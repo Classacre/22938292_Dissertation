@@ -8,12 +8,6 @@ This repository contains the code, scripts, and documentation for the analysis p
 
 ---
 
-## Repository
-
-This project is published at: [https://github.com/Classacre/22938292_Dissertation](https://github.com/Classacre/22938292_Dissertation)
-
----
-
 ## Project Objectives & Hypothesis
 
 ### Specific Objectives
@@ -120,10 +114,3 @@ source("seurat_utilities/Seurat_Visualization.R")
 - All logs for Seurat summary/viz are in `seurat_utilities/`.
 - Review and further categorize files in `misc_files/` as needed.
 - Update any script paths if you move scripts as described above.
-
----
-
-## To Do (for full consistency)
-- Move `seurat_metadata/seurat_metadata_summary.R` to `seurat_metadata/seurat_metadata_summary.R` and update any references.
-- Move `Seurat_Visualization.R` to `seurat_utilities/Seurat_Visualization.R` and update any references.
-- Remove or update any old references to `batch_scripts/`.
