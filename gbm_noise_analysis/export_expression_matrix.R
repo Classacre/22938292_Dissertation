@@ -5,7 +5,8 @@ seurat_path <- "/group/sms029/Oliva_dataset/integrated_col_trajectories.rds"
 outfile <- "/group/sms029/mnieuwenh/gbm_noise_analysis/expression_matrix.csv"
 
 seurat_obj <- readRDS(seurat_path)
-expr_mat <- as.matrix(seurat_obj@assays$RNA@data) # log-normalized counts
+# Use the new Seurat v5 Assay5 structure: data is in layers
+expr_mat <- as.matrix(seurat_obj@assays$RNA@layers$data) # log-normalized counts
 gene_names <- rownames(expr_mat)
 cell_names <- colnames(expr_mat)
 
