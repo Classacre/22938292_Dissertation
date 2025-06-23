@@ -6,7 +6,7 @@
 #SBATCH --mem=16G
 #SBATCH --cpus-per-task=2
 #SBATCH --time=01:00:00
-#SBATCH --mail-user=22938292@uwa.edu.au
+#SBATCH --mail-user=22938292@student.uwa.edu.au
 #SBATCH --mail-type=END,FAIL
 
 module load Anaconda3/2024.06
