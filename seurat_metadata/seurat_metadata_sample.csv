@@ -1,0 +1,6 @@
+"","orig.ident","nCount_RNA","nFeature_RNA","genotype","clusters","seurat_clusters","lineage","trajectory_clusters","pseudotime","identity","early_epi_genes_score"
+"AAACCTGAGAGCCCAA-1_1","RL650_col_cvi_r3",2357,1033,"col","0","0","rootcap","rc_4",0.533907353878021,"border cells",-0.0402918024069693
+"AAACCTGAGGCCCTTG-1_1","RL650_col_cvi_r3",7147,3052,"col","1","1","rootcap","rc_0",0.311738848686218,"root cap early",0.0500268011571239
+"AAACGGGAGCTAGGCA-1_1","RL650_col_cvi_r3",4120,1760,"col","0","0","rootcap","rc_1",0.500819206237793,"root cap tip",-0.0431877860378392
+"AAACGGGCACCCTATC-1_1","RL650_col_cvi_r3",2003,1122,"col","2","2","rootcap","rc_2",0.442028701305389,"root cap lateral",-0.0284152608934605
+"AAACGGGCAGCATACT-1_1","RL650_col_cvi_r3",3735,1529,"col","0","0","rootcap","rc_1",0.507532596588135,"root cap tip",-0.0539411398882029
