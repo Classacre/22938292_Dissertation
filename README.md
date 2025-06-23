@@ -6,7 +6,7 @@ This repository contains the code, scripts, and documentation for the analysis p
 
 **Note:**
 - The primary Seurat object used for these analyses (`Oliva_dataset/integrated_col_trajectories.rds`) is not included in this repository, as it is not yet published or publicly available. Users will not be able to reproduce the full analysis or generate the same results until this dataset is released.
-- The GBM gene list (`gbM_data/unique_gbm_genes.csv`) is also not included in this repository, as it is the property of Cahn et al ([PubMed](https://pubmed.ncbi.nlm.nih.gov/39632087/)) and Bewick et al ([PNAS](https://www.pnas.org/doi/10.1073/pnas.1604666113)). You must obtain permission or access to these data from the original sources.
+- The GBM gene list (`gbM_data/unique_gbm_genes.csv`) is included in this repository. It is a consensus set of GBM genes derived using a script that processes data from Cahn et al ([PubMed](https://pubmed.ncbi.nlm.nih.gov/39632087/)) and Bewick et al ([PNAS](https://www.pnas.org/doi/10.1073/pnas.1604666113)). The raw data from these studies is not included here.
 
 All code and workflow steps are provided for transparency and future reproducibility.
 
