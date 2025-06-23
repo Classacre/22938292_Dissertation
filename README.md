@@ -4,7 +4,11 @@
 
 This repository contains the code, scripts, and documentation for the analysis performed in Mika Nieuwenhuyzen's Bioinformatics dissertation (Student number: 22938292), supervised by James Lloyd at the University of Western Australia.
 
-**Note:** The primary Seurat object used for these analyses (`Oliva_dataset/integrated_col_trajectories.rds`) is not included in this repository, as it is not yet published or publicly available. Users will not be able to reproduce the full analysis or generate the same results until this dataset is released. All code and workflow steps are provided for transparency and future reproducibility.
+**Note:**
+- The primary Seurat object used for these analyses (`Oliva_dataset/integrated_col_trajectories.rds`) is not included in this repository, as it is not yet published or publicly available. Users will not be able to reproduce the full analysis or generate the same results until this dataset is released.
+- The GBM gene list (`gbM_data/unique_gbm_genes.csv`) is also not included in this repository, as it is the property of Cahn et al ([PubMed](https://pubmed.ncbi.nlm.nih.gov/39632087/)) and Bewick et al ([PNAS](https://www.pnas.org/doi/10.1073/pnas.1604666113)). You must obtain permission or access to these data from the original sources.
+
+All code and workflow steps are provided for transparency and future reproducibility.
 
 ---
 
