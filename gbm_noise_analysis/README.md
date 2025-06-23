@@ -4,8 +4,11 @@ This workflow compares expression noise between gene-body methylated (GBM) and n
 
 ## Files and Inputs
 - **Seurat object:** `/group/sms029/Oliva_dataset/integrated_col_trajectories.rds`
-- **GBM gene list:** `/group/sms029/GBM_Data/unique_gbm_genes.csv` (column: `Gene`)
+- **GBM gene list:** `/group/sms029/mnieuwenh/gbM_data/unique_gbm_genes.csv` (column: `Gene`)
 - **Output directory:** `/group/sms029/mnieuwenh/gbm_noise_analysis/`
+
+## Data Availability
+- The GBM gene list is not included in this repository as it is the property of Cahn et al ([PubMed](https://pubmed.ncbi.nlm.nih.gov/39632087/)) and Bewick et al ([PNAS](https://www.pnas.org/doi/10.1073/pnas.1604666113)).
 
 ## Steps
 1. **Export gene expression matrix from Seurat (R script)**

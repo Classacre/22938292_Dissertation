@@ -1,0 +1,12 @@
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+Error in as.matrix(seurat_obj@assays$RNA@data) : 
+  no slot of name "data" for this object of class "Assay5"
+Execution halted

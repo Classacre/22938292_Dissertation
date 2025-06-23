@@ -3,7 +3,7 @@ library(ggplot2)
 
 # Load expression matrix and GBM gene list
 expr_mat <- as.matrix(read.csv("/group/sms029/mnieuwenh/gbm_noise_analysis/expression_matrix.csv", row.names=1, check.names=FALSE))
-gbm_genes <- read.csv("/group/sms029/GBM_Data/unique_gbm_genes.csv", stringsAsFactors=FALSE)$Gene
+gbm_genes <- read.csv("/group/sms029/mnieuwenh/gbM_data/unique_gbm_genes.csv", stringsAsFactors=FALSE)$Gene
 
 # Annotate genes
 all_genes <- rownames(expr_mat)
