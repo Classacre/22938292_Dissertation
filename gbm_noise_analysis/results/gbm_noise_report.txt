@@ -1,0 +1,18 @@
+GBM Gene Expression Noise Analysis Report
+========================================
+
+1. Coefficient of Variation (CV) Calculation:
+   - For each gene, mean and variance of expression across all cells were calculated.
+   - CV = sqrt(variance) / mean.
+
+2. High- and Low-Noise Gene Classification:
+   - Genes were ranked by CV.
+   - Top 10%: 'high-noise genes'.
+   - Bottom 10%: 'low-noise genes'.
+
+3. Statistical Test:
+   - Wilcoxon rank-sum test was used to compare CV between GBM and non-GBM genes.
+   - p-value: 0
+
+4. Interpretation:
+   - There is a statistically significant difference in expression noise between GBM and non-GBM genes.

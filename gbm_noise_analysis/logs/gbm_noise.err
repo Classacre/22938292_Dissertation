@@ -1,3 +1,35 @@
 Warning message:
 Removed 1151 rows containing non-finite outside the scale range
 (`stat_boxplot()`). 
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Error in `filter()`:
+ℹ In argument: `is.finite(cv_expr)`.
+Caused by error:
+! `..1` must be of size 0 or 1, not size 25784.
+Backtrace:
+     ▆
+  1. ├─cv_by_celltype %>% filter(is.finite(cv_expr))
+  2. ├─dplyr::filter(., is.finite(cv_expr))
+  3. ├─dplyr:::filter.data.frame(., is.finite(cv_expr))
+  4. │ └─dplyr:::filter_rows(.data, dots, by)
+  5. │   └─dplyr:::filter_eval(...)
+  6. │     ├─base::withCallingHandlers(...)
+  7. │     └─mask$eval_all_filter(dots, env_filter)
+  8. │       └─dplyr (local) eval()
+  9. ├─dplyr:::dplyr_internal_error(...)
+ 10. │ └─rlang::abort(class = c(class, "dplyr:::internal_error"), dplyr_error_data = data)
+ 11. │   └─rlang:::signal_abort(cnd, .file)
+ 12. │     └─base::signalCondition(cnd)
+ 13. └─dplyr (local) `<fn>`(`<dpl:::__>`)
+ 14.   └─rlang::abort(message, class = error_class, parent = parent, call = error_call)
+Execution halted
