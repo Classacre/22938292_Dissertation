@@ -8,7 +8,6 @@ gbm_genes <- read.csv("/group/sms029/mnieuwenh/gbM_data/unique_gbm_genes.csv", s
 # Annotate genes
 all_genes <- rownames(expr_mat)
 gbm_status <- all_genes %in% gbm_genes
-cell_metadata <- read.csv("/group/sms029/mnieuwenh/seurat_metadata/seurat_metadata_full.csv", row.names=1, check.names=FALSE)
 
 # Calculate mean, variance, CV for each gene
 mean_expr <- rowMeans(expr_mat)
@@ -24,8 +23,8 @@ results <- data.frame(
   cv_expr = cv_expr
 )
 
-# Save results to new results folder
-write.csv(results, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_comparison.csv", row.names=FALSE)
+# Save results to new high_low_noise results folder
+write.csv(results, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_comparison.csv", row.names=FALSE)
 
 # Boxplot: CV by GBM status
 p <- ggplot(results, aes(x=gbm, y=cv_expr, fill=gbm)) +
@@ -33,14 +32,14 @@ p <- ggplot(results, aes(x=gbm, y=cv_expr, fill=gbm)) +
   scale_x_discrete(labels=c("Non-GBM", "GBM")) +
   labs(title="Expression Noise (CV) by GBM Status", x="GBM Status", y="Coefficient of Variation (CV)") +
   theme_bw()
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_boxplot.png", plot=p, width=7, height=5)
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot.png", plot=p, width=7, height=5)
 
 # Wilcoxon test
 stat <- wilcox.test(cv_expr ~ gbm, data=results)
-cat("Wilcoxon test p-value:", stat$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_stats.txt")
+cat("Wilcoxon test p-value:", stat$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt")
 
 # Report file
-report_file <- "/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_report.txt"
+report_file <- "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_report.txt"
 cat(
   "GBM Gene Expression Noise Analysis Report\n",
   "========================================\n\n",
@@ -97,7 +96,7 @@ for (celltype in cell_types) {
 cv_by_celltype_df <- do.call(rbind, cv_by_celltype)
 
 # Save cell type p-value table
-write.csv(pval_celltype_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_pvalues_by_celltype.csv", row.names=FALSE)
+write.csv(pval_celltype_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_pvalues_by_celltype.csv", row.names=FALSE)
 
 # Plot: CV by GBM status for each cell type
 p_celltype <- ggplot(cv_by_celltype_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
@@ -109,7 +108,7 @@ p_celltype <- ggplot(cv_by_celltype_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
         strip.text = element_text(size=8),
         plot.margin = margin(10, 10, 10, 10))
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_boxplot_by_celltype.png", plot=p_celltype, width=18, height=8)
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_by_celltype.png", plot=p_celltype, width=18, height=8)
 
 # Additional: GBM vs Non-GBM analysis split by lineage
 lineages <- unique(cell_metadata$lineage)
@@ -144,7 +143,7 @@ for (lineage in lineages) {
 cv_by_lineage_df <- do.call(rbind, cv_by_lineage)
 
 # Save lineage p-value table
-write.csv(pval_lineage_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_pvalues_by_lineage.csv", row.names=FALSE)
+write.csv(pval_lineage_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_pvalues_by_lineage.csv", row.names=FALSE)
 
 # Plot: CV by GBM status for each lineage
 p_lineage <- ggplot(cv_by_lineage_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
@@ -156,4 +155,4 @@ p_lineage <- ggplot(cv_by_lineage_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
         strip.text = element_text(size=8),
         plot.margin = margin(10, 10, 10, 10))
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_boxplot_by_lineage.png", plot=p_lineage, width=18, height=8)
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_by_lineage.png", plot=p_lineage, width=18, height=8)
