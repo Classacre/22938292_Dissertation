@@ -1,0 +1,16 @@
+First 5 colnames in expression matrix:
+[1] "V1" "V2" "V3" "V4" "V5"
+
+First 5 rownames in metadata:
+[1] "AAACCTGAGAGCCCAA-1_1" "AAACCTGAGGCCCTTG-1_1" "AAACGGGAGCTAGGCA-1_1"
+[4] "AAACGGGCACCCTATC-1_1" "AAACGGGCAGCATACT-1_1"
+
+Number of overlapping cell names:
+[1] 0
+
+Example of non-overlapping cell names in expr_mat:
+[1] "V1" "V2" "V3" "V4" "V5"
+
+Example of non-overlapping cell names in metadata:
+[1] "AAACCTGAGAGCCCAA-1_1" "AAACCTGAGGCCCTTG-1_1" "AAACGGGAGCTAGGCA-1_1"
+[4] "AAACGGGCACCCTATC-1_1" "AAACGGGCAGCATACT-1_1"

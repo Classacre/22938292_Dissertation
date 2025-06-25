@@ -63,39 +63,43 @@ cat(
   file=report_file
 )
 
-# Additional: GBM vs Non-GBM analysis split by cell type (identity)
-# Load cell metadata to get cell types
-cell_metadata <- read.csv("/group/sms029/mnieuwenh/seurat_metadata/seurat_metadata_sample.csv", row.names=1, check.names=FALSE)
+# Additional: GBM vs Non-GBM analysis split by cell type (identity) using full metadata
+cell_types <- unique(cell_metadata$identity)
+celltype_results <- list()
+cv_by_celltype <- list()
+pval_celltype_table <- data.frame(celltype=character(), p_value=numeric(), stringsAsFactors=FALSE)
 
-# Ensure columns match between expr_mat and metadata
-common_cells <- intersect(colnames(expr_mat), rownames(cell_metadata))
-expr_mat <- expr_mat[, common_cells]
-cell_metadata <- cell_metadata[common_cells, ]
-
-# For each gene, calculate CV within each cell type
-library(dplyr)
-library(tidyr)
-
-cv_by_celltype <- lapply(unique(cell_metadata$identity), function(celltype) {
+for (celltype in cell_types) {
   cells_in_type <- rownames(cell_metadata)[cell_metadata$identity == celltype]
-  if (length(cells_in_type) < 2) return(NULL)
+  if (length(cells_in_type) < 2) next
   sub_mat <- expr_mat[, cells_in_type, drop=FALSE]
   mean_expr <- rowMeans(sub_mat)
   var_expr <- apply(sub_mat, 1, var)
   cv_expr <- sqrt(var_expr) / mean_expr
-  data.frame(
+  df <- data.frame(
     gene = rownames(sub_mat),
     celltype = celltype,
     gbm = rownames(sub_mat) %in% gbm_genes,
     cv_expr = cv_expr
   )
-}) %>% bind_rows()
+  df <- df[is.finite(df$cv_expr), ]
+  cv_by_celltype[[celltype]] <- df
+  # Wilcoxon test for this cell type
+  if (length(unique(df$gbm)) > 1) {
+    stat <- wilcox.test(cv_expr ~ gbm, data=df)
+    pval_celltype_table <- rbind(pval_celltype_table, data.frame(celltype=celltype, p_value=stat$p.value))
+  } else {
+    pval_celltype_table <- rbind(pval_celltype_table, data.frame(celltype=celltype, p_value=NA))
+  }
+}
 
-# Remove infinite/NaN values
-cv_by_celltype <- cv_by_celltype %>% filter(is.finite(cv_expr))
+cv_by_celltype_df <- do.call(rbind, cv_by_celltype)
+
+# Save cell type p-value table
+write.csv(pval_celltype_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_pvalues_by_celltype.csv", row.names=FALSE)
 
 # Plot: CV by GBM status for each cell type
-p_celltype <- ggplot(cv_by_celltype, aes(x=gbm, y=cv_expr, fill=gbm)) +
+p_celltype <- ggplot(cv_by_celltype_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
   geom_boxplot(outlier.size=0.5) +
   facet_wrap(~celltype, scales="free_y") +
   scale_x_discrete(labels=c("Non-GBM", "GBM")) +
@@ -105,3 +109,50 @@ p_celltype <- ggplot(cv_by_celltype, aes(x=gbm, y=cv_expr, fill=gbm)) +
         strip.text = element_text(size=8),
         plot.margin = margin(10, 10, 10, 10))
 ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_boxplot_by_celltype.png", plot=p_celltype, width=18, height=8)
+
+# Additional: GBM vs Non-GBM analysis split by lineage
+lineages <- unique(cell_metadata$lineage)
+lineage_results <- list()
+cv_by_lineage <- list()
+pval_lineage_table <- data.frame(lineage=character(), p_value=numeric(), stringsAsFactors=FALSE)
+
+for (lineage in lineages) {
+  cells_in_lineage <- rownames(cell_metadata)[cell_metadata$lineage == lineage]
+  if (length(cells_in_lineage) < 2) next
+  sub_mat <- expr_mat[, cells_in_lineage, drop=FALSE]
+  mean_expr <- rowMeans(sub_mat)
+  var_expr <- apply(sub_mat, 1, var)
+  cv_expr <- sqrt(var_expr) / mean_expr
+  df <- data.frame(
+    gene = rownames(sub_mat),
+    lineage = lineage,
+    gbm = rownames(sub_mat) %in% gbm_genes,
+    cv_expr = cv_expr
+  )
+  df <- df[is.finite(df$cv_expr), ]
+  cv_by_lineage[[lineage]] <- df
+  # Wilcoxon test for this lineage
+  if (length(unique(df$gbm)) > 1) {
+    stat <- wilcox.test(cv_expr ~ gbm, data=df)
+    pval_lineage_table <- rbind(pval_lineage_table, data.frame(lineage=lineage, p_value=stat$p.value))
+  } else {
+    pval_lineage_table <- rbind(pval_lineage_table, data.frame(lineage=lineage, p_value=NA))
+  }
+}
+
+cv_by_lineage_df <- do.call(rbind, cv_by_lineage)
+
+# Save lineage p-value table
+write.csv(pval_lineage_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_pvalues_by_lineage.csv", row.names=FALSE)
+
+# Plot: CV by GBM status for each lineage
+p_lineage <- ggplot(cv_by_lineage_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
+  geom_boxplot(outlier.size=0.5) +
+  facet_wrap(~lineage, scales="free_y") +
+  scale_x_discrete(labels=c("Non-GBM", "GBM")) +
+  labs(title="Expression Noise (CV) by GBM Status in Each Lineage", x="GBM Status", y="Coefficient of Variation (CV)") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+        strip.text = element_text(size=8),
+        plot.margin = margin(10, 10, 10, 10))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/gbm_noise_boxplot_by_lineage.png", plot=p_lineage, width=18, height=8)

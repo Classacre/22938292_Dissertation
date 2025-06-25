@@ -1,0 +1,19 @@
+=== Seurat Object Summary ===
+Assays:
+[1] "RNA"
+
+Number of cells: 21527 
+Number of features (genes): 25784 
+
+Metadata columns:
+ [1] "orig.ident"            "nCount_RNA"            "nFeature_RNA"         
+ [4] "genotype"              "clusters"              "seurat_clusters"      
+ [7] "lineage"               "trajectory_clusters"   "pseudotime"           
+[10] "identity"              "early_epi_genes_score"
+
+Ident levels:
+[1] "rootcap"    "epidermis"  "cortex"     "xpp"        "endodermis"
+[6] "ppp"        "procambium" "phloem"     "xylem"     
+
+Dimensional reductions:
+[1] "pca"             "integrated.rpca" "umap.rpca"      
