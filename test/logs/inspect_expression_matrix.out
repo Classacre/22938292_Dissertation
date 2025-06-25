@@ -1,7 +1,0 @@
-Expression matrix dimensions:  25784 genes x 87056 cells
-First 5 gene names in matrix:
-[1] "1" "2" "3" "4" "5"
-Number of unique GBM genes in list:  11272 
-Number of genes in matrix that are GBM:  0 
-Number of genes in matrix that are non-GBM:  25784 
-Are there both GBM and non-GBM genes in the matrix?  FALSE 
