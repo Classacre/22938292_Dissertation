@@ -27,26 +27,19 @@ This workflow compares expression noise between gene-body methylated (GBM) and n
 
 ## Additional Analysis Steps
 
-### 4. Check Genotype Diversity
-To check which genotypes are present in your Seurat object, run:
-```sh
-sbatch batch_scripts/check_genotypes.sh
-```
-This will output a CSV file `gbm_noise_analysis/genotype_counts.csv` listing all unique genotype values and their counts.
-
-### 5. Identify High- and Low-Noise Genes
+### 4. Identify High- and Low-Noise Genes
 - Calculates coefficient of variation (CV) for each gene across all cells.
 - Classifies top 10% as "high-noise" and bottom 10% as "low-noise" genes.
 
-### 6. Identify Responsive Genes
+### 5. Identify Responsive Genes
 - Finds genes highly expressed in one cell type (identity) but low in others.
 - Outputs a list of responsive genes.
 
-### 7. Annotate Genes with gbM and Compare Features
+### 6. Annotate Genes with gbM and Compare Features
 - Annotates genes as gbM/non-gbM, high/low noise, and responsive/non-responsive.
 - Compares gbM frequency among these groups.
 
-### 8. Statistical Analysis
+### 7. Statistical Analysis
 - Performs Fisher's exact test to compare gbM frequency in high/low noise and responsive/non-responsive genes.
 
 ## How to Run All Steps
@@ -54,18 +47,13 @@ This will output a CSV file `gbm_noise_analysis/genotype_counts.csv` listing all
    ```sh
    sbatch batch_scripts/export_expression_matrix.sh
    ```
-2. Check genotype diversity:
-   ```sh
-   sbatch batch_scripts/check_genotypes.sh
-   ```
-3. Run noise and responsiveness analysis:
+2. Run noise and responsiveness analysis:
    ```sh
    sbatch batch_scripts/gbm_noise_analysis.sh
    ```
 
 ## Output Files
 - Expression matrix: `gbm_noise_analysis/expression_matrix.csv`
-- Genotype counts: `gbm_noise_analysis/genotype_counts.csv`
 - Noise analysis results: `gbm_noise_analysis/gbm_noise_comparison.csv`, `gbm_noise_analysis/gbm_noise_boxplot.png`, `gbm_noise_analysis/gbm_noise_stats.txt`
 - Additional gene annotation and responsiveness results will be added as scripts are extended.
 

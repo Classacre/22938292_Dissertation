@@ -12,7 +12,7 @@ seurat_obj <- readRDS(seurat_path)
 seurat_obj <- subset(seurat_obj, subset = genotype == "col")
 
 # Set output directory for plots
-plot_dir <- "/group/sms029/mnieuwenh/seurat_utilities/logs"
+plot_dir <- "/group/sms029/mnieuwenh/seurat_plots"
 if (!dir.exists(plot_dir)) dir.create(plot_dir)
 
 caption_text <- "Only the Col genotype was used for this analysis."

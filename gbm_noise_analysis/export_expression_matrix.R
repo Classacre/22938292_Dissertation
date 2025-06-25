@@ -8,8 +8,8 @@ seurat_obj <- readRDS(seurat_path)
 # Use the new Seurat v5 Assay5 structure: data is in layers
 expr_mat <- as.matrix(seurat_obj@assays$RNA@layers$data) # log-normalized counts
 
-# Get gene names from the features slot
-feature_names <- seurat_obj@assays$RNA@features
+# Get gene names from the rownames of the LogMap features object
+feature_names <- rownames(seurat_obj@assays$RNA@features)
 if (length(feature_names) == nrow(expr_mat)) {
   rownames(expr_mat) <- feature_names
 } else {

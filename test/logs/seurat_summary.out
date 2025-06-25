@@ -1,0 +1,26 @@
+
+--- Structure of seurat_obj@assays$RNA@features ---
+Formal class 'LogMap' [package "SeuratObject"] with 1 slot
+  ..@ .Data: logi [1:25784, 1:6] TRUE TRUE TRUE TRUE TRUE TRUE ...
+  .. ..- attr(*, "dimnames")=List of 2
+  .. .. ..$ : chr [1:25784] "AT1G01010" "AT1G01020" "AT1G01030" "AT1G01040" ...
+  .. .. ..$ : chr [1:6] "data" "counts" "scale.data.1" "scale.data.2" ...
+  ..$ dim     : int [1:2] 25784 6
+  ..$ dimnames:List of 2
+  .. ..$ : chr [1:25784] "AT1G01010" "AT1G01020" "AT1G01030" "AT1G01040" ...
+  .. ..$ : chr [1:6] "data" "counts" "scale.data.1" "scale.data.2" ...
+Length: 154704 
+
+--- Structure of seurat_obj@assays$RNA@layers ---
+[1] "data"         "counts"       "scale.data.1" "scale.data.2" "scale.data.3"
+[6] "scale.data"  
+Expression matrix (layers$data):
+Dimensions: 25784, 21527 
+
+First 5 feature names:
+A logical map for 5 values across 6 observations
+First 5 rownames of expression matrix:
+NULL
+
+Number of features: 154704 
+Number of rows in expression matrix: 25784 

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=seurat_viz
-#SBATCH --output=/group/sms029/mnieuwenh/batch_scripts/logs/seurat_viz.out
-#SBATCH --error=/group/sms029/mnieuwenh/batch_scripts/logs/seurat_viz.err
+#SBATCH --output=/group/sms029/mnieuwenh/seurat_utilities/logs/seurat_viz.out
+#SBATCH --error=/group/sms029/mnieuwenh/seurat_utilities/logs/seurat_viz.err
 #SBATCH --partition=work
 #SBATCH --mem=120G
 #SBATCH --cpus-per-task=8

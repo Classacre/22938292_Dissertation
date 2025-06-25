@@ -1,0 +1,20 @@
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+Warning messages:
+1: The `slot` argument of `FetchData()` is deprecated as of SeuratObject 5.0.0.
+ℹ Please use the `layer` argument instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+2: `PackageCheck()` was deprecated in SeuratObject 5.0.0.
+ℹ Please use `rlang::check_installed()` instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+Error: no slot of name "var.features" for this object of class "Assay5"
+Execution halted
