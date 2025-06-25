@@ -12,7 +12,7 @@ seurat_obj <- readRDS(seurat_path)
 seurat_obj <- subset(seurat_obj, subset = genotype == "col")
 
 # Set output directory for plots
-plot_dir <- "/group/sms029/mnieuwenh/seurat_plots"
+plot_dir <- "/group/sms029/mnieuwenh/seurat_utilities/logs"
 if (!dir.exists(plot_dir)) dir.create(plot_dir)
 
 caption_text <- "Only the Col genotype was used for this analysis."
@@ -56,8 +56,12 @@ for (feature in qc_features) {
   if (feature %in% colnames(seurat_obj@meta.data)) {
     p <- VlnPlot(seurat_obj, features = feature, group.by = "identity") +
       ggtitle(paste("Violin plot of", feature, "by Cell Type (Identity)")) +
-      labs(caption = caption_text)
-    ggsave(filename = file.path(plot_dir, paste0("violin_", feature, ".png")), plot = p, width = 8, height = 6)
+      labs(caption = caption_text) +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+        plot.margin = margin(10, 10, 10, 10)
+      )
+    ggsave(filename = file.path(plot_dir, paste0("violin_", feature, ".png")), plot = p, width = 16, height = 6)
   }
 }
 
