@@ -7,6 +7,8 @@ The following objects are masked from ‘package:base’:
 
     intersect, t
 
-Error in as.matrix(seurat_obj@assays$RNA@data) : 
-  no slot of name "data" for this object of class "Assay5"
+Warning message:
+In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 4.1 GiB
+Error: Number of features does not match number of rows in expression matrix. Cannot assign gene names.
 Execution halted

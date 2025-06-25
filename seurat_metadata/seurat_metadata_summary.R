@@ -5,7 +5,7 @@ if (!requireNamespace("knitr", quietly = TRUE)) install.packages("knitr")
 library(knitr)
 
 # Path to Seurat object
-seurat_path <- "/group/sms029/Oliva_dataset/integrated_col_trajectories.rds"
+seurat_path <- "/group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds"
 
 # Load the Seurat object
 seurat_obj <- readRDS(seurat_path)

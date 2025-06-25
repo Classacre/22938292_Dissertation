@@ -1,5 +1,9 @@
 # Arabidopsis Root scRNA-seq Analysis: Directory Structure, Objectives, and Workflow
 
+<p align="center">
+  <img src="https://i.imgur.com/E4F0ZZ7.png" alt="Project Illustration" width="500"/>
+</p>
+
 ## Publication and Data Availability
 
 This repository contains the code, scripts, and documentation for the analysis performed in Mika Nieuwenhuyzen's Bioinformatics dissertation (Student number: 22938292), supervised by James Lloyd at the University of Western Australia.

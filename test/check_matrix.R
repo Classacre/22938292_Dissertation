@@ -1,7 +1,7 @@
 # Check Seurat object RNA assay structure and available slots
 library(Seurat)
 
-seurat_path <- "/group/sms029/Oliva_dataset/integrated_col_trajectories.rds"
+seurat_path <- "/group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds"
 
 seurat_obj <- readRDS(seurat_path)
 

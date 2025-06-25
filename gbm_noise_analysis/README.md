@@ -3,7 +3,7 @@
 This workflow compares expression noise between gene-body methylated (GBM) and non-GBM genes using a large Seurat object on an HPC cluster with SLURM.
 
 ## Files and Inputs
-- **Seurat object:** `/group/sms029/Oliva_dataset/integrated_col_trajectories.rds`
+- **Seurat object:** `/group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds`
 - **GBM gene list:** `/group/sms029/mnieuwenh/gbM_data/unique_gbm_genes.csv` (column: `Gene`)
 - **Output directory:** `/group/sms029/mnieuwenh/gbm_noise_analysis/`
 
