@@ -1,13 +1,20 @@
-# Compare expression noise between GBM and non-GBM genes
+# Compare expression noise between gbM and TE-like methylation genes (Cahn and Bewick)
 library(ggplot2)
 
-# Load expression matrix and GBM gene list
+# Load expression matrix
 expr_mat <- as.matrix(read.csv("/group/sms029/mnieuwenh/gbm_noise_analysis/expression_matrix.csv", row.names=1, check.names=FALSE))
-gbm_genes <- read.csv("/group/sms029/mnieuwenh/gbM_data/unique_gbm_genes.csv", stringsAsFactors=FALSE)$Gene
 
-# Annotate genes
-all_genes <- rownames(expr_mat)
-gbm_status <- all_genes %in% gbm_genes
+# Load combined methylation annotation
+gene_anno <- read.csv("/group/sms029/mnieuwenh/Methylation_Data/combined_methylation_data.csv", stringsAsFactors=FALSE)
+rownames(gene_anno) <- gene_anno$Gene_ID
+
+# Annotate genes for each methylation status
+genes <- rownames(expr_mat)
+anno <- gene_anno[genes, ]
+
+cahn_gbm <- !is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status == "gbM"
+bewick_gbm <- !is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "gbM"
+bewick_te_like <- !is.na(anno$Bewick_Classification) & (anno$Bewick_Classification == "mCHG" | anno$Bewick_Classification == "mCHH")
 
 # Calculate mean, variance, CV for each gene
 mean_expr <- rowMeans(expr_mat)
@@ -16,143 +23,106 @@ cv_expr <- sqrt(var_expr) / mean_expr
 
 # Create results data frame
 results <- data.frame(
-  gene = all_genes,
-  gbm = gbm_status,
+  gene = genes,
+  cahn_gbm = cahn_gbm,
+  bewick_gbm = bewick_gbm,
+  bewick_te_like = bewick_te_like,
   mean_expr = mean_expr,
   var_expr = var_expr,
   cv_expr = cv_expr
 )
 
-# Save results to new high_low_noise results folder
 write.csv(results, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_comparison.csv", row.names=FALSE)
 
-# Boxplot: CV by GBM status
-p <- ggplot(results, aes(x=gbm, y=cv_expr, fill=gbm)) +
+# Boxplots: CV by each methylation status
+gbm_labels <- c("FALSE"="Non-gbM", "TRUE"="gbM")
+te_labels <- c("FALSE"="Other", "TRUE"="TE-like")
+
+p1 <- ggplot(results, aes(x=factor(cahn_gbm), y=cv_expr, fill=factor(cahn_gbm))) +
   geom_boxplot(outlier.size=0.5) +
-  scale_x_discrete(labels=c("Non-GBM", "GBM")) +
-  labs(title="Expression Noise (CV) by GBM Status", x="GBM Status", y="Coefficient of Variation (CV)") +
+  scale_x_discrete(labels=gbm_labels) +
+  labs(title="Expression Noise (CV) by Cahn gbM Status", x="Cahn gbM", y="CV") +
   theme_bw()
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot.png", plot=p, width=7, height=5)
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_cahn.png", plot=p1, width=7, height=5)
 
-# Wilcoxon test
-stat <- wilcox.test(cv_expr ~ gbm, data=results)
-cat("Wilcoxon test p-value:", stat$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt")
-
-# Report file
-report_file <- "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_report.txt"
-cat(
-  "GBM Gene Expression Noise Analysis Report\n",
-  "========================================\n\n",
-  "1. Coefficient of Variation (CV) Calculation:\n",
-  "   - For each gene, mean and variance of expression across all cells were calculated.\n",
-  "   - CV = sqrt(variance) / mean.\n\n",
-  "2. High- and Low-Noise Gene Classification:\n",
-  "   - Genes were ranked by CV.\n",
-  "   - Top 10%: 'high-noise genes'.\n",
-  "   - Bottom 10%: 'low-noise genes'.\n\n",
-  "3. Statistical Test:\n",
-  "   - Wilcoxon rank-sum test was used to compare CV between GBM and non-GBM genes.\n",
-  "   - p-value: ", stat$p.value, "\n\n",
-  "4. Interpretation:\n",
-  if (stat$p.value < 0.05) {
-    "   - There is a statistically significant difference in expression noise between GBM and non-GBM genes.\n"
-  } else {
-    "   - No statistically significant difference in expression noise was detected between GBM and non-GBM genes.\n"
-  },
-  sep="",
-  file=report_file
-)
-
-# Additional: GBM vs Non-GBM analysis split by cell type (identity) using full metadata
-cell_types <- unique(cell_metadata$identity)
-celltype_results <- list()
-cv_by_celltype <- list()
-pval_celltype_table <- data.frame(celltype=character(), p_value=numeric(), stringsAsFactors=FALSE)
-
-for (celltype in cell_types) {
-  cells_in_type <- rownames(cell_metadata)[cell_metadata$identity == celltype]
-  if (length(cells_in_type) < 2) next
-  sub_mat <- expr_mat[, cells_in_type, drop=FALSE]
-  mean_expr <- rowMeans(sub_mat)
-  var_expr <- apply(sub_mat, 1, var)
-  cv_expr <- sqrt(var_expr) / mean_expr
-  df <- data.frame(
-    gene = rownames(sub_mat),
-    celltype = celltype,
-    gbm = rownames(sub_mat) %in% gbm_genes,
-    cv_expr = cv_expr
-  )
-  df <- df[is.finite(df$cv_expr), ]
-  cv_by_celltype[[celltype]] <- df
-  # Wilcoxon test for this cell type
-  if (length(unique(df$gbm)) > 1) {
-    stat <- wilcox.test(cv_expr ~ gbm, data=df)
-    pval_celltype_table <- rbind(pval_celltype_table, data.frame(celltype=celltype, p_value=stat$p.value))
-  } else {
-    pval_celltype_table <- rbind(pval_celltype_table, data.frame(celltype=celltype, p_value=NA))
-  }
-}
-
-cv_by_celltype_df <- do.call(rbind, cv_by_celltype)
-
-# Save cell type p-value table
-write.csv(pval_celltype_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_pvalues_by_celltype.csv", row.names=FALSE)
-
-# Plot: CV by GBM status for each cell type
-p_celltype <- ggplot(cv_by_celltype_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
+p2 <- ggplot(results, aes(x=factor(bewick_gbm), y=cv_expr, fill=factor(bewick_gbm))) +
   geom_boxplot(outlier.size=0.5) +
-  facet_wrap(~celltype, scales="free_y") +
-  scale_x_discrete(labels=c("Non-GBM", "GBM")) +
-  labs(title="Expression Noise (CV) by GBM Status in Each Cell Type", x="GBM Status", y="Coefficient of Variation (CV)") +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
-        strip.text = element_text(size=8),
-        plot.margin = margin(10, 10, 10, 10))
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_by_celltype.png", plot=p_celltype, width=18, height=8)
+  scale_x_discrete(labels=gbm_labels) +
+  labs(title="Expression Noise (CV) by Bewick gbM Status", x="Bewick gbM", y="CV") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_bewick.png", plot=p2, width=7, height=5)
 
-# Additional: GBM vs Non-GBM analysis split by lineage
-lineages <- unique(cell_metadata$lineage)
-lineage_results <- list()
-cv_by_lineage <- list()
-pval_lineage_table <- data.frame(lineage=character(), p_value=numeric(), stringsAsFactors=FALSE)
-
-for (lineage in lineages) {
-  cells_in_lineage <- rownames(cell_metadata)[cell_metadata$lineage == lineage]
-  if (length(cells_in_lineage) < 2) next
-  sub_mat <- expr_mat[, cells_in_lineage, drop=FALSE]
-  mean_expr <- rowMeans(sub_mat)
-  var_expr <- apply(sub_mat, 1, var)
-  cv_expr <- sqrt(var_expr) / mean_expr
-  df <- data.frame(
-    gene = rownames(sub_mat),
-    lineage = lineage,
-    gbm = rownames(sub_mat) %in% gbm_genes,
-    cv_expr = cv_expr
-  )
-  df <- df[is.finite(df$cv_expr), ]
-  cv_by_lineage[[lineage]] <- df
-  # Wilcoxon test for this lineage
-  if (length(unique(df$gbm)) > 1) {
-    stat <- wilcox.test(cv_expr ~ gbm, data=df)
-    pval_lineage_table <- rbind(pval_lineage_table, data.frame(lineage=lineage, p_value=stat$p.value))
-  } else {
-    pval_lineage_table <- rbind(pval_lineage_table, data.frame(lineage=lineage, p_value=NA))
-  }
-}
-
-cv_by_lineage_df <- do.call(rbind, cv_by_lineage)
-
-# Save lineage p-value table
-write.csv(pval_lineage_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_pvalues_by_lineage.csv", row.names=FALSE)
-
-# Plot: CV by GBM status for each lineage
-p_lineage <- ggplot(cv_by_lineage_df, aes(x=gbm, y=cv_expr, fill=gbm)) +
+p3 <- ggplot(results, aes(x=factor(bewick_te_like), y=cv_expr, fill=factor(bewick_te_like))) +
   geom_boxplot(outlier.size=0.5) +
-  facet_wrap(~lineage, scales="free_y") +
-  scale_x_discrete(labels=c("Non-GBM", "GBM")) +
-  labs(title="Expression Noise (CV) by GBM Status in Each Lineage", x="GBM Status", y="Coefficient of Variation (CV)") +
+  scale_x_discrete(labels=te_labels) +
+  labs(title="Expression Noise (CV) by Bewick TE-like Status", x="Bewick TE-like", y="CV") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_te_like.png", plot=p3, width=7, height=5)
+
+# Assign each gene to a methylation group for combined boxplot
+results$methylation_group <- NA
+results$methylation_group[!is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status == "gbM"] <- "Cahn gbM"
+results$methylation_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "gbM"] <- "Bewick gbM"
+results$methylation_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "mCHH"] <- "CHH"
+results$methylation_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "mCHG"] <- "CHG"
+results$methylation_group[!is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status == "TE-like methylation"] <- "TE-Like Methylation"
+results$methylation_group[!is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status == "Unmethylated" & is.na(results$methylation_group)] <- "Unmethylated"
+results$methylation_group[is.na(results$methylation_group)] <- "Non-gbM"
+
+# Combined boxplot
+results$methylation_group <- factor(results$methylation_group, levels=c("Unmethylated", "Non-gbM", "Bewick gbM", "Cahn gbM", "CHH", "CHG", "TE-Like Methylation"))
+p_combined <- ggplot(results, aes(x=methylation_group, y=cv_expr, color=methylation_group)) +
+  geom_jitter(width=0.25, alpha=0.5, size=0.7) +
+  labs(title="Univariant Scatter Plot: Expression Noise (CV) by Methylation Group", x="Methylation Group", y="CV") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
-        strip.text = element_text(size=8),
-        plot.margin = margin(10, 10, 10, 10))
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_by_lineage.png", plot=p_lineage, width=18, height=8)
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_scatter_combined.png", plot=p_combined, width=10, height=6)
+
+# Assign methylation group for Cahn
+results$cahn_group <- NA
+results$cahn_group[!is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status == "gbM"] <- "gbM"
+results$cahn_group[!is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status == "TE-like methylation"] <- "TE-like"
+results$cahn_group[!is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status == "Unmethylated"] <- "Unmethylated"
+results$cahn_group <- factor(results$cahn_group, levels=c("Unmethylated", "gbM", "TE-like"))
+
+# Assign methylation group for Bewick
+results$bewick_group <- NA
+results$bewick_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "gbM"] <- "gbM"
+results$bewick_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "mCHH"] <- "CHH"
+results$bewick_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "mCHG"] <- "CHG"
+results$bewick_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "Unmethylated"] <- "Unmethylated"
+results$bewick_group <- factor(results$bewick_group, levels=c("Unmethylated", "gbM", "CHH", "CHG"))
+
+# Filter out non-finite CV values for plotting
+plot_results <- results[is.finite(results$cv_expr), ]
+
+# Remove extreme outliers (e.g., above 99th percentile) for plotting
+cv_cap <- quantile(plot_results$cv_expr, 0.99, na.rm=TRUE)
+plot_results <- plot_results[plot_results$cv_expr <= cv_cap, ]
+
+# Cahn plot with median line
+p_cahn <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=cahn_group, y=cv_expr, color=cahn_group)) +
+  geom_jitter(width=0.25, alpha=0.5, size=0.7) +
+  stat_summary(fun=median, geom="crossbar", width=0.5, color="black", fatten=2, size=0.7) +
+  labs(title="Univariant Scatter Plot: Expression Noise (CV) by Cahn Methylation Group", x="Cahn Methylation Group", y="CV") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_scatter_cahn.png", plot=p_cahn, width=8, height=6)
+
+# Bewick plot with median line
+p_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=bewick_group, y=cv_expr, color=bewick_group)) +
+  geom_jitter(width=0.25, alpha=0.5, size=0.7) +
+  stat_summary(fun=median, geom="crossbar", width=0.5, color="black", fatten=2, size=0.7) +
+  labs(title="Univariant Scatter Plot: Expression Noise (CV) by Bewick Methylation Group", x="Bewick Methylation Group", y="CV") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_scatter_bewick.png", plot=p_bewick, width=8, height=6)
+
+# Wilcoxon tests
+stat_cahn <- wilcox.test(cv_expr ~ cahn_gbm, data=results)
+stat_bewick <- wilcox.test(cv_expr ~ bewick_gbm, data=results)
+stat_te_like <- wilcox.test(cv_expr ~ bewick_te_like, data=results)
+
+cat("Wilcoxon test p-value (Cahn gbM):", stat_cahn$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt")
+cat("Wilcoxon test p-value (Bewick gbM):", stat_bewick$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)
+cat("Wilcoxon test p-value (Bewick TE-like):", stat_te_like$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)

@@ -10,7 +10,8 @@ This repository contains the code, scripts, and documentation for the analysis p
 
 **Note:**
 - The primary Seurat object used for these analyses (`Oliva_dataset/integrated_col_trajectories.rds`) is not included in this repository, as it is not yet published or publicly available. Users will not be able to reproduce the full analysis or generate the same results until this dataset is released.
-- The GBM gene list (`gbM_data/unique_gbm_genes.csv`) is included in this repository. It is a consensus set of GBM genes derived using a script that processes data from Cahn et al ([PubMed](https://pubmed.ncbi.nlm.nih.gov/39632087/)) and Bewick et al ([PNAS](https://www.pnas.org/doi/10.1073/pnas.1604666113)). The raw data from these studies is not included here.
+- The methylation datasets from Cahn et al. ([PubMed](https://pubmed.ncbi.nlm.nih.gov/39632087/)) and Bewick et al. ([PNAS](https://www.pnas.org/doi/10.1073/pnas.1604666113)) are included in `Methylation_Data/` and are publicly available.
+- The GBM gene list (`gbM_data/unique_gbm_genes.csv`) is included in this repository. It is a consensus set of GBM genes derived using a script that processes data from Cahn et al. and Bewick et al.
 
 All code and workflow steps are provided for transparency and future reproducibility.
 
@@ -26,12 +27,14 @@ All code and workflow steps are provided for transparency and future reproducibi
    - Find genes induced in one cell type but not another.
    - Characterize noise level of responsive genes.
 3. **Genomic feature analysis:**
-   - Identify features (e.g., DNA methylation status) of high/low noise and high/low responsiveness genes.
+   - Identify features (e.g., DNA methylation status, TE-like methylation) of high/low noise and high/low responsiveness genes.
    - Determine shared features between noisy and responsive genes.
+   - Explore the effects of both gbM (gene body methylation) and TE-like methylation on gene expression noise.
 
 ### Research Hypothesis
 - Genes with gbM (gene body methylation) will exhibit less noisy expression within the same cell type compared to unmethylated genes.
-- Responsive (cell-type-specific) genes are less likely to exhibit gbM compared to housekeeping genes.
+- Genes with TE-like methylation may show distinct noise characteristics, which will be explored in parallel to gbM.
+- Responsive (cell-type-specific) genes are less likely to exhibit gbM or TE-like methylation compared to housekeeping genes.
 
 ---
 
@@ -39,6 +42,8 @@ All code and workflow steps are provided for transparency and future reproducibi
 
 - `gbm_noise_analysis/`  
   Main pipeline scripts (R and bash), logs, and results for noise and methylation analysis.
+- `Methylation_Data/`  
+  Public methylation datasets (Cahn et al., Bewick et al.), combined methylation annotation, and H2A.Z gene lists.
 - `seurat_utilities/`  
   Batch scripts for Seurat summary and visualization.
 - `seurat_metadata/`  
@@ -56,7 +61,7 @@ All code and workflow steps are provided for transparency and future reproducibi
 - Run: `sbatch gbm_noise_analysis/export_expression_matrix.sh`
 - Output: `gbm_noise_analysis/expression_matrix.csv`
 
-### 2. Calculate Expression Noise & Compare gbM
+### 2. Calculate Expression Noise & Compare gbM and TE-like Methylation
 - Run: `sbatch gbm_noise_analysis/gbm_noise_analysis.sh`
 - Output: `gbm_noise_analysis/gbm_noise_comparison.csv`, `gbm_noise_analysis/gbm_noise_boxplot.png`, `gbm_noise_analysis/gbm_noise_stats.txt`
 

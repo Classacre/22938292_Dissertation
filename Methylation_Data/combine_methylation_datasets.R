@@ -2,11 +2,11 @@
 # Purpose: Combine Cahn_et_al_2024 and Bewick_et_al_2016 methylation data, add agreement columns, H2A.Z enrichment columns, and output CSV file (base R only).
 
 # Read Cahn data
-df_cahn <- read.csv("/group/sms029/mnieuwenh/gbM_data/Cahn_et_al_2024.csv", stringsAsFactors = FALSE)
+df_cahn <- read.csv("/group/sms029/mnieuwenh/Methylation_Data/Cahn_et_al_2024.csv", stringsAsFactors = FALSE)
 colnames(df_cahn) <- c("Gene_ID", "Cahn_Methylation_status")
 
 # Read Bewick data
-df_bewick <- read.csv("/group/sms029/mnieuwenh/gbM_data/Bewick_et_al_2016.csv", stringsAsFactors = FALSE)
+df_bewick <- read.csv("/group/sms029/mnieuwenh/Methylation_Data/Bewick_et_al_2016.csv", stringsAsFactors = FALSE)
 colnames(df_bewick)[1:2] <- c("Gene", "Bewick_Classification")
 
 # Standardize gene IDs (remove .x isoform from Bewick)
@@ -19,8 +19,8 @@ df_bewick$Bewick_Classification[df_bewick$Bewick_Classification == "UM"] <- "Unm
 df_bewick <- df_bewick[, c("Gene_ID", "Bewick_Classification")]
 
 # Read H2A.Z depleted and enriched gene lists
-dep <- read.csv("/group/sms029/mnieuwenh/gbM_data/H2A.Z Body-Depleted Genes journal.csv", stringsAsFactors = FALSE)[,1]
-enr <- read.csv("/group/sms029/mnieuwenh/gbM_data/H2A.Z Body-Enriched Genes journal.csv", stringsAsFactors = FALSE)[,1]
+dep <- read.csv("/group/sms029/mnieuwenh/Methylation_Data/H2A.Z Body-Depleted Genes journal.csv", stringsAsFactors = FALSE)[,1]
+enr <- read.csv("/group/sms029/mnieuwenh/Methylation_Data/H2A.Z Body-Enriched Genes journal.csv", stringsAsFactors = FALSE)[,1]
 
 # Merge datasets
 merged <- merge(df_cahn, df_bewick, by = "Gene_ID", all = TRUE)
@@ -39,4 +39,4 @@ merged$H2AZ_Enriched <- ifelse(merged$Gene_ID %in% enr, TRUE,
                               ifelse(merged$Gene_ID %in% dep, FALSE, NA))
 
 # Output CSV
-write.csv(merged, "/group/sms029/mnieuwenh/gbM_data/combined_methylation_data.csv", row.names = FALSE)
+write.csv(merged, "/group/sms029/mnieuwenh/Methylation_Data/combined_methylation_data.csv", row.names = FALSE)

@@ -1,3 +1,15 @@
 Warning message:
 Removed 1151 rows containing non-finite outside the scale range
 (`stat_boxplot()`). 
+Warning message:
+Removed 1151 rows containing non-finite outside the scale range
+(`stat_boxplot()`). 
+Warning message:
+Removed 1151 rows containing non-finite outside the scale range
+(`stat_boxplot()`). 
+Warning message:
+Removed 1151 rows containing missing values or values outside the scale range
+(`geom_point()`). 
+Warning message:
+Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead. 
