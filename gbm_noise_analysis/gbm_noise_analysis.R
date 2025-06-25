@@ -8,6 +8,7 @@ gbm_genes <- read.csv("/group/sms029/mnieuwenh/gbM_data/unique_gbm_genes.csv", s
 # Annotate genes
 all_genes <- rownames(expr_mat)
 gbm_status <- all_genes %in% gbm_genes
+cell_metadata <- read.csv("/group/sms029/mnieuwenh/seurat_metadata/seurat_metadata_full.csv", row.names=1, check.names=FALSE)
 
 # Calculate mean, variance, CV for each gene
 mean_expr <- rowMeans(expr_mat)
