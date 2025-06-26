@@ -111,6 +111,41 @@ plot_results <- results[is.finite(results$cv_expr), ]
 cv_cap <- quantile(plot_results$cv_expr, 0.99, na.rm=TRUE)
 plot_results <- plot_results[plot_results$cv_expr <= cv_cap, ]
 
+# Filter out lowly expressed genes for noise/CV analysis
+mean_threshold <- 1
+filtered_results <- plot_results[plot_results$mean_expr > mean_threshold, ]
+
+# Brennecke et al. (2013) noise filtering: fit mean–CV^2 relationship
+plot_results$cv2 <- plot_results$cv_expr^2
+fit <- nls(cv2 ~ a / mean_expr + b, data=plot_results[plot_results$mean_expr > 0,], start=list(a=1, b=0.1))
+fit_vals <- predict(fit, newdata=data.frame(mean_expr=plot_results$mean_expr))
+# Calculate 95% quantile of residuals as threshold
+residuals <- plot_results$cv2 - fit_vals
+threshold <- quantile(residuals, 0.95, na.rm=TRUE)
+# Genes above threshold are considered biologically variable
+plot_results$biol_variable <- residuals > threshold
+filtered_biol <- plot_results[plot_results$biol_variable & plot_results$mean_expr > 0, ]
+
+# Plot: mean vs CV^2 with fitted curve and threshold
+library(scales)
+ggplot(plot_results, aes(x=mean_expr, y=cv2)) +
+  geom_point(alpha=0.3, size=0.5) +
+  stat_function(fun=function(x) predict(fit, newdata=data.frame(mean_expr=x)), color="red", size=1) +
+  geom_point(data=filtered_biol, aes(x=mean_expr, y=cv2), color="blue", alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs CV^2 with Technical Noise Fit (Brennecke et al. 2013)", x="Mean Expression", y="CV^2") +
+  scale_x_continuous(trans=log10_trans()) +
+  scale_y_continuous(trans=log10_trans()) +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv2_brennecke.png", width=8, height=6)
+
+# Use only biologically variable genes for downstream noise analysis
+# Example: mean vs CV by Cahn group (biol variable only)
+p_mean_cv_cahn_biol <- ggplot(filtered_biol[!is.na(filtered_biol$cahn_group),], aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs CV by Cahn Methylation Group (Biologically Variable Genes)", x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_cahn_group_biolvar.png", plot=p_mean_cv_cahn_biol, width=8, height=6)
+
 # Cahn boxplot
 p_cahn <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=cahn_group, y=cv_expr, fill=cahn_group)) +
   geom_boxplot(outlier.size=0.5, outlier.shape=16, outlier.alpha=0.3) +
@@ -156,6 +191,50 @@ p_mean_cv_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes
   labs(title="Mean Expression vs CV by Bewick Methylation Group", x="Mean Expression", y="Coefficient of Variation (CV)") +
   theme_bw()
 ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_bewick_group.png", plot=p_mean_cv_bewick, width=8, height=6)
+
+# Plot: mean vs CV by methylation group (Cahn) - filtered
+p_mean_cv_cahn_filtered <- ggplot(filtered_results[!is.na(filtered_results$cahn_group),], aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title=paste0("Mean Expression vs CV by Cahn Methylation Group (mean > ", mean_threshold, ")"), x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_cahn_group_filtered.png", plot=p_mean_cv_cahn_filtered, width=8, height=6)
+
+# Plot: mean vs CV by methylation group (Bewick) - filtered
+p_mean_cv_bewick_filtered <- ggplot(filtered_results[!is.na(filtered_results$bewick_group),], aes(x=mean_expr, y=cv_expr, color=bewick_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title=paste0("Mean Expression vs CV by Bewick Methylation Group (mean > ", mean_threshold, ")"), x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_bewick_group_filtered.png", plot=p_mean_cv_bewick_filtered, width=8, height=6)
+
+# Plot: distribution of mean expression by methylation group (Cahn)
+p_mean_cahn <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=cahn_group, y=mean_expr, fill=cahn_group)) +
+  geom_violin(trim=FALSE, scale="width") +
+  geom_boxplot(width=0.1, fill="white") +
+  labs(title="Mean Expression by Cahn Methylation Group", x="Cahn Methylation Group", y="Mean Expression") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_expr_violin_cahn.png", plot=p_mean_cahn, width=8, height=6)
+
+# Plot: distribution of mean expression by methylation group (Bewick)
+p_mean_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=bewick_group, y=mean_expr, fill=bewick_group)) +
+  geom_violin(trim=FALSE, scale="width") +
+  geom_boxplot(width=0.1, fill="white") +
+  labs(title="Mean Expression by Bewick Methylation Group", x="Bewick Methylation Group", y="Mean Expression") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_expr_violin_bewick.png", plot=p_mean_bewick, width=8, height=6)
+
+# Plot: histogram of mean expression (all genes)
+ggplot(plot_results, aes(x=mean_expr)) +
+  geom_histogram(bins=100, fill="#0072B2", color="white", alpha=0.7") +
+  labs(title="Distribution of Mean Expression (All Genes)", x="Mean Expression", y="Gene Count") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_expr_histogram_all.png", width=8, height=6)
+
+# Plot: histogram of mean expression (filtered genes)
+ggplot(filtered_results, aes(x=mean_expr)) +
+  geom_histogram(bins=100, fill="#D55E00", color="white", alpha=0.7") +
+  labs(title=paste0("Distribution of Mean Expression (Filtered, mean > ", mean_threshold, ")"), x="Mean Expression", y="Gene Count") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_expr_histogram_filtered.png", width=8, height=6)
 
 # Annotate genes for each methylation status and H2A.Z status
 h2az_depleted <- !is.na(anno$H2AZ_Depleted) & anno$H2AZ_Depleted == TRUE

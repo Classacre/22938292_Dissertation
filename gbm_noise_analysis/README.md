@@ -89,3 +89,21 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
 - The pipeline now supports flexible comparison of gene expression noise and responsiveness across both methylation and H2A.Z categories, including their combinations.
 - All code and workflow steps are provided for transparency and future reproducibility.
 - You may need to edit gene names if your Seurat object uses a different format than the methylation annotation.
+
+## Noise Filtering Approach (Brennecke et al., 2013)
+To distinguish technical noise from biological variability, we use the method of Brennecke et al. (2013), which models the expected technical noise as a function of mean expression:
+
+\[
+\text{CV}^2 = a_0 + \frac{a_1}{\mu}
+\]
+
+where:
+- \(\text{CV}^2\) is the squared coefficient of variation for each gene,
+- \(\mu\) is the mean expression of the gene,
+- \(a_0\) and \(a_1\) are parameters estimated from the data by fitting the curve to the majority of genes (assumed to be dominated by technical noise).
+
+Genes with observed \(\text{CV}^2\) significantly above this fitted curve are considered to have biological variability (not just technical noise). Typically, genes above the 95% confidence interval of the fit are retained for downstream noise analysis.
+
+This approach ensures that only genes with evidence of true biological variability are included in noise analyses, reducing the impact of technical artifacts from lowly expressed genes.
+
+- See `mean_vs_cv2_brennecke.png` for a visualization of the fitted curve and selected genes.
