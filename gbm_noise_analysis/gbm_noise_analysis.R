@@ -149,11 +149,60 @@ p_mean_cv_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes
   theme_bw()
 ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_bewick_group.png", plot=p_mean_cv_bewick, width=8, height=6)
 
+# Annotate genes for each methylation status and H2A.Z status
+h2az_depleted <- !is.na(anno$H2AZ_Depleted) & anno$H2AZ_Depleted == TRUE
+h2az_enriched <- !is.na(anno$H2AZ_Enriched) & anno$H2AZ_Enriched == TRUE
+h2az_group <- rep(NA, length(genes))
+h2az_group[h2az_depleted] <- "H2A.Z-Depleted"
+h2az_group[h2az_enriched] <- "H2A.Z-Enriched"
+h2az_group[is.na(h2az_group)] <- "Other/NA"
+
+# Add H2A.Z columns to results
+gbm_labels <- c("FALSE"="Non-gbM", "TRUE"="gbM")
+te_labels <- c("FALSE"="Other", "TRUE"="TE-like")
+
+results$h2az_depleted <- h2az_depleted
+results$h2az_enriched <- h2az_enriched
+results$h2az_group <- factor(h2az_group, levels=c("H2A.Z-Depleted", "H2A.Z-Enriched", "Other/NA"))
+
+# Boxplot: CV by H2A.Z group
+p_h2az <- ggplot(results, aes(x=h2az_group, y=cv_expr, fill=h2az_group)) +
+  geom_boxplot(outlier.size=0.5) +
+  labs(title="Expression Noise (CV) by H2A.Z Group", x="H2A.Z Group", y="CV") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_h2az.png", plot=p_h2az, width=8, height=6)
+
+# Scatter plots: mean vs SD and mean vs CV by H2A.Z group
+p_mean_sd_h2az <- ggplot(results, aes(x=mean_expr, y=sd_expr, color=h2az_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs SD by H2A.Z Group", x="Mean Expression", y="Standard Deviation") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_sd_by_h2az_group.png", plot=p_mean_sd_h2az, width=8, height=6)
+
+p_mean_cv_h2az <- ggplot(results, aes(x=mean_expr, y=cv_expr, color=h2az_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs CV by H2A.Z Group", x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_h2az_group.png", plot=p_mean_cv_h2az, width=8, height=6)
+
+# Combined methylation + H2A.Z group (optional, for interaction)
+results$meth_h2az_group <- paste0(results$methylation_group, "+", results$h2az_group)
+
+# Boxplot: CV by methylation + H2A.Z group
+p_meth_h2az <- ggplot(results, aes(x=meth_h2az_group, y=cv_expr, fill=meth_h2az_group)) +
+  geom_boxplot(outlier.size=0.5) +
+  labs(title="Expression Noise (CV) by Methylation + H2A.Z Group", x="Methylation + H2A.Z Group", y="CV") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_meth_h2az.png", plot=p_meth_h2az, width=12, height=6)
+
 # Wilcoxon tests
 stat_cahn <- wilcox.test(cv_expr ~ cahn_gbm, data=results)
 stat_bewick <- wilcox.test(cv_expr ~ bewick_gbm, data=results)
 stat_te_like <- wilcox.test(cv_expr ~ bewick_te_like, data=results)
+stat_h2az <- wilcox.test(cv_expr ~ h2az_group, data=results, subset=h2az_group %in% c("H2A.Z-Depleted", "H2A.Z-Enriched"))
 
 cat("Wilcoxon test p-value (Cahn gbM):", stat_cahn$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt")
 cat("Wilcoxon test p-value (Bewick gbM):", stat_bewick$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)
 cat("Wilcoxon test p-value (Bewick TE-like):", stat_te_like$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)
+cat("Wilcoxon test p-value (H2A.Z-Depleted vs H2A.Z-Enriched):", stat_h2az$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)

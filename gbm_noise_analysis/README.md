@@ -47,16 +47,24 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
   - `gbm_noise_boxplot_bewick.png` (Bewick: gbM, mCHG, mCHH, Unmethylated)
   - `gbm_noise_boxplot_combined.png` (all groups)
   - `gbm_noise_boxplot_te_like.png`, `gbm_noise_boxplot_by_celltype.png`, `gbm_noise_boxplot_by_lineage.png`, etc.
+  - `gbm_noise_boxplot_h2az.png` (CV by H2A.Z group)
+  - `gbm_noise_boxplot_meth_h2az.png` (CV by methylation + H2A.Z group)
 - **Scatter plots:**
   - `gbm_noise_scatter_cahn.png`, `gbm_noise_scatter_bewick.png`, `gbm_noise_scatter_combined.png`
   - `mean_vs_sd_by_cahn_group.png`, `mean_vs_cv_by_cahn_group.png`
   - `mean_vs_sd_by_bewick_group.png`, `mean_vs_cv_by_bewick_group.png`
   - `mean_vs_sd_by_methylation_group.png`, `mean_vs_cv_by_methylation_group.png`
+  - `mean_vs_sd_by_h2az_group.png`, `mean_vs_cv_by_h2az_group.png`
+  - `mean_vs_sd_by_meth_h2az_group.png`, `mean_vs_cv_by_meth_h2az_group.png`
 - **Statistical results:**
   - `gbm_noise_stats.txt` (Wilcoxon test p-values for group comparisons)
   - `gbm_noise_report.txt` (summary report)
+  - `fisher_h2az.txt` (Fisher's test for H2A.Z enrichment)
 - **Responsive gene results:**
   - `results/responsive_genes/responsive_genes.csv`, `responsive_noise_stats.txt`, `responsive_vs_nonresponsive_noise.png`
+  - `prop_responsive_by_h2az.csv` (proportion of responsive genes by H2A.Z group)
+  - `cv_by_h2az_and_responsive.png` (CV by H2A.Z group and responsiveness)
+  - `cv_by_meth_h2az_and_responsive.png` (CV by methylation + H2A.Z group and responsiveness)
 - **Logs:**
   - All SLURM output and error logs are in the `logs/` subfolder.
 
@@ -68,6 +76,6 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
 ---
 
 ## Notes
-- The pipeline allows for flexible comparison of gene expression noise across multiple methylation categories, including both Cahn and Bewick classifications.
+- The pipeline now supports flexible comparison of gene expression noise and responsiveness across both methylation and H2A.Z categories, including their combinations.
 - All code and workflow steps are provided for transparency and future reproducibility.
 - You may need to edit gene names if your Seurat object uses a different format than the methylation annotation.
