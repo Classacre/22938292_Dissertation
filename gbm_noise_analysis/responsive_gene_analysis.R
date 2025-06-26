@@ -2,6 +2,14 @@
 # Responsive genes: highly expressed in one cell type (identity), low in others
 # Output: responsive gene list and their noise characteristics
 
+# Install required R packages if not already installed
+if (!requireNamespace("ggridges", quietly = TRUE)) install.packages("ggridges", repos="https://cloud.r-project.org/")
+if (!requireNamespace("ComplexUpset", quietly = TRUE)) install.packages("ComplexUpset", repos="https://cloud.r-project.org/")
+if (!requireNamespace("pheatmap", quietly = TRUE)) install.packages("pheatmap", repos="https://cloud.r-project.org/")
+library(ggridges)
+library(ComplexUpset)
+library(pheatmap)
+
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -56,6 +64,22 @@ p_resp <- ggplot(responsive_genes, aes(x=is_responsive, y=cv_expr, fill=is_respo
   labs(title="Expression Noise (CV) for Responsive vs Non-Responsive Genes", x="Gene Type", y="Coefficient of Variation (CV)") +
   theme_bw()
 ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/responsive_vs_nonresponsive_noise.png", plot=p_resp, width=8, height=6)
+
+# Violin plot: CV for responsive vs non-responsive genes
+p_resp_violin <- ggplot(responsive_genes, aes(x=is_responsive, y=cv_expr, fill=is_responsive)) +
+  geom_violin(trim=FALSE, scale="width") +
+  geom_boxplot(width=0.1, outlier.size=0.5, outlier.shape=16, outlier.alpha=0.3, fill="white") +
+  scale_x_discrete(labels=c("Non-Responsive", "Responsive")) +
+  labs(title="Expression Noise (CV) for Responsive vs Non-Responsive Genes (Violin)", x="Gene Type", y="Coefficient of Variation (CV)") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/responsive_vs_nonresponsive_violin.png", plot=p_resp_violin, width=8, height=6)
+
+# Ridge plot: CV for responsive vs non-responsive genes
+p_resp_ridge <- ggplot(responsive_genes, aes(x=cv_expr, y=factor(is_responsive, labels=c("Non-Responsive", "Responsive")), fill=is_responsive)) +
+  ggridges::geom_density_ridges(scale=1.2, alpha=0.7) +
+  labs(title="CV Distribution for Responsive vs Non-Responsive Genes (Ridge)", x="CV", y="Gene Type") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/responsive_vs_nonresponsive_ridge.png", plot=p_resp_ridge, width=8, height=6)
 
 # Wilcoxon test
 stat_resp <- wilcox.test(cv_expr ~ is_responsive, data=responsive_genes)
@@ -162,3 +186,29 @@ summary_text <- c(
   sprintf("Fisher's exact (H2A.Z): p = %.3g. %s", fisher_h2az$p.value, ifelse(fisher_h2az$p.value < 0.05, "Significant enrichment.", "No significant enrichment."))
 )
 writeLines(summary_text, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/responsive_stats_summary.txt")
+
+# UpSet plot: Overlap of responsive, gbM, and H2A.Z-depleted genes
+upset_data <- responsive_genes
+upset_data$gbM <- upset_data$Cahn_Methylation_status == "gbM" | upset_data$Bewick_Classification == "gbM"
+upset_data$H2AZ_Depleted <- upset_data$H2AZ_Group == "H2A.Z-Depleted"
+upset_data <- upset_data[,c("is_responsive","gbM","H2AZ_Depleted")]
+colnames(upset_data) <- c("Responsive","gbM","H2A.Z-Depleted")
+ComplexUpset::upset(as.data.frame(upset_data), intersect = c("Responsive","gbM","H2A.Z-Depleted"), width_ratio=0.1)
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/upset_responsive_gbm_h2az.png", width=14, height=7)
+
+# Heatmap: Top 100 responsive genes with wider canvas
+responsive_top100 <- head(responsive_genes[order(-responsive_genes$max_mean + responsive_genes$second_mean),], 100)
+mat_resp <- expr_mat[responsive_top100$gene,]
+pheatmap::pheatmap(mat_resp, cluster_rows=TRUE, cluster_cols=TRUE, show_rownames=FALSE, show_colnames=FALSE, main="Top 100 Responsive Genes")
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/heatmap_top100_responsive.png", width=16, height=8)
+
+# Ridge plot: CV for responsive vs non-responsive genes with increased y separation
+p_resp_ridge <- ggplot(responsive_genes, aes(x=cv_expr, y=factor(is_responsive, labels=c("Non-Responsive", "Responsive")), fill=is_responsive)) +
+  ggridges::geom_density_ridges(scale=2.5, alpha=0.7, rel_min_height=0.01) +
+  labs(title="CV Distribution for Responsive vs Non-Responsive Genes (Ridge)", x="CV", y="Gene Type") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/responsive_vs_nonresponsive_ridge.png", plot=p_resp_ridge, width=8, height=8)
+
+# UpSet plot: Overlap of responsive, gbM, and H2A.Z-depleted genes with wider canvas
+ComplexUpset::upset(as.data.frame(upset_data), intersect = c("Responsive","gbM","H2A.Z-Depleted"), width_ratio=0.1, set_sizes=ComplexUpset::upset_set_size() + theme(axis.text.x = element_text(angle=45, hjust=1, size=14)))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/upset_responsive_gbm_h2az.png", width=14, height=7)

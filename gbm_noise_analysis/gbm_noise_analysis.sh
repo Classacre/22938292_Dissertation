@@ -13,4 +13,7 @@ module load Anaconda3/2024.06
 source ~/.bashrc
 conda activate /group/sms029/conda_environment/R
 
+# Install required R packages via conda if not present
+conda install -y -c conda-forge r-ggridges r-complexupset r-pheatmap
+
 Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/gbm_noise_analysis.R

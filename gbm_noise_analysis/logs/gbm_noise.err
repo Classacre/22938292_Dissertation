@@ -19,3 +19,8 @@ Removed 1151 rows containing missing values or values outside the scale range
 Warning message:
 Removed 1151 rows containing non-finite outside the scale range
 (`stat_boxplot()`). 
+Picking joint bandwidth of 3.69
+Picking joint bandwidth of 8.08
+Warning message:
+In upset_data(data, intersect, mode = mode, encode_sets = encode_sets,  :
+  Detected missing values in the columns indicating sets, coercing to FALSE

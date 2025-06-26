@@ -1,6 +1,14 @@
 # Compare expression noise between gbM and TE-like methylation genes (Cahn and Bewick)
 library(ggplot2)
 
+# Install required R packages if not already installed
+if (!requireNamespace("ggridges", quietly = TRUE)) install.packages("ggridges", repos="https://cloud.r-project.org/")
+if (!requireNamespace("ComplexUpset", quietly = TRUE)) install.packages("ComplexUpset", repos="https://cloud.r-project.org/")
+if (!requireNamespace("pheatmap", quietly = TRUE)) install.packages("pheatmap", repos="https://cloud.r-project.org/")
+library(ggridges)
+library(ComplexUpset)
+library(pheatmap)
+
 # Load expression matrix
 expr_mat <- as.matrix(read.csv("/group/sms029/mnieuwenh/gbm_noise_analysis/expression_matrix.csv", row.names=1, check.names=FALSE))
 
@@ -195,6 +203,57 @@ p_meth_h2az <- ggplot(results, aes(x=meth_h2az_group, y=cv_expr, fill=meth_h2az_
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust=1))
 ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_meth_h2az.png", plot=p_meth_h2az, width=12, height=6)
+
+# Violin plot: CV by methylation group (Cahn)
+p_cahn_violin <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=cahn_group, y=cv_expr, fill=cahn_group)) +
+  geom_violin(trim=FALSE, scale="width") +
+  geom_boxplot(width=0.1, outlier.size=0.5, outlier.shape=16, outlier.alpha=0.3, fill="white") +
+  labs(title="Expression Noise (CV) by Cahn Methylation Group (Violin)", x="Cahn Methylation Group", y="CV") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_violin_cahn.png", plot=p_cahn_violin, width=8, height=6)
+
+# Violin plot: CV by methylation group (Bewick)
+p_bewick_violin <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=bewick_group, y=cv_expr, fill=bewick_group)) +
+  geom_violin(trim=FALSE, scale="width") +
+  geom_boxplot(width=0.1, outlier.size=0.5, outlier.shape=16, outlier.alpha=0.3, fill="white") +
+  labs(title="Expression Noise (CV) by Bewick Methylation Group (Violin)", x="Bewick Methylation Group", y="CV") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_violin_bewick.png", plot=p_bewick_violin, width=8, height=6)
+
+# Ridge plot: CV by methylation group (Cahn) with increased y separation
+p_cahn_ridge <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=cv_expr, y=cahn_group, fill=cahn_group)) +
+  ggridges::geom_density_ridges(scale=2.5, alpha=0.7, rel_min_height=0.01) +
+  labs(title="CV Distribution by Cahn Methylation Group (Ridge)", x="CV", y="Cahn Methylation Group") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_ridge_cahn.png", plot=p_cahn_ridge, width=8, height=8)
+
+# Ridge plot: CV by methylation group (Bewick) with increased y separation
+p_bewick_ridge <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=cv_expr, y=bewick_group, fill=bewick_group)) +
+  ggridges::geom_density_ridges(scale=2.5, alpha=0.7, rel_min_height=0.01) +
+  labs(title="CV Distribution by Bewick Methylation Group (Ridge)", x="CV", y="Bewick Methylation Group") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_ridge_bewick.png", plot=p_bewick_ridge, width=8, height=8)
+
+# UpSet plot: Overlap of high-noise, gbM, and H2A.Z-depleted genes with wider canvas
+upset_data <- data.frame(
+  High_Noise = results$cv_expr >= quantile(results$cv_expr, 0.9, na.rm=TRUE),
+  gbM = results$cahn_gbm | results$bewick_gbm,
+  H2AZ_Depleted = results$h2az_group == "H2A.Z-Depleted"
+)
+ComplexUpset::upset(upset_data, intersect = c("High_Noise","gbM","H2AZ_Depleted"), width_ratio=0.1, set_sizes=ComplexUpset::upset_set_size() + theme(axis.text.x = element_text(angle=45, hjust=1, size=14)))
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/upset_highnoise_gbm_h2az.png", width=14, height=7)
+
+# Heatmap: Top 30 high-noise genes (CV) with wider canvas
+if (exists("plot_results")) {
+  topN <- 30
+  top_genes <- head(plot_results[order(-plot_results$cv_expr),], topN)
+  if (nrow(top_genes) > 0) {
+    mat <- expr_mat[top_genes$gene, , drop=FALSE]
+    pheatmap::pheatmap(mat, cluster_rows=TRUE, cluster_cols=TRUE, show_rownames=TRUE, show_colnames=FALSE, main=paste("Top", topN, "High-Noise Genes (CV)"), filename="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/heatmap_top30_highnoise.png", width=16, height=8)
+  }
+}
 
 # Wilcoxon tests
 stat_cahn <- wilcox.test(cv_expr ~ cahn_gbm, data=results)

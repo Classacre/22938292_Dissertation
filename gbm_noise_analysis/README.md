@@ -56,6 +56,18 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
   - `mean_vs_sd_by_methylation_group.png`, `mean_vs_cv_by_methylation_group.png`
   - `mean_vs_sd_by_h2az_group.png`, `mean_vs_cv_by_h2az_group.png`
   - `mean_vs_sd_by_meth_h2az_group.png`, `mean_vs_cv_by_meth_h2az_group.png`
+- **Violin plots:**
+  - `gbm_noise_violin_cahn.png`, `gbm_noise_violin_bewick.png` (CV by methylation group, violin)
+  - `results/responsive_genes/responsive_vs_nonresponsive_violin.png` (CV for responsive vs non-responsive genes, violin)
+- **Ridge plots:**
+  - `gbm_noise_ridge_cahn.png`, `gbm_noise_ridge_bewick.png` (CV by methylation group, ridge)
+  - `results/responsive_genes/responsive_vs_nonresponsive_ridge.png` (CV for responsive vs non-responsive genes, ridge)
+- **UpSet plots:**
+  - `upset_highnoise_gbm_h2az.png` (Overlap of high-noise, gbM, and H2A.Z-depleted genes)
+  - `results/responsive_genes/upset_responsive_gbm_h2az.png` (Overlap of responsive, gbM, and H2A.Z-depleted genes)
+- **Heatmaps:**
+  - `heatmap_top100_highnoise.png` (Top 100 high-noise genes, wide canvas)
+  - `results/responsive_genes/heatmap_top100_responsive.png` (Top 100 responsive genes, wide canvas)
 - **Statistical results:**
   - `gbm_noise_stats_summary.csv` (table of p-values for all group comparisons)
   - `gbm_noise_stats_summary.txt` (plain-language summary of findings)
