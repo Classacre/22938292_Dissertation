@@ -1,4 +1,0 @@
-Wilcoxon test p-value (Cahn gbM): 0 
-Wilcoxon test p-value (Bewick gbM): 1.083122e-214 
-Wilcoxon test p-value (Bewick TE-like): 2.033599e-73 
-Wilcoxon test p-value (H2A.Z-Depleted vs H2A.Z-Enriched): 0 

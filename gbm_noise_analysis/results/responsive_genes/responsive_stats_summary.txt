@@ -1,0 +1,5 @@
+Summary of Responsive Gene Group Comparisons:
+Responsive vs Non-Responsive (CV): p = 1.08e-12. Significant difference.
+Fisher's exact (Cahn): p = 1.56e-17. Significant enrichment.
+Fisher's exact (Bewick): p = 3.67e-13. Significant enrichment.
+Fisher's exact (H2A.Z): p = 3.09e-07. Significant enrichment.

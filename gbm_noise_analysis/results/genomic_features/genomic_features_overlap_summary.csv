@@ -1,0 +1,33 @@
+"Cahn_Group","Bewick_Group","H2AZ_Group","n","high_noise","low_noise","high_responsive","low_responsive","shared_high","shared_low"
+"TE-like methylation","Unmethylated","H2A.Z-Depleted",34,4,2,5,1,1,1
+"TE-like methylation","Unmethylated","H2A.Z-Enriched",165,33,7,13,21,1,1
+"TE-like methylation","Unmethylated","Other/NA",575,95,74,65,108,1,1
+"TE-like methylation","gbM","H2A.Z-Depleted",25,0,2,1,0,0,0
+"TE-like methylation","gbM","H2A.Z-Enriched",15,3,1,0,2,0,1
+"TE-like methylation","gbM","Other/NA",72,7,9,5,11,1,1
+"TE-like methylation","mCHG","H2A.Z-Depleted",8,0,1,3,1,0,1
+"TE-like methylation","mCHG","H2A.Z-Enriched",11,1,1,4,1,1,1
+"TE-like methylation","mCHG","Other/NA",47,17,11,3,16,1,1
+"TE-like methylation","mCHH","H2A.Z-Depleted",19,4,7,0,10,0,1
+"TE-like methylation","mCHH","H2A.Z-Enriched",19,8,2,1,7,1,1
+"TE-like methylation","mCHH","Other/NA",269,102,75,4,116,1,1
+"TE-like methylation",NA,"Other/NA",96,41,20,0,37,0,1
+"Unmethylated","Unmethylated","H2A.Z-Depleted",161,1,28,22,3,1,1
+"Unmethylated","Unmethylated","H2A.Z-Enriched",1981,230,117,220,178,1,1
+"Unmethylated","Unmethylated","Other/NA",9280,962,1141,1395,841,1,1
+"Unmethylated","gbM","H2A.Z-Enriched",1,0,0,0,0,0,0
+"Unmethylated","gbM","Other/NA",2,0,1,1,0,0,0
+"Unmethylated","mCHH","Other/NA",5,1,1,1,2,1,1
+"Unmethylated",NA,"Other/NA",244,75,30,4,73,1,1
+"gbM","Unmethylated","H2A.Z-Depleted",1184,3,126,100,17,1,1
+"gbM","Unmethylated","H2A.Z-Enriched",1092,93,44,85,92,1,1
+"gbM","Unmethylated","Other/NA",3558,169,294,346,181,1,1
+"gbM","gbM","H2A.Z-Depleted",2434,2,90,136,29,1,1
+"gbM","gbM","H2A.Z-Enriched",372,8,7,20,16,1,1
+"gbM","gbM","Other/NA",1909,36,92,128,49,1,1
+"gbM","mCHG","Other/NA",1,0,0,0,0,0,0
+"gbM","mCHH","H2A.Z-Depleted",2,0,0,0,0,0,0
+"gbM","mCHH","Other/NA",2,0,1,0,1,0,1
+"gbM",NA,"Other/NA",66,11,9,0,19,0,1
+NA,"Unmethylated","Other/NA",5,0,0,0,0,0,0
+NA,NA,"Other/NA",2130,673,386,17,747,1,1

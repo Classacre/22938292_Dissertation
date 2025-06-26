@@ -1,0 +1,5 @@
+Summary of Expression Noise Group Comparisons:
+Cahn gbM vs non-gbM: p = 0. Significant difference.
+Bewick gbM vs non-gbM: p = 1.08e-214. Significant difference.
+Bewick TE-like vs other: p = 2.03e-73. Significant difference.
+H2A.Z-Depleted vs H2A.Z-Enriched: p = 0. Significant difference.

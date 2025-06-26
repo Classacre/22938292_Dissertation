@@ -202,7 +202,29 @@ stat_bewick <- wilcox.test(cv_expr ~ bewick_gbm, data=results)
 stat_te_like <- wilcox.test(cv_expr ~ bewick_te_like, data=results)
 stat_h2az <- wilcox.test(cv_expr ~ h2az_group, data=results, subset=h2az_group %in% c("H2A.Z-Depleted", "H2A.Z-Enriched"))
 
-cat("Wilcoxon test p-value (Cahn gbM):", stat_cahn$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt")
-cat("Wilcoxon test p-value (Bewick gbM):", stat_bewick$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)
-cat("Wilcoxon test p-value (Bewick TE-like):", stat_te_like$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)
-cat("Wilcoxon test p-value (H2A.Z-Depleted vs H2A.Z-Enriched):", stat_h2az$p.value, "\n", file="/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats.txt", append=TRUE)
+# Create a summary statistics table for all group comparisons
+stat_table <- data.frame(
+  Comparison = c(
+    "Cahn gbM vs non-gbM",
+    "Bewick gbM vs non-gbM",
+    "Bewick TE-like vs other",
+    "H2A.Z-Depleted vs H2A.Z-Enriched"
+  ),
+  P_value = c(
+    stat_cahn$p.value,
+    stat_bewick$p.value,
+    stat_te_like$p.value,
+    stat_h2az$p.value
+  )
+)
+write.csv(stat_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats_summary.csv", row.names=FALSE)
+
+# Add a text summary of findings
+summary_text <- c(
+  "Summary of Expression Noise Group Comparisons:",
+  sprintf("Cahn gbM vs non-gbM: p = %.3g. %s", stat_cahn$p.value, ifelse(stat_cahn$p.value < 0.05, "Significant difference.", "No significant difference.")),
+  sprintf("Bewick gbM vs non-gbM: p = %.3g. %s", stat_bewick$p.value, ifelse(stat_bewick$p.value < 0.05, "Significant difference.", "No significant difference.")),
+  sprintf("Bewick TE-like vs other: p = %.3g. %s", stat_te_like$p.value, ifelse(stat_te_like$p.value < 0.05, "Significant difference.", "No significant difference.")),
+  sprintf("H2A.Z-Depleted vs H2A.Z-Enriched: p = %.3g. %s", stat_h2az$p.value, ifelse(stat_h2az$p.value < 0.05, "Significant difference.", "No significant difference."))
+)
+writeLines(summary_text, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_stats_summary.txt")

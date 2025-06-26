@@ -135,3 +135,30 @@ p_meth_h2az <- ggplot(responsive_genes, aes(x=meth_h2az_group, y=cv_expr, fill=i
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust=1))
 ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/cv_by_meth_h2az_and_responsive.png", plot=p_meth_h2az, width=12, height=6)
+
+# Create a summary statistics table for all responsive gene group comparisons
+stat_table <- data.frame(
+  Comparison = c(
+    "Responsive vs Non-Responsive (CV)",
+    "Fisher's exact (Cahn)",
+    "Fisher's exact (Bewick)",
+    "Fisher's exact (H2A.Z)"
+  ),
+  P_value = c(
+    stat_resp$p.value,
+    fisher_cahn$p.value,
+    fisher_bewick$p.value,
+    fisher_h2az$p.value
+  )
+)
+write.csv(stat_table, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/responsive_stats_summary.csv", row.names=FALSE)
+
+# Add a text summary of findings
+summary_text <- c(
+  "Summary of Responsive Gene Group Comparisons:",
+  sprintf("Responsive vs Non-Responsive (CV): p = %.3g. %s", stat_resp$p.value, ifelse(stat_resp$p.value < 0.05, "Significant difference.", "No significant difference.")),
+  sprintf("Fisher's exact (Cahn): p = %.3g. %s", fisher_cahn$p.value, ifelse(fisher_cahn$p.value < 0.05, "Significant enrichment.", "No significant enrichment.")),
+  sprintf("Fisher's exact (Bewick): p = %.3g. %s", fisher_bewick$p.value, ifelse(fisher_bewick$p.value < 0.05, "Significant enrichment.", "No significant enrichment.")),
+  sprintf("Fisher's exact (H2A.Z): p = %.3g. %s", fisher_h2az$p.value, ifelse(fisher_h2az$p.value < 0.05, "Significant enrichment.", "No significant enrichment."))
+)
+writeLines(summary_text, "/group/sms029/mnieuwenh/gbm_noise_analysis/results/responsive_genes/responsive_stats_summary.txt")

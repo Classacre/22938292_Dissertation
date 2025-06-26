@@ -57,14 +57,11 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
   - `mean_vs_sd_by_h2az_group.png`, `mean_vs_cv_by_h2az_group.png`
   - `mean_vs_sd_by_meth_h2az_group.png`, `mean_vs_cv_by_meth_h2az_group.png`
 - **Statistical results:**
-  - `gbm_noise_stats.txt` (Wilcoxon test p-values for group comparisons)
-  - `gbm_noise_report.txt` (summary report)
-  - `fisher_h2az.txt` (Fisher's test for H2A.Z enrichment)
+  - `gbm_noise_stats_summary.csv` (table of p-values for all group comparisons)
+  - `gbm_noise_stats_summary.txt` (plain-language summary of findings)
 - **Responsive gene results:**
-  - `results/responsive_genes/responsive_genes.csv`, `responsive_noise_stats.txt`, `responsive_vs_nonresponsive_noise.png`
-  - `prop_responsive_by_h2az.csv` (proportion of responsive genes by H2A.Z group)
-  - `cv_by_h2az_and_responsive.png` (CV by H2A.Z group and responsiveness)
-  - `cv_by_meth_h2az_and_responsive.png` (CV by methylation + H2A.Z group and responsiveness)
+  - `results/responsive_genes/responsive_stats_summary.csv` (table of p-values for all group comparisons)
+  - `results/responsive_genes/responsive_stats_summary.txt` (plain-language summary of findings)
 - **Logs:**
   - All SLURM output and error logs are in the `logs/` subfolder.
 
@@ -76,6 +73,7 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
 ---
 
 ## Notes
+- All statistical results are now summarized in a single table and a single summary text file per analysis folder for clarity. Old .txt files with individual p-values have been removed for a cleaner output directory.
 - The pipeline now supports flexible comparison of gene expression noise and responsiveness across both methylation and H2A.Z categories, including their combinations.
 - All code and workflow steps are provided for transparency and future reproducibility.
 - You may need to edit gene names if your Seurat object uses a different format than the methylation annotation.
