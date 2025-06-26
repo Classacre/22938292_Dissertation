@@ -93,6 +93,9 @@ results$bewick_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classifica
 results$bewick_group[!is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "Unmethylated"] <- "Unmethylated"
 results$bewick_group <- factor(results$bewick_group, levels=c("Unmethylated", "gbM", "CHH", "CHG"))
 
+# Add sd_expr column before filtering for plotting
+results$sd_expr <- sqrt(results$var_expr)
+
 # Filter out non-finite CV values for plotting
 plot_results <- results[is.finite(results$cv_expr), ]
 
@@ -100,23 +103,51 @@ plot_results <- results[is.finite(results$cv_expr), ]
 cv_cap <- quantile(plot_results$cv_expr, 0.99, na.rm=TRUE)
 plot_results <- plot_results[plot_results$cv_expr <= cv_cap, ]
 
-# Cahn plot with median line
-p_cahn <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=cahn_group, y=cv_expr, color=cahn_group)) +
-  geom_jitter(width=0.25, alpha=0.5, size=0.7) +
-  stat_summary(fun=median, geom="crossbar", width=0.5, color="black", fatten=2, size=0.7) +
-  labs(title="Univariant Scatter Plot: Expression Noise (CV) by Cahn Methylation Group", x="Cahn Methylation Group", y="CV") +
+# Cahn boxplot
+p_cahn <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=cahn_group, y=cv_expr, fill=cahn_group)) +
+  geom_boxplot(outlier.size=0.5, outlier.shape=16, outlier.alpha=0.3) +
+  labs(title="Expression Noise (CV) by Cahn Methylation Group", x="Cahn Methylation Group", y="CV") +
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust=1))
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_scatter_cahn.png", plot=p_cahn, width=8, height=6)
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_cahn.png", plot=p_cahn, width=8, height=6)
 
-# Bewick plot with median line
-p_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=bewick_group, y=cv_expr, color=bewick_group)) +
-  geom_jitter(width=0.25, alpha=0.5, size=0.7) +
-  stat_summary(fun=median, geom="crossbar", width=0.5, color="black", fatten=2, size=0.7) +
-  labs(title="Univariant Scatter Plot: Expression Noise (CV) by Bewick Methylation Group", x="Bewick Methylation Group", y="CV") +
+# Bewick boxplot
+p_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=bewick_group, y=cv_expr, fill=bewick_group)) +
+  geom_boxplot(outlier.size=0.5, outlier.shape=16, outlier.alpha=0.3) +
+  labs(title="Expression Noise (CV) by Bewick Methylation Group", x="Bewick Methylation Group", y="CV") +
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust=1))
-ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_scatter_bewick.png", plot=p_bewick, width=8, height=6)
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/gbm_noise_boxplot_bewick.png", plot=p_bewick, width=8, height=6)
+
+# Additional scatter plots: mean vs sd and mean vs CV, split by Cahn and Bewick methylation groups
+
+# Cahn: Mean vs SD
+p_mean_sd_cahn <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=mean_expr, y=sd_expr, color=cahn_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs SD by Cahn Methylation Group", x="Mean Expression", y="Standard Deviation") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_sd_by_cahn_group.png", plot=p_mean_sd_cahn, width=8, height=6)
+
+# Cahn: Mean vs CV
+p_mean_cv_cahn <- ggplot(plot_results[!is.na(plot_results$cahn_group),], aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs CV by Cahn Methylation Group", x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_cahn_group.png", plot=p_mean_cv_cahn, width=8, height=6)
+
+# Bewick: Mean vs SD
+p_mean_sd_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=mean_expr, y=sd_expr, color=bewick_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs SD by Bewick Methylation Group", x="Mean Expression", y="Standard Deviation") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_sd_by_bewick_group.png", plot=p_mean_sd_bewick, width=8, height=6)
+
+# Bewick: Mean vs CV
+p_mean_cv_bewick <- ggplot(plot_results[!is.na(plot_results$bewick_group),], aes(x=mean_expr, y=cv_expr, color=bewick_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean Expression vs CV by Bewick Methylation Group", x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+ggsave("/group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_vs_cv_by_bewick_group.png", plot=p_mean_cv_bewick, width=8, height=6)
 
 # Wilcoxon tests
 stat_cahn <- wilcox.test(cv_expr ~ cahn_gbm, data=results)
