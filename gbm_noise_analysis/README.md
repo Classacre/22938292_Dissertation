@@ -107,3 +107,53 @@ Genes with observed \(\text{CV}^2\) significantly above this fitted curve are co
 This approach ensures that only genes with evidence of true biological variability are included in noise analyses, reducing the impact of technical artifacts from lowly expressed genes.
 
 - See `mean_vs_cv2_brennecke.png` for a visualization of the fitted curve and selected genes.
+
+# In-depth Explanation: Noise Filtering and Its Importance
+
+## Why Filter for Technical Noise?
+Single-cell RNA-seq data is inherently noisy, especially for genes with low expression. This noise can arise from technical limitations (such as inefficient RNA capture or amplification) and does not reflect true biological differences. If not accounted for, technical noise can obscure real biological patterns and lead to misleading conclusions.
+
+## Step-by-Step: How We Distinguish Technical Noise from Biological Variability
+
+1. **Calculate Mean and Variance for Each Gene**
+   - For every gene, we compute the mean expression (average across all cells) and the variance (how much the expression varies between cells).
+   - These are basic statistical measures: mean tells us the typical expression, variance tells us how much it fluctuates.
+
+2. **Compute the Coefficient of Variation (CV)**
+   - The CV is the standard deviation divided by the mean. It tells us how variable a gene is, relative to its average expression.
+   - We use the squared CV (CV²) for mathematical convenience and to match the Brennecke method.
+
+3. **Plot Mean Expression vs. CV² for All Genes**
+   - Most genes, especially those with low mean expression, show high CV² due to technical noise.
+   - By plotting all genes, we can see the general trend: as mean expression increases, technical noise (CV²) decreases.
+
+4. **Fit the Brennecke et al. (2013) Model**
+   - The Brennecke model describes the expected technical noise as:
+     
+     \[
+     \text{CV}^2 = a_0 + \frac{a_1}{\mu}
+     \]
+     - Here, \(\mu\) is the mean expression, and \(a_0\), \(a_1\) are fitted parameters.
+     - This formula captures the fact that technical noise is higher for lowly expressed genes.
+
+5. **Identify Genes with True Biological Variability**
+   - Genes whose observed CV² is significantly above the fitted curve are likely to be truly variable due to biology, not just technical error.
+   - We typically use a statistical threshold (e.g., 95% confidence interval) to select these genes.
+
+6. **Filter Out Genes Dominated by Technical Noise**
+   - Only genes above the threshold are kept for downstream analysis. This ensures our results reflect real biological differences, not artifacts.
+
+## Why This Matters
+- **Accurate Results:** By removing genes dominated by technical noise, we avoid false positives and focus on genes that are genuinely variable between cells.
+- **Reproducibility:** This method is widely used and accepted in the single-cell field, making our results robust and comparable to other studies.
+- **Transparency:** The approach is visualized in `mean_vs_cv2_brennecke.png`, so anyone can see how the threshold was set and which genes were selected.
+
+## Mathematical Significance (in Simple Terms)
+- The formula \(\text{CV}^2 = a_0 + \frac{a_1}{\mu}\) means that for genes with low average expression (small \(\mu\)), the expected noise is high. As the average expression increases, the expected noise drops.
+- By fitting this curve to the data, we can tell which genes are more variable than expected by chance (technical noise), and which are likely to be biologically interesting.
+
+## For Non-Experts
+- Think of technical noise like static on a radio: it’s louder when the signal is weak (low expression), but fades as the signal gets stronger (high expression).
+- Our method finds the point where the “static” is no longer the main thing we hear, so we can focus on the real “music” (biological signal).
+
+---

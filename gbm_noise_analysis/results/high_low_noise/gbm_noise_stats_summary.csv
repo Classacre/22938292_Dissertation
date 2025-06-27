@@ -1,5 +1,5 @@
-"Comparison","P_value"
-"Cahn gbM vs non-gbM",0
-"Bewick gbM vs non-gbM",1.08312151484392e-214
-"Bewick TE-like vs other",2.03359902438956e-73
-"H2A.Z-Depleted vs H2A.Z-Enriched",0
+"Comparison","P_value","Statistic"
+"Cahn gbM vs non-gbM","0.0000000000e+00",97248019.5
+"Bewick gbM vs non-gbM","1.0831215148e-214",61484345
+"Bewick TE-like vs other","2.0335990244e-73",1298084.5
+"H2A.Z-Depleted vs H2A.Z-Enriched","0.0000000000e+00",2491045
