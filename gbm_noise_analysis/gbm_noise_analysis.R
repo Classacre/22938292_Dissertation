@@ -30,12 +30,12 @@ cahn_gbm <- !is.na(anno$Cahn_Methylation_status) & anno$Cahn_Methylation_status 
 bewick_gbm <- !is.na(anno$Bewick_Classification) & anno$Bewick_Classification == "gbM"
 bewick_te_like <- !is.na(anno$Bewick_Classification) & (anno$Bewick_Classification == "mCHG" | anno$Bewick_Classification == "mCHH")
 
-# Calculate mean, variance, CV for each gene
+# Calculate mean, variance, CV for each gene (overall)
 mean_expr <- rowMeans(expr_mat)
 var_expr <- apply(expr_mat, 1, var)
 cv_expr <- sqrt(var_expr) / mean_expr
 
-# Create results data frame
+# Create results data frame (overall gene properties)
 results <- data.frame(
   gene = genes,
   cahn_gbm = cahn_gbm,
@@ -73,7 +73,7 @@ results$bewick_group <- factor(results$bewick_group, levels=c("Unmethylated", "g
 # Add sd_expr column before filtering for plotting
 results$sd_expr <- sqrt(results$var_expr)
 
-# Filter out non-finite CV values for plotting
+# Filter out non-finite CV values for plotting (overall data for Brennecke fit)
 plot_results <- results[is.finite(results$cv_expr), ]
 # Remove extreme outliers (e.g., above 99th percentile) for plotting
 cv_cap <- quantile(plot_results$cv_expr, 0.99, na.rm=TRUE)
@@ -223,41 +223,91 @@ common_cells <- intersect(colnames(expr_mat), rownames(cell_metadata))
 expr_mat <- expr_mat[, common_cells]
 cell_metadata <- cell_metadata[common_cells, ]
 
-# Calculate mean expression per gene per celltype and lineage
-gene_means_celltype <- sapply(unique(cell_metadata$identity), function(ct) {
+# Calculate mean expression per gene per celltype and lineage (robustly)
+gene_means_celltype_list <- lapply(unique(cell_metadata$identity), function(ct) {
   cells <- rownames(cell_metadata)[cell_metadata$identity == ct]
   if (length(cells) < 1) return(rep(NA, nrow(expr_mat)))
   rowMeans(expr_mat[, cells, drop=FALSE])
 })
+gene_means_celltype <- do.call(cbind, gene_means_celltype_list)
 colnames(gene_means_celltype) <- unique(cell_metadata$identity)
+rownames(gene_means_celltype) <- rownames(expr_mat) # Ensure row names are genes
 
-gene_means_lineage <- sapply(unique(cell_metadata$lineage), function(ln) {
+gene_means_lineage_list <- lapply(unique(cell_metadata$lineage), function(ln) {
   cells <- rownames(cell_metadata)[cell_metadata$lineage == ln]
   if (length(cells) < 1) return(rep(NA, nrow(expr_mat)))
   rowMeans(expr_mat[, cells, drop=FALSE])
 })
+gene_means_lineage <- do.call(cbind, gene_means_lineage_list)
 colnames(gene_means_lineage) <- unique(cell_metadata$lineage)
+rownames(gene_means_lineage) <- rownames(expr_mat) # Ensure row names are genes
 
-# Add mean expression by celltype/lineage to results
-gene_means_celltype_df <- as.data.frame(gene_means_celltype)
-gene_means_celltype_df$gene <- rownames(gene_means_celltype_df)
-results <- merge(results, gene_means_celltype_df, by.x="gene", by.y="gene", all.x=TRUE)
-gene_means_lineage_df <- as.data.frame(gene_means_lineage)
-gene_means_lineage_df$gene <- rownames(gene_means_lineage_df)
-results <- merge(results, gene_means_lineage_df, by.x="gene", by.y="gene", all.x=TRUE, suffixes=c("_celltype","_lineage"))
 
-# --- Celltype and Lineage groupings: Cahn and Bewick, unfiltered and filtered ---
-celltypes <- unique(cell_metadata$identity)
-lineages <- unique(cell_metadata$lineage)
+# Calculate mean, variance, CV for each gene within each celltype and lineage
+gene_data_by_celltype <- list()
+for (ct in unique(cell_metadata$identity)) {
+  if (is.na(ct) || ct == "") next
+  cells_in_ct <- rownames(cell_metadata)[cell_metadata$identity == ct]
+  if (length(cells_in_ct) > 1) { # Need at least 2 cells to calculate variance
+    expr_mat_ct <- expr_mat[, cells_in_ct, drop=FALSE]
+    mean_expr_ct <- rowMeans(expr_mat_ct)
+    var_expr_ct <- apply(expr_mat_ct, 1, var)
+    cv_expr_ct <- sqrt(var_expr_ct) / mean_expr_ct
 
-# FIX: Define celltype_levels explicitly
+    # Combine with gene annotations from 'results' (which has cahn_group, bewick_group)
+    temp_df <- data.frame(
+      gene = rownames(expr_mat_ct),
+      mean_expr_ct = mean_expr_ct,
+      var_expr_ct = var_expr_ct,
+      cv_expr_ct = cv_expr_ct
+    ) %>%
+    left_join(results %>% dplyr::select(gene, cahn_group, bewick_group), by = "gene") %>%
+    filter(is.finite(cv_expr_ct)) # Filter out non-finite CVs for this celltype
+
+    # Remove extreme outliers for this celltype's CV distribution (99th percentile)
+    cv_cap_ct <- quantile(temp_df$cv_expr_ct, 0.99, na.rm=TRUE)
+    temp_df <- temp_df[temp_df$cv_expr_ct <= cv_cap_ct, ]
+
+    gene_data_by_celltype[[ct]] <- temp_df
+  }
+}
+
+gene_data_by_lineage <- list()
+for (ln in unique(cell_metadata$lineage)) {
+  if (is.na(ln) || ln == "") next
+  cells_in_ln <- rownames(cell_metadata)[cell_metadata$lineage == ln]
+  if (length(cells_in_ln) > 1) { # Need at least 2 cells to calculate variance
+    expr_mat_ln <- expr_mat[, cells_in_ln, drop=FALSE]
+    mean_expr_ln <- rowMeans(expr_mat_ln)
+    var_expr_ln <- apply(expr_mat_ln, 1, var)
+    cv_expr_ln <- sqrt(var_expr_ln) / mean_expr_ln
+
+    # Combine with gene annotations from 'results'
+    temp_df <- data.frame(
+      gene = rownames(expr_mat_ln),
+      mean_expr_ln = mean_expr_ln,
+      var_expr_ln = var_expr_ln,
+      cv_expr_ln = cv_expr_ln
+    ) %>%
+    left_join(results %>% dplyr::select(gene, cahn_group, bewick_group), by = "gene") %>%
+    filter(is.finite(cv_expr_ln)) # Filter out non-finite CVs for this lineage
+
+    # Remove extreme outliers for this lineage's CV distribution
+    cv_cap_ln <- quantile(temp_df$cv_expr_ln, 0.99, na.rm=TRUE)
+    temp_df <- temp_df[temp_df$cv_expr_ln <= cv_cap_ln, ]
+
+    gene_data_by_lineage[[ln]] <- temp_df
+  }
+}
+
+# Define celltype_levels and lineage_levels for lapply calls
 celltype_levels <- unique(cell_metadata$identity)
-
+lineage_levels <- unique(cell_metadata$lineage)
 
 # --- Boxplots by celltype (Cahn group) - Mean Expression ---
 plots_cahn_celltype_unfiltered <- lapply(celltype_levels, function(ct) {
-  d <- plot_results
-  d$cell_mean <- gene_means_celltype[d$gene, ct]
+  d <- plot_results # Overall unfiltered gene set
+  d$cell_mean <- gene_means_celltype[d$gene, ct] # Add celltype-specific mean
   ggplot(d[!is.na(d$cahn_group),], aes(x=factor(cahn_group), y=cell_mean, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Mean Expression") +
@@ -273,8 +323,8 @@ for (i in 1:length(g_cahn_celltype_unfiltered)) {
 dev.off()
 
 plots_cahn_celltype_filtered <- lapply(celltype_levels, function(ct) {
-  d <- filtered_biol
-  d$cell_mean <- gene_means_celltype[d$gene, ct]
+  d <- filtered_biol # Overall filtered gene set
+  d$cell_mean <- gene_means_celltype[d$gene, ct] # Add celltype-specific mean
   ggplot(d[!is.na(d$cahn_group),], aes(x=factor(cahn_group), y=cell_mean, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Mean Expression") +
@@ -326,7 +376,6 @@ dev.off()
 
 
 # --- Boxplots by lineage (Cahn group) - Mean Expression ---
-lineage_levels <- unique(cell_metadata$lineage)
 plots_cahn_lineage_unfiltered <- lapply(lineage_levels, function(ln) {
   d <- plot_results
   d$lineage_mean <- gene_means_lineage[d$gene, ln]
@@ -399,8 +448,10 @@ dev.off()
 
 # --- Boxplots by celltype (Cahn group) - Expression Noise (CV) ---
 plots_cahn_celltype_cv_unfiltered <- lapply(celltype_levels, function(ct) {
-  d <- plot_results
-  ggplot(d[!is.na(d$cahn_group),], aes(x=factor(cahn_group), y=cv_expr, fill=factor(cahn_group))) +
+  d_ct <- gene_data_by_celltype[[ct]] # Use celltype-specific data
+  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL) # Handle empty data for a celltype
+
+  ggplot(d_ct[!is.na(d_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -415,8 +466,14 @@ for (i in 1:length(g_cahn_celltype_cv_unfiltered)) {
 dev.off()
 
 plots_cahn_celltype_cv_filtered <- lapply(celltype_levels, function(ct) {
-  d <- filtered_biol
-  ggplot(d[!is.na(d$cahn_group),], aes(x=factor(cahn_group), y=cv_expr, fill=factor(cahn_group))) +
+  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
+  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
+
+  # Filter to include only genes that were overall Brennecke-filtered
+  d_filtered_ct <- d_ct %>% filter(gene %in% filtered_biol$gene)
+  if (nrow(d_filtered_ct) == 0) return(NULL) # Return NULL if no genes left after filtering
+
+  ggplot(d_filtered_ct[!is.na(d_filtered_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -432,8 +489,10 @@ dev.off()
 
 # --- Boxplots by celltype (Bewick group) - Expression Noise (CV) ---
 plots_bewick_celltype_cv_unfiltered <- lapply(celltype_levels, function(ct) {
-  d <- plot_results
-  ggplot(d[!is.na(d$bewick_group),], aes(x=factor(bewick_group), y=cv_expr, fill=factor(bewick_group))) +
+  d_ct <- gene_data_by_celltype[[ct]] # Use celltype-specific data
+  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
+
+  ggplot(d_ct[!is.na(d_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -448,8 +507,14 @@ for (i in 1:length(g_bewick_celltype_cv_unfiltered)) {
 dev.off()
 
 plots_bewick_celltype_cv_filtered <- lapply(celltype_levels, function(ct) {
-  d <- filtered_biol
-  ggplot(d[!is.na(d$bewick_group),], aes(x=factor(bewick_group), y=cv_expr, fill=factor(bewick_group))) +
+  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
+  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
+
+  # Filter to include only genes that were overall Brennecke-filtered
+  d_filtered_ct <- d_ct %>% filter(gene %in% filtered_biol$gene)
+  if (nrow(d_filtered_ct) == 0) return(NULL)
+
+  ggplot(d_filtered_ct[!is.na(d_filtered_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -466,8 +531,10 @@ dev.off()
 
 # --- Boxplots by lineage (Cahn group) - Expression Noise (CV) ---
 plots_cahn_lineage_cv_unfiltered <- lapply(lineage_levels, function(ln) {
-  d <- plot_results
-  ggplot(d[!is.na(d$cahn_group),], aes(x=factor(cahn_group), y=cv_expr, fill=factor(cahn_group))) +
+  d_ln <- gene_data_by_lineage[[ln]] # Use lineage-specific data
+  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+
+  ggplot(d_ln[!is.na(d_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Cahn Group in", ln), x="Cahn Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -482,8 +549,14 @@ for (i in 1:length(g_cahn_lineage_cv_unfiltered)) {
 dev.off()
 
 plots_cahn_lineage_cv_filtered <- lapply(lineage_levels, function(ln) {
-  d <- filtered_biol
-  ggplot(d[!is.na(d$cahn_group),], aes(x=factor(cahn_group), y=cv_expr, fill=factor(cahn_group))) +
+  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
+  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+
+  # Filter to include only genes that were overall Brennecke-filtered
+  d_filtered_ln <- d_ln %>% filter(gene %in% filtered_biol$gene)
+  if (nrow(d_filtered_ln) == 0) return(NULL)
+
+  ggplot(d_filtered_ln[!is.na(d_filtered_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Cahn Group in", ln), x="Cahn Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -499,8 +572,10 @@ dev.off()
 
 # --- Boxplots by lineage (Bewick group) - Expression Noise (CV) ---
 plots_bewick_lineage_cv_unfiltered <- lapply(lineage_levels, function(ln) {
-  d <- plot_results
-  ggplot(d[!is.na(d$bewick_group),], aes(x=factor(bewick_group), y=cv_expr, fill=factor(bewick_group))) +
+  d_ln <- gene_data_by_lineage[[ln]] # Use lineage-specific data
+  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+
+  ggplot(d_ln[!is.na(d_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Bewick Group in", ln), x="Bewick Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -515,8 +590,14 @@ for (i in 1:length(g_bewick_lineage_cv_unfiltered)) {
 dev.off()
 
 plots_bewick_lineage_cv_filtered <- lapply(lineage_levels, function(ln) {
-  d <- filtered_biol
-  ggplot(d[!is.na(d$bewick_group),], aes(x=factor(bewick_group), y=cv_expr, fill=factor(bewick_group))) +
+  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
+  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+
+  # Filter to include only genes that were overall Brennecke-filtered
+  d_filtered_ln <- d_ln %>% filter(gene %in% filtered_biol$gene)
+  if (nrow(d_filtered_ln) == 0) return(NULL)
+
+  ggplot(d_filtered_ln[!is.na(d_filtered_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
     labs(title=paste("Bewick Group in", ln), x="Bewick Group", y="Expression Noise (CV)") +
     theme_bw() +
@@ -802,7 +883,7 @@ perform_group_stats <- function(data_df, value_col, group_col_name, context_name
 }
 
 # Iterate and collect stats for Mean Expression by Celltype/Lineage
-for (ct in celltypes) {
+for (ct in celltype_levels) { # Use celltype_levels
   if (is.na(ct) || ct == "") next
   d_unfiltered <- plot_results
   d_unfiltered$cell_mean <- gene_means_celltype[d_unfiltered$gene, ct]
@@ -815,7 +896,7 @@ for (ct in celltypes) {
   perform_group_stats(d_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "Filtered", ct)
 }
 
-for (ln in lineages) {
+for (ln in lineage_levels) { # Use lineage_levels
   if (is.na(ln) || ln == "") next
   d_unfiltered <- plot_results
   d_unfiltered$lineage_mean <- gene_means_lineage[d_unfiltered$gene, ln]
@@ -829,24 +910,36 @@ for (ln in lineages) {
 }
 
 # Iterate and collect stats for CV Expression by Celltype/Lineage
-for (ct in celltypes) {
+for (ct in celltype_levels) { # Use celltype_levels
   if (is.na(ct) || ct == "") next
-  # For CV, the value is directly in plot_results/filtered_biol
-  perform_group_stats(plot_results, "cv_expr", "cahn_group", "CV Expr by Celltype", "Unfiltered", ct)
-  perform_group_stats(plot_results, "cv_expr", "bewick_group", "CV Expr by Celltype", "Unfiltered", ct)
+  # For CV, use the celltype-specific data frame
+  d_ct_unfiltered <- gene_data_by_celltype[[ct]]
+  if (!is.null(d_ct_unfiltered) && nrow(d_ct_unfiltered) > 0) {
+    perform_group_stats(d_ct_unfiltered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Unfiltered", ct)
+    perform_group_stats(d_ct_unfiltered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Unfiltered", ct)
+  }
 
-  perform_group_stats(filtered_biol, "cv_expr", "cahn_group", "CV Expr by Celltype", "Filtered", ct)
-  perform_group_stats(filtered_biol, "cv_expr", "bewick_group", "CV Expr by Celltype", "Filtered", ct)
+  d_ct_filtered <- d_ct_unfiltered %>% filter(gene %in% filtered_biol$gene)
+  if (!is.null(d_ct_filtered) && nrow(d_ct_filtered) > 0) {
+    perform_group_stats(d_ct_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Filtered", ct)
+    perform_group_stats(d_ct_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Filtered", ct)
+  }
 }
 
-for (ln in lineages) {
+for (ln in lineage_levels) { # Use lineage_levels
   if (is.na(ln) || ln == "") next
-  # For CV, the value is directly in plot_results/filtered_biol
-  perform_group_stats(plot_results, "cv_expr", "cahn_group", "CV Expr by Lineage", "Unfiltered", ln)
-  perform_group_stats(plot_results, "cv_expr", "bewick_group", "CV Expr by Lineage", "Unfiltered", ln)
+  # For CV, use the lineage-specific data frame
+  d_ln_unfiltered <- gene_data_by_lineage[[ln]]
+  if (!is.null(d_ln_unfiltered) && nrow(d_ln_unfiltered) > 0) {
+    perform_group_stats(d_ln_unfiltered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Unfiltered", ln)
+    perform_group_stats(d_ln_unfiltered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Unfiltered", ln)
+  }
 
-  perform_group_stats(filtered_biol, "cv_expr", "cahn_group", "CV Expr by Lineage", "Filtered", ln)
-  perform_group_stats(filtered_biol, "cv_expr", "bewick_group", "CV Expr by Lineage", "Filtered", ln)
+  d_ln_filtered <- d_ln_unfiltered %>% filter(gene %in% filtered_biol$gene)
+  if (!is.null(d_ln_filtered) && nrow(d_ln_filtered) > 0) {
+    perform_group_stats(d_ln_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Filtered", ln)
+    perform_group_stats(d_ln_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Filtered", ln)
+  }
 }
 
 # Combine all collected stats into a single data frame

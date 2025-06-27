@@ -30,4 +30,12 @@ In upset_data(data, intersect, mode = mode, encode_sets = encode_sets,  :
 Warning message:
 Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ℹ Please use `linewidth` instead. 
+There were 25 warnings (use warnings() to see them)
+Warning messages:
+1: In wilcox.test.default(xi, xj, paired = paired, ...) :
+  cannot compute exact p-value with ties
+2: In wilcox.test.default(xi, xj, paired = paired, ...) :
+  cannot compute exact p-value with ties
+3: In wilcox.test.default(xi, xj, paired = paired, ...) :
+  cannot compute exact p-value with ties
 All plots and statistics saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/high_low_noise/mean_cv_filtering_comparison.pdf
