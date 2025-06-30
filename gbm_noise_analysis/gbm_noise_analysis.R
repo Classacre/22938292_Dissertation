@@ -471,16 +471,16 @@ plots_cahn_celltype_cv_filtered <- lapply(celltype_levels, function(ct) {
 
   # Filter to include only genes that were overall Brennecke-filtered
   d_filtered_ct <- d_ct %>% filter(gene %in% filtered_biol$gene)
-  if (nrow(d_filtered_ct) == 0) return(NULL) # Return NULL if no genes left after filtering
+  if (nrow(d_filtered_ct) == 0) return(NULL)
 
   ggplot(d_filtered_ct[!is.na(d_filtered_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV)") +
+    labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV) (Brennecke Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_cahn_celltype_cv_filtered <- marrangeGrob(plots_cahn_celltype_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Celltypes (Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_cahn_by_celltype_filtered.pdf"), width=18, height=12)
+g_cahn_celltype_cv_filtered <- marrangeGrob(plots_cahn_celltype_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Celltypes (Brennecke Filtered)")
+pdf(file.path(output_dir, "grid_cv_expr_cahn_by_celltype_brennecke_filtered.pdf"), width=18, height=12)
 for (i in 1:length(g_cahn_celltype_cv_filtered)) {
   grid.newpage()
   grid.draw(g_cahn_celltype_cv_filtered[[i]])
@@ -516,12 +516,12 @@ plots_bewick_celltype_cv_filtered <- lapply(celltype_levels, function(ct) {
 
   ggplot(d_filtered_ct[!is.na(d_filtered_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV)") +
+    labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV) (Brennecke Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_bewick_celltype_cv_filtered <- marrangeGrob(plots_bewick_celltype_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Celltypes (Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_bewick_by_celltype_filtered.pdf"), width=18, height=12)
+g_bewick_celltype_cv_filtered <- marrangeGrob(plots_bewick_celltype_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Celltypes (Brennecke Filtered)")
+pdf(file.path(output_dir, "grid_cv_expr_bewick_by_celltype_brennecke_filtered.pdf"), width=18, height=12)
 for (i in 1:length(g_bewick_celltype_cv_filtered)) {
   grid.newpage()
   grid.draw(g_bewick_celltype_cv_filtered[[i]])
@@ -695,7 +695,7 @@ p_combined_filter_visualization <- ggplot(plot_results, aes(x = mean_expr, y = c
         legend.box = "horizontal") # Place legend at bottom for better readability
 
 
-# --- Mean Expression vs CV plots for comparison of filtering methods (8 plots) ---
+# --- Mean Expression vs CV plots for comparison of filtering methods ---
 # Collect all plots in a list to save to a single PDF
 all_plots_for_pdf <- list()
 
@@ -721,7 +721,7 @@ p_mean_cv_bewick_baseline <- ggplot(plot_results, aes(x=mean_expr, y=cv_expr, co
 all_plots_for_pdf[["bewick_baseline"]] <- p_mean_cv_bewick_baseline
 
 
-# Scenario 2: Brennecke Filter Only
+# Scenario 2: Brennecke Filter Only (Log Scale)
 p_mean_cv_cahn_brennecke_filtered <- ggplot(filtered_biol, aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
   geom_point(alpha=0.5, size=0.7) +
   labs(title="Mean vs CV by Cahn Group (Brennecke Filter Only)",
@@ -739,7 +739,7 @@ p_mean_cv_bewick_brennecke_filtered <- ggplot(filtered_biol, aes(x=mean_expr, y=
 all_plots_for_pdf[["bewick_brennecke"]] <- p_mean_cv_bewick_brennecke_filtered
 
 
-# Scenario 3: James Lloyd Filter Only (then basic cleaning)
+# Scenario 3: James Lloyd Filter Only (Log Scale)
 p_mean_cv_cahn_james_lloyd_filtered <- ggplot(plot_results_mean_filtered, aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
   geom_point(alpha=0.5, size=0.7) +
   labs(title="Mean vs CV by Cahn Group (James Lloyd Filter Only)",
@@ -757,7 +757,7 @@ p_mean_cv_bewick_james_lloyd_filtered <- ggplot(plot_results_mean_filtered, aes(
 all_plots_for_pdf[["bewick_james_lloyd"]] <- p_mean_cv_bewick_james_lloyd_filtered
 
 
-# Scenario 4: James Lloyd Filter THEN Brennecke Filter
+# Scenario 4: James Lloyd Filter THEN Brennecke Filter (Log Scale)
 if (nrow(filtered_biol_mean_filtered) > 0) {
   p_mean_cv_cahn_james_lloyd_then_brennecke_filtered <- ggplot(filtered_biol_mean_filtered, aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
     geom_point(alpha=0.5, size=0.7) +
@@ -781,6 +781,38 @@ if (nrow(filtered_biol_mean_filtered) > 0) {
 } else {
   warning("Skipping Bewick James Lloyd THEN Brennecke plot: filtered_biol_mean_filtered is empty.")
 }
+
+# --- NEW: Mean Expression vs CV plots (NO Log Scale) ---
+
+# James Lloyd Filter Only (No Log Scale)
+p_mean_cv_cahn_james_lloyd_nolog <- ggplot(plot_results_mean_filtered, aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean vs CV by Cahn Group (James Lloyd Filter Only, No Log Scale)",
+       x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+all_plots_for_pdf[["cahn_james_lloyd_nolog"]] <- p_mean_cv_cahn_james_lloyd_nolog
+
+p_mean_cv_bewick_james_lloyd_nolog <- ggplot(plot_results_mean_filtered, aes(x=mean_expr, y=cv_expr, color=bewick_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean vs CV by Bewick Group (James Lloyd Filter Only, No Log Scale)",
+       x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+all_plots_for_pdf[["bewick_james_lloyd_nolog"]] <- p_mean_cv_bewick_james_lloyd_nolog
+
+# Brennecke Filter Only (No Log Scale)
+p_mean_cv_cahn_brennecke_nolog <- ggplot(filtered_biol, aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean vs CV by Cahn Group (Brennecke Filter Only, No Log Scale)",
+       x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+all_plots_for_pdf[["cahn_brennecke_nolog"]] <- p_mean_cv_cahn_brennecke_nolog
+
+p_mean_cv_bewick_brennecke_nolog <- ggplot(filtered_biol, aes(x=mean_expr, y=cv_expr, color=bewick_group)) +
+  geom_point(alpha=0.5, size=0.7) +
+  labs(title="Mean vs CV by Bewick Group (Brennecke Filter Only, No Log Scale)",
+       x="Mean Expression", y="Coefficient of Variation (CV)") +
+  theme_bw()
+all_plots_for_pdf[["bewick_brennecke_nolog"]] <- p_mean_cv_bewick_brennecke_nolog
 
 
 # --- STATISTICAL ANALYSIS FOR FILTERING METHODS AND GRID PLOTS ---
@@ -892,8 +924,13 @@ for (ct in celltype_levels) { # Use celltype_levels
 
   d_filtered <- filtered_biol
   d_filtered$cell_mean <- gene_means_celltype[d_filtered$gene, ct]
-  perform_group_stats(d_filtered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "Filtered", ct)
-  perform_group_stats(d_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "Filtered", ct)
+  perform_group_stats(d_filtered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "Brennecke Filtered", ct)
+  perform_group_stats(d_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "Brennecke Filtered", ct)
+
+  d_jl_filtered <- plot_results_mean_filtered # Data filtered by James Lloyd
+  d_jl_filtered$cell_mean <- gene_means_celltype[d_jl_filtered$gene, ct]
+  perform_group_stats(d_jl_filtered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "James Lloyd Filtered", ct)
+  perform_group_stats(d_jl_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "James Lloyd Filtered", ct)
 }
 
 for (ln in lineage_levels) { # Use lineage_levels
@@ -905,8 +942,13 @@ for (ln in lineage_levels) { # Use lineage_levels
 
   d_filtered <- filtered_biol
   d_filtered$lineage_mean <- gene_means_lineage[d_filtered$gene, ln]
-  perform_group_stats(d_filtered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "Filtered", ln)
-  perform_group_stats(d_filtered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "Filtered", ln)
+  perform_group_stats(d_filtered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "Brennecke Filtered", ln)
+  perform_group_stats(d_filtered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "Brennecke Filtered", ln)
+
+  d_jl_filtered <- plot_results_mean_filtered # Data filtered by James Lloyd
+  d_jl_filtered$lineage_mean <- gene_means_lineage[d_jl_filtered$gene, ln]
+  perform_group_stats(d_jl_filtered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "James Lloyd Filtered", ln)
+  perform_group_stats(d_jl_filtered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "James Lloyd Filtered", ln)
 }
 
 # Iterate and collect stats for CV Expression by Celltype/Lineage
@@ -919,10 +961,18 @@ for (ct in celltype_levels) { # Use celltype_levels
     perform_group_stats(d_ct_unfiltered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Unfiltered", ct)
   }
 
-  d_ct_filtered <- d_ct_unfiltered %>% filter(gene %in% filtered_biol$gene)
-  if (!is.null(d_ct_filtered) && nrow(d_ct_filtered) > 0) {
-    perform_group_stats(d_ct_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Filtered", ct)
-    perform_group_stats(d_ct_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Filtered", ct)
+  # Brennecke Filtered CV
+  d_ct_brennecke_filtered <- d_ct_unfiltered %>% filter(gene %in% filtered_biol$gene)
+  if (!is.null(d_ct_brennecke_filtered) && nrow(d_ct_brennecke_filtered) > 0) {
+    perform_group_stats(d_ct_brennecke_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
+    perform_group_stats(d_ct_brennecke_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
+  }
+
+  # James Lloyd Filtered CV
+  d_ct_james_lloyd_filtered <- d_ct_unfiltered %>% filter(gene %in% plot_results_mean_filtered$gene)
+  if (!is.null(d_ct_james_lloyd_filtered) && nrow(d_ct_james_lloyd_filtered) > 0) {
+    perform_group_stats(d_ct_james_lloyd_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
+    perform_group_stats(d_ct_james_lloyd_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
   }
 }
 
@@ -935,12 +985,21 @@ for (ln in lineage_levels) { # Use lineage_levels
     perform_group_stats(d_ln_unfiltered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Unfiltered", ln)
   }
 
-  d_ln_filtered <- d_ln_unfiltered %>% filter(gene %in% filtered_biol$gene)
-  if (!is.null(d_ln_filtered) && nrow(d_ln_filtered) > 0) {
-    perform_group_stats(d_ln_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Filtered", ln)
-    perform_group_stats(d_ln_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Filtered", ln)
+  # Brennecke Filtered CV
+  d_ln_brennecke_filtered <- d_ln_unfiltered %>% filter(gene %in% filtered_biol$gene)
+  if (!is.null(d_ln_brennecke_filtered) && nrow(d_ln_brennecke_filtered) > 0) {
+    perform_group_stats(d_ln_brennecke_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
+    perform_group_stats(d_ln_brennecke_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
+  }
+
+  # James Lloyd Filtered CV
+  d_ln_james_lloyd_filtered <- d_ln_unfiltered %>% filter(gene %in% plot_results_mean_filtered$gene)
+  if (!is.null(d_ln_james_lloyd_filtered) && nrow(d_ln_james_lloyd_filtered) > 0) {
+    perform_group_stats(d_ln_james_lloyd_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
+    perform_group_stats(d_ln_james_lloyd_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
   }
 }
+
 
 # Combine all collected stats into a single data frame
 final_grid_stats_df <- if (length(all_grid_stats_df_rows) > 0) {
@@ -1045,3 +1104,97 @@ for (table_grob_obj in all_tables_for_pdf) {
 dev.off()
 
 message(paste("All plots and statistics saved to:", pdf_filename))
+
+# --- NEW: Save James Lloyd Filtered CV Boxplots to separate PDFs ---
+
+# Boxplots by celltype (Cahn group) - Expression Noise (CV) (James Lloyd Filtered)
+plots_cahn_celltype_cv_james_lloyd_filtered <- lapply(celltype_levels, function(ct) {
+  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
+  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
+
+  # Filter to include only genes that were overall James Lloyd-filtered
+  d_filtered_jl_ct <- d_ct %>% filter(gene %in% plot_results_mean_filtered$gene)
+  if (nrow(d_filtered_jl_ct) == 0) return(NULL)
+
+  ggplot(d_filtered_jl_ct[!is.na(d_filtered_jl_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
+    geom_boxplot(outlier.size=0.5) +
+    labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    theme_bw() +
+    theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
+})
+g_cahn_celltype_cv_james_lloyd_filtered <- marrangeGrob(plots_cahn_celltype_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Celltypes (James Lloyd Filtered)")
+pdf(file.path(output_dir, "grid_cv_expr_cahn_by_celltype_james_lloyd_filtered.pdf"), width=18, height=12)
+for (i in 1:length(g_cahn_celltype_cv_james_lloyd_filtered)) {
+  grid.newpage()
+  grid.draw(g_cahn_celltype_cv_james_lloyd_filtered[[i]])
+}
+dev.off()
+
+# Boxplots by celltype (Bewick group) - Expression Noise (CV) (James Lloyd Filtered)
+plots_bewick_celltype_cv_james_lloyd_filtered <- lapply(celltype_levels, function(ct) {
+  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
+  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
+
+  # Filter to include only genes that were overall James Lloyd-filtered
+  d_filtered_jl_ct <- d_ct %>% filter(gene %in% plot_results_mean_filtered$gene)
+  if (nrow(d_filtered_jl_ct) == 0) return(NULL)
+
+  ggplot(d_filtered_jl_ct[!is.na(d_filtered_jl_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
+    geom_boxplot(outlier.size=0.5) +
+    labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    theme_bw() +
+    theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
+})
+g_bewick_celltype_cv_james_lloyd_filtered <- marrangeGrob(plots_bewick_celltype_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Celltypes (James Lloyd Filtered)")
+pdf(file.path(output_dir, "grid_cv_expr_bewick_by_celltype_james_lloyd_filtered.pdf"), width=18, height=12)
+for (i in 1:length(g_bewick_celltype_cv_james_lloyd_filtered)) {
+  grid.newpage()
+  grid.draw(g_bewick_celltype_cv_james_lloyd_filtered[[i]])
+}
+dev.off()
+
+# Boxplots by lineage (Cahn group) - Expression Noise (CV) (James Lloyd Filtered)
+plots_cahn_lineage_cv_james_lloyd_filtered <- lapply(lineage_levels, function(ln) {
+  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
+  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+
+  # Filter to include only genes that were overall James Lloyd-filtered
+  d_filtered_jl_ln <- d_ln %>% filter(gene %in% plot_results_mean_filtered$gene)
+  if (nrow(d_filtered_jl_ln) == 0) return(NULL)
+
+  ggplot(d_filtered_jl_ln[!is.na(d_filtered_jl_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
+    geom_boxplot(outlier.size=0.5) +
+    labs(title=paste("Cahn Group in", ln), x="Cahn Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    theme_bw() +
+    theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
+})
+g_cahn_lineage_cv_james_lloyd_filtered <- marrangeGrob(plots_cahn_lineage_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Lineages (James Lloyd Filtered)")
+pdf(file.path(output_dir, "grid_cv_expr_cahn_by_lineage_james_lloyd_filtered.pdf"), width=18, height=12)
+for (i in 1:length(g_cahn_lineage_cv_james_lloyd_filtered)) {
+  grid.newpage()
+  grid.draw(g_cahn_lineage_cv_james_lloyd_filtered[[i]])
+}
+dev.off()
+
+# Boxplots by lineage (Bewick group) - Expression Noise (CV) (James Lloyd Filtered)
+plots_bewick_lineage_cv_james_lloyd_filtered <- lapply(lineage_levels, function(ln) {
+  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
+  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+
+  # Filter to include only genes that were overall James Lloyd-filtered
+  d_filtered_jl_ln <- d_ln %>% filter(gene %in% plot_results_mean_filtered$gene)
+  if (nrow(d_filtered_jl_ln) == 0) return(NULL)
+
+  ggplot(d_filtered_jl_ln[!is.na(d_filtered_jl_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
+    geom_boxplot(outlier.size=0.5) +
+    labs(title=paste("Bewick Group in", ln), x="Bewick Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    theme_bw() +
+    theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
+})
+g_bewick_lineage_cv_james_lloyd_filtered <- marrangeGrob(plots_bewick_lineage_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Lineages (James Lloyd Filtered)")
+pdf(file.path(output_dir, "grid_cv_expr_bewick_by_lineage_james_lloyd_filtered.pdf"), width=18, height=12)
+for (i in 1:length(g_bewick_lineage_cv_james_lloyd_filtered)) {
+  grid.newpage()
+  grid.draw(g_bewick_lineage_cv_james_lloyd_filtered[[i]])
+}
+dev.off()
