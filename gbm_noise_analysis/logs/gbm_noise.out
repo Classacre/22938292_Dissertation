@@ -7,45 +7,869 @@ Solving environment: ...working... done
 
 # All requested packages already installed.
 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
-pdf 
-  3 
+[1] "--- Debugging Bewick Group Counts ---"
+[1] "Counts of Bewick groups in plot_results (baseline):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       17407         4805          224           53         2077 
+[1] "Counts of Bewick groups in plot_results_jl_10_percent_filtered:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       16466         4781          153           43         1529 
+[1] "Counts of Bewick groups in plot_results_jl_20_percent_filtered:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14745         4696           81           27          871 
+[1] "Counts of Bewick groups in plot_results_mean_gt_0.5_filtered:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in plot_results_mean_gt_1_filtered:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "-------------------------------------"
+[1] "--- Debugging Bewick Group Counts in Celltype Data ---"
+[1] "Counts of Bewick groups in gene_data_by_celltype for border cells:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10772         3804           43           18          398 
+[1] "Counts of Bewick groups in gene_data_by_celltype for border cells (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10760         3804           41           18          389 
+[1] "Counts of Bewick groups in gene_data_by_celltype for border cells (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10662         3801           37           18          363 
+[1] "Counts of Bewick groups in gene_data_by_celltype for border cells (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for border cells (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap early:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15013         4708          120           29         1196 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap early (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14896         4703          112           29         1132 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap early (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14172         4664           73           25          818 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap early (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap early (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap tip:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13844         4521           85           23          874 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap tip (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13802         4521           83           23          849 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap tip (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13457         4506           65           22          690 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap tip (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap tip (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap lateral:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13906         4546           95           28          871 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap lateral (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13848         4545           92           27          846 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap lateral (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13488         4531           71           24          704 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap lateral (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for root cap lateral (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for columella:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13052         4550           64           21          693 
+[1] "Counts of Bewick groups in gene_data_by_celltype for columella (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13025         4549           63           21          680 
+[1] "Counts of Bewick groups in gene_data_by_celltype for columella (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12768         4530           55           20          606 
+[1] "Counts of Bewick groups in gene_data_by_celltype for columella (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for columella (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for non-hair cells:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15552         4718          132           38         1433 
+[1] "Counts of Bewick groups in gene_data_by_celltype for non-hair cells (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15313         4712          120           36         1280 
+[1] "Counts of Bewick groups in gene_data_by_celltype for non-hair cells (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14330         4666           78           26          837 
+[1] "Counts of Bewick groups in gene_data_by_celltype for non-hair cells (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for non-hair cells (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for epidermis early:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15702         4756          140           36         1481 
+[1] "Counts of Bewick groups in gene_data_by_celltype for epidermis early (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15408         4741          121           34         1300 
+[1] "Counts of Bewick groups in gene_data_by_celltype for epidermis early (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14375         4681           74           27          838 
+[1] "Counts of Bewick groups in gene_data_by_celltype for epidermis early (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for epidermis early (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells early:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15497         4728          143           39         1495 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells early (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15242         4723          121           37         1293 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells early (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14282         4673           77           27          830 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells early (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells early (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13852         4554           85           27          923 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13768         4554           79           27          890 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13345         4531           64           22          733 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14757         4637          121           36         1257 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14604         4634          105           33         1152 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13894         4612           75           25          802 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12449         4245           69           22          721 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12391         4243           66           21          691 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12067         4237           55           20          581 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for hair cells ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13255         4513           68           24          670 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13233         4511           64           23          660 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13043         4497           55           21          577 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11823         4152           57           21          526 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11796         4152           55           21          521 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11647         4142           47           20          474 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for cortex ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11768         4096           59           21          466 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11755         4096           56           20          456 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11639         4084           49           19          421 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14536         4621           92           29         1076 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14428         4621           86           29         1019 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13794         4591           68           23          759 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for endodermis ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15332         4726          120           32         1368 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15162         4717          105           31         1244 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14311         4669           75           24          839 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for xpp ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14451         4655           87           29         1052 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14377         4655           79           29          989 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13814         4626           65           22          758 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12578         4377           53           23          537 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12561         4376           53           23          528 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12394         4367           47           21          494 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for ppp ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14454         4652           88           27         1015 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14380         4649           81           27          970 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13860         4618           64           24          756 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12677         4377           62           23          585 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12659         4376           57           23          572 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12514         4369           51           21          519 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for procambium ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10586         3771           37           23          324 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10578         3771           34           23          318 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10493         3765           28           20          305 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11942         4210           50           21          457 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11927         4210           48           20          454 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11831         4200           41           20          418 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12112         4347           41           22          554 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12087         4344           41           22          544 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11926         4338           39           19          498 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protophloem ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13561         4562           81           27          858 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13523         4561           76           26          834 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13186         4547           63           23          687 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaphloem ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14105         4619           84           30         1007 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14018         4619           79           28          959 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13532         4602           60           23          734 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem early:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11979         4247           53           23          628 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem early (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11952         4247           51           23          615 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem early (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11751         4243           44           19          530 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem early (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem early (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        9668         3396           37           16          291 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        9656         3396           36           16          285 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        9556         3393           31           16          269 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS-:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12037         4248           47           27          541 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS- (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       12013         4248           47           27          531 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS- (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       11857         4244           41           23          480 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS- (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for metaxylem ERS- (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS+:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10176         3713           40           17          396 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS+ (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10154         3712           39           17          390 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS+ (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       10028         3710           36           16          360 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS+ (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_celltype for protoxylem ERS+ (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "-------------------------------------"
+[1] "--- Debugging Bewick Group Counts in Lineage Data ---"
+[1] "Counts of Bewick groups in gene_data_by_lineage for rootcap:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15904         4747          145           34         1417 
+[1] "Counts of Bewick groups in gene_data_by_lineage for rootcap (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15675         4742          132           33         1294 
+[1] "Counts of Bewick groups in gene_data_by_lineage for rootcap (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14551         4684           79           26          846 
+[1] "Counts of Bewick groups in gene_data_by_lineage for rootcap (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for rootcap (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for epidermis:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       16814         4790          197           49         1889 
+[1] "Counts of Bewick groups in gene_data_by_lineage for epidermis (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       16159         4768          147           41         1476 
+[1] "Counts of Bewick groups in gene_data_by_lineage for epidermis (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14682         4694           81           27          859 
+[1] "Counts of Bewick groups in gene_data_by_lineage for epidermis (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for epidermis (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for cortex:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14181         4582           92           28          978 
+[1] "Counts of Bewick groups in gene_data_by_lineage for cortex (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14072         4582           85           28          941 
+[1] "Counts of Bewick groups in gene_data_by_lineage for cortex (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13571         4555           66           23          757 
+[1] "Counts of Bewick groups in gene_data_by_lineage for cortex (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for cortex (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xpp:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15491         4736          129           33         1408 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xpp (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       15305         4726          109           31         1275 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xpp (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14397         4673           75           24          845 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xpp (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xpp (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for endodermis:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14715         4629          103           30         1120 
+[1] "Counts of Bewick groups in gene_data_by_lineage for endodermis (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14598         4629           94           29         1053 
+[1] "Counts of Bewick groups in gene_data_by_lineage for endodermis (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13920         4596           72           23          774 
+[1] "Counts of Bewick groups in gene_data_by_lineage for endodermis (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for endodermis (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for ppp:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14683         4674           94           29         1070 
+[1] "Counts of Bewick groups in gene_data_by_lineage for ppp (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14596         4673           86           29         1002 
+[1] "Counts of Bewick groups in gene_data_by_lineage for ppp (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13975         4642           69           22          767 
+[1] "Counts of Bewick groups in gene_data_by_lineage for ppp (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for ppp (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for procambium:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14788         4681          100           30         1081 
+[1] "Counts of Bewick groups in gene_data_by_lineage for procambium (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14698         4677           89           30         1024 
+[1] "Counts of Bewick groups in gene_data_by_lineage for procambium (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14104         4641           69           25          778 
+[1] "Counts of Bewick groups in gene_data_by_lineage for procambium (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for procambium (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for phloem:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14488         4640          100           33         1009 
+[1] "Counts of Bewick groups in gene_data_by_lineage for phloem (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14405         4636           90           31          967 
+[1] "Counts of Bewick groups in gene_data_by_lineage for phloem (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       13895         4611           67           25          758 
+[1] "Counts of Bewick groups in gene_data_by_lineage for phloem (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for phloem (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xylem:"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14956         4658          106           36         1166 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xylem (JL10 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14802         4657           98           34         1091 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xylem (JL20 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+       14073         4631           66           24          792 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xylem (Mean > 0.5 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+        1380          169            0            0            8 
+[1] "Counts of Bewick groups in gene_data_by_lineage for xylem (Mean > 1 filtered):"
+
+Unmethylated          gbM          CHH          CHG         <NA> 
+         553           45            0            0            2 
+[1] "-------------------------------------"
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
