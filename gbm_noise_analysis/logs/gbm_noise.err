@@ -27,6 +27,8 @@ Picking joint bandwidth of 8.08
 Warning message:
 In upset_data(data, intersect, mode = mode, encode_sets = encode_sets,  :
   Detected missing values in the columns indicating sets, coercing to FALSE
+There were 35 warnings (use warnings() to see them)
+There were 16 warnings (use warnings() to see them)
 Warning message:
 Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ℹ Please use `linewidth` instead. 

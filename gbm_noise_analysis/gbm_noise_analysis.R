@@ -304,6 +304,245 @@ for (ln in unique(cell_metadata$lineage)) {
 celltype_levels <- unique(cell_metadata$identity)
 lineage_levels <- unique(cell_metadata$lineage)
 
+# Helper function to get Kruskal-Wallis p-value for plot titles
+get_kruskal_pvalue <- function(data_df, value_col, group_col_name) {
+  d_test <- data_df
+  
+  # Handle Bewick's TE-like grouping for stats
+  if (group_col_name == "bewick_group") {
+    d_test$temp_group_for_stats <- as.character(d_test[[group_col_name]])
+    d_test$temp_group_for_stats[d_test$temp_group_for_stats %in% c("CHH", "CHG")] <- "TE-like"
+    d_test$temp_group_for_stats <- factor(d_test$temp_group_for_stats, levels=c("Unmethylated", "gbM", "TE-like"))
+    test_group_col <- "temp_group_for_stats"
+  } else {
+    test_group_col <- group_col_name
+  }
+  
+  d_test <- d_test[!is.na(d_test[[test_group_col]]) & !is.na(d_test[[value_col]]),]
+  
+  if (length(unique(d_test[[test_group_col]])) < 2 || any(table(d_test[[test_group_col]]) < 2)) {
+    return(NA) # Not enough groups or data for test
+  }
+  
+  kruskal_result <- tryCatch({
+    kruskal.test(d_test[[value_col]] ~ d_test[[test_group_col]])
+  }, error = function(e) {
+    warning(paste("Kruskal-Wallis error:", e$message))
+    return(NA)
+  })
+  
+  if (is.null(kruskal_result)) {
+    return(NA)
+  }
+  return(kruskal_result$p.value)
+}
+
+# New helper function to run specific tests and format results for a table
+run_specific_group_stats <- function(data_df, value_col, group_col_name, context_name, filter_tag, specific_context) {
+  results_list <- list()
+  
+  # Ensure the data_df is not empty and has the required columns
+  if (nrow(data_df) == 0 || !value_col %in% colnames(data_df) || !group_col_name %in% colnames(data_df)) {
+    return(NULL)
+  }
+  
+  # Filter out NA values for the group_col and value_col
+  d_test <- data_df[!is.na(data_df[[group_col_name]]) & !is.na(data_df[[value_col]]),]
+  
+  # Define groups for comparison based on group_col_name
+  base_group <- "Unmethylated"
+  compare_groups <- c()
+  
+  if (group_col_name == "cahn_group") {
+    compare_groups <- c("gbM", "TE-like")
+  } else if (group_col_name == "bewick_group") {
+    # For Bewick, compare against gbM, CHH, and CHG individually
+    compare_groups <- c("gbM", "CHH", "CHG")
+  } else {
+    # If the group_col_name is not recognized for specific comparisons, skip
+    return(NULL)
+  }
+  
+  # Kruskal-Wallis test for overall significance among all relevant groups
+  all_relevant_groups <- unique(d_test[[group_col_name]])[unique(d_test[[group_col_name]]) %in% c(base_group, compare_groups)]
+  d_kruskal <- d_test[d_test[[group_col_name]] %in% all_relevant_groups, ]
+  d_kruskal[[group_col_name]] <- droplevels(d_kruskal[[group_col_name]]) # Drop unused levels
+  
+  if (length(unique(d_kruskal[[group_col_name]])) >= 2 && all(table(d_kruskal[[group_col_name]]) >= 2)) {
+    kruskal_result <- tryCatch({
+      kruskal.test(d_kruskal[[value_col]] ~ d_kruskal[[group_col_name]])
+    }, error = function(e) {
+      warning(paste("Kruskal-Wallis error for", context_name, filter_tag, specific_context, ":", e$message))
+      return(NULL)
+    })
+    if (!is.null(kruskal_result)) {
+      results_list[[length(results_list) + 1]] <- data.frame(
+        Context = context_name,
+        Filter_Tag = filter_tag,
+        Specific_Context = specific_context,
+        Group_Type = group_col_name,
+        Comparison = "Overall (Kruskal-Wallis)",
+        P_value = kruskal_result$p.value,
+        stringsAsFactors = FALSE
+      )
+    }
+  }
+
+  # Pairwise Wilcoxon tests against base_group
+  for (comp_group in compare_groups) {
+    group1_data <- d_test[[value_col]][d_test[[group_col_name]] == base_group]
+    group2_data <- d_test[[value_col]][d_test[[group_col_name]] == comp_group]
+    
+    if (length(group1_data) >= 2 && length(group2_data) >= 2) {
+      wilcox_result <- tryCatch({
+        wilcox.test(group1_data, group2_data)
+      }, error = function(e) {
+        warning(paste("Wilcoxon error for", base_group, "vs", comp_group, ":", e$message))
+        return(NULL)
+      })
+      
+      if (!is.null(wilcox_result)) {
+        results_list[[length(results_list) + 1]] <- data.frame(
+          Context = context_name,
+          Filter_Tag = filter_tag,
+          Specific_Context = specific_context,
+          Group_Type = group_col_name,
+          Comparison = paste(comp_group, "vs", base_group),
+          P_value = wilcox_result$p.value,
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+  
+  if (length(results_list) > 0) {
+    return(do.call(rbind, results_list))
+  } else {
+    return(NULL)
+  }
+}
+
+# Helper function to generate and save a PDF with plots and a statistics table
+save_grid_pdf_with_stats <- function(plot_list, stat_data_list, filename, title_text, nrow_grid = 2, ncol_grid = 3) {
+  pdf(filename, width=18, height=12) # Use larger dimensions for grid plots
+
+  # Arrange plots in a grid and paginate
+  if (length(plot_list) > 0) {
+    # Filter out NULL plots before marrangeGrob
+    valid_plots <- plot_list[!sapply(plot_list, is.null)]
+    if (length(valid_plots) > 0) {
+      grob_pages <- marrangeGrob(valid_plots, nrow=nrow_grid, ncol=ncol_grid, top=title_text)
+      for (i in 1:length(grob_pages)) {
+        grid.newpage()
+        grid.draw(grob_pages[[i]])
+      }
+    } else {
+      grid.newpage()
+      grid.text("No plots to display for this category.", gp = gpar(fontsize = 12))
+    }
+  } else {
+    grid.newpage()
+    grid.text("No plots to display for this category.", gp = gpar(fontsize = 12))
+  }
+
+  # Generate and print statistics table
+  if (length(stat_data_list) > 0) {
+    # Combine all individual stat dataframes into one
+    combined_stats_df <- bind_rows(stat_data_list) # No .id needed if already structured
+
+    # Format P_value column for display
+    combined_stats_df$P_value_Formatted <- formatC(combined_stats_df$P_value, format="e", digits=4)
+
+    # Create a custom theme for coloring significant p-values
+    # Define a default theme
+    my_theme <- ttheme_default(
+      core = list(
+        fg_params = list(col = "black", fontsize = 8)
+      ),
+      colhead = list(
+        fg_params = list(col = "black", fontsize = 9, fontface = "bold")
+      ),
+      rowhead = list(
+        fg_params = list(col = "black", fontsize = 8, fontface = "bold")
+      )
+    )
+
+    # Function to apply color based on p-value
+    apply_pvalue_color <- function(df, p_value_col_name, threshold = 0.05) {
+      # Initialize all cells to default color
+      colors <- matrix("black", nrow = nrow(df), ncol = ncol(df))
+      
+      # Find the column index for the p-value
+      p_col_idx <- which(colnames(df) == p_value_col_name)
+      
+      if (length(p_col_idx) > 0) {
+        # Apply red color for significant p-values
+        significant_rows <- which(df[[p_value_col_name]] < threshold)
+        if (length(significant_rows) > 0) {
+          colors[significant_rows, p_col_idx] <- "red"
+        }
+      }
+      return(colors)
+    }
+    
+    # Get the colors matrix for the formatted p-value column
+    # Need to apply colors to the 'P_value_Formatted' column, not the original 'P_value'
+    # So, create a temporary df with just the columns to be displayed to get accurate indexing for colors
+    temp_display_df <- combined_stats_df %>% dplyr::select(Context, Filter_Tag, Specific_Context, Group_Type, Comparison, P_value_Formatted)
+    p_value_colors_matrix <- apply_pvalue_color(combined_stats_df, "P_value") # Use original P_value for logic
+    
+    # Now map these colors to the correct column in the display table
+    display_col_idx_for_p_value <- which(colnames(temp_display_df) == "P_value_Formatted")
+    final_colors_for_table <- matrix("black", nrow = nrow(temp_display_df), ncol = ncol(temp_display_df))
+    if (length(display_col_idx_for_p_value) > 0) {
+      final_colors_for_table[, display_col_idx_for_p_value] <- p_value_colors_matrix[, which(colnames(combined_stats_df) == "P_value")]
+    }
+
+    # Update the foreground parameters in the theme
+    my_theme$core$fg_params$col <- final_colors_for_table
+    
+    # Create the table grob using the formatted p-value column
+    table_to_display <- combined_stats_df %>% dplyr::select(-P_value) # Remove numeric P_value column
+
+    grid.newpage()
+    table_title_grob <- textGrob(paste0("Statistical Comparisons for ", title_text), gp = gpar(fontsize = 14, fontface = "bold"))
+    
+    # Check if there's enough data for the table
+    if (nrow(table_to_display) > 0) {
+        # Split table into pages if too long
+        rows_per_page <- 30 # Adjust as needed
+        num_pages <- ceiling(nrow(table_to_display) / rows_per_page)
+
+        for (p in 1:num_pages) {
+            start_row <- (p - 1) * rows_per_page + 1
+            end_row <- min(p * rows_per_page, nrow(table_to_display))
+            page_data <- table_to_display[start_row:end_row, ]
+            # Need to slice the color matrix corresponding to the page data
+            page_colors_matrix_for_table <- final_colors_for_table[start_row:end_row, ]
+
+            # Create a temporary theme for this page to apply colors
+            page_theme <- my_theme
+            page_theme$core$fg_params$col <- page_colors_matrix_for_table
+
+            table_grob_page <- tableGrob(page_data, rows = NULL, theme = page_theme)
+            
+            grid.newpage()
+            grid.draw(arrangeGrob(table_title_grob, table_grob_page, ncol = 1, heights = c(0.1, 0.9)))
+        }
+    } else {
+        grid.newpage()
+        grid.text("No statistical results available for these plots.", gp = gpar(fontsize = 12))
+    }
+
+  } else {
+    grid.newpage()
+    grid.text("No statistical results available for these plots.", gp = gpar(fontsize = 12))
+  }
+
+  dev.off()
+}
+
+
 # --- Boxplots by celltype (Cahn group) - Mean Expression ---
 plots_cahn_celltype_unfiltered <- lapply(celltype_levels, function(ct) {
   d <- plot_results # Overall unfiltered gene set
@@ -314,13 +553,7 @@ plots_cahn_celltype_unfiltered <- lapply(celltype_levels, function(ct) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_cahn_celltype_unfiltered <- marrangeGrob(plots_cahn_celltype_unfiltered, nrow=2, ncol=3, top="Mean Expression by Cahn Group in Celltypes (Unfiltered)")
-pdf(file.path(output_dir, "grid_mean_expr_cahn_by_celltype_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_celltype_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_cahn_celltype_unfiltered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_celltype_unfiltered, list(), file.path(output_dir, "grid_mean_expr_cahn_by_celltype_unfiltered.pdf"), "Mean Expression by Cahn Group in Celltypes (Unfiltered)")
 
 plots_cahn_celltype_filtered <- lapply(celltype_levels, function(ct) {
   d <- filtered_biol # Overall filtered gene set
@@ -331,13 +564,7 @@ plots_cahn_celltype_filtered <- lapply(celltype_levels, function(ct) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_cahn_celltype_filtered <- marrangeGrob(plots_cahn_celltype_filtered, nrow=2, ncol=3, top="Mean Expression by Cahn Group in Celltypes (Filtered)")
-pdf(file.path(output_dir, "grid_mean_expr_cahn_by_celltype_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_celltype_filtered)) {
-  grid.newpage()
-  grid.draw(g_cahn_celltype_filtered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_celltype_filtered, list(), file.path(output_dir, "grid_mean_expr_cahn_by_celltype_filtered.pdf"), "Mean Expression by Cahn Group in Celltypes (Filtered)")
 
 # --- Boxplots by celltype (Bewick group) - Mean Expression ---
 plots_bewick_celltype_unfiltered <- lapply(celltype_levels, function(ct) {
@@ -349,13 +576,7 @@ plots_bewick_celltype_unfiltered <- lapply(celltype_levels, function(ct) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_bewick_celltype_unfiltered <- marrangeGrob(plots_bewick_celltype_unfiltered, nrow=2, ncol=3, top="Mean Expression by Bewick Group in Celltypes (Unfiltered)")
-pdf(file.path(output_dir, "grid_mean_expr_bewick_by_celltype_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_celltype_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_bewick_celltype_unfiltered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_celltype_unfiltered, list(), file.path(output_dir, "grid_mean_expr_bewick_by_celltype_unfiltered.pdf"), "Mean Expression by Bewick Group in Celltypes (Unfiltered)")
 
 plots_bewick_celltype_filtered <- lapply(celltype_levels, function(ct) {
   d <- filtered_biol
@@ -366,13 +587,7 @@ plots_bewick_celltype_filtered <- lapply(celltype_levels, function(ct) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_bewick_celltype_filtered <- marrangeGrob(plots_bewick_celltype_filtered, nrow=2, ncol=3, top="Mean Expression by Bewick Group in Celltypes (Filtered)")
-pdf(file.path(output_dir, "grid_mean_expr_bewick_by_celltype_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_celltype_filtered)) {
-  grid.newpage()
-  grid.draw(g_bewick_celltype_filtered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_celltype_filtered, list(), file.path(output_dir, "grid_mean_expr_bewick_by_celltype_filtered.pdf"), "Mean Expression by Bewick Group in Celltypes (Filtered)")
 
 
 # --- Boxplots by lineage (Cahn group) - Mean Expression ---
@@ -385,13 +600,7 @@ plots_cahn_lineage_unfiltered <- lapply(lineage_levels, function(ln) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_cahn_lineage_unfiltered <- marrangeGrob(plots_cahn_lineage_unfiltered, nrow=2, ncol=3, top="Mean Expression by Cahn Group in Lineages (Unfiltered)")
-pdf(file.path(output_dir, "grid_mean_expr_cahn_by_lineage_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_lineage_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_cahn_lineage_unfiltered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_lineage_unfiltered, list(), file.path(output_dir, "grid_mean_expr_cahn_by_lineage_unfiltered.pdf"), "Mean Expression by Cahn Group in Lineages (Unfiltered)")
 
 plots_cahn_lineage_filtered <- lapply(lineage_levels, function(ln) {
   d <- filtered_biol
@@ -402,13 +611,7 @@ plots_cahn_lineage_filtered <- lapply(lineage_levels, function(ln) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_cahn_lineage_filtered <- marrangeGrob(plots_cahn_lineage_filtered, nrow=2, ncol=3, top="Mean Expression by Cahn Group in Lineages (Filtered)")
-pdf(file.path(output_dir, "grid_mean_expr_cahn_by_lineage_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_lineage_filtered)) {
-  grid.newpage()
-  grid.draw(g_cahn_lineage_filtered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_lineage_filtered, list(), file.path(output_dir, "grid_mean_expr_cahn_by_lineage_filtered.pdf"), "Mean Expression by Cahn Group in Lineages (Filtered)")
 
 # --- Boxplots by lineage (Bewick group) - Mean Expression ---
 plots_bewick_lineage_unfiltered <- lapply(lineage_levels, function(ln) {
@@ -420,13 +623,7 @@ plots_bewick_lineage_unfiltered <- lapply(lineage_levels, function(ln) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_bewick_lineage_unfiltered <- marrangeGrob(plots_bewick_lineage_unfiltered, nrow=2, ncol=3, top="Mean Expression by Bewick Group in Lineages (Unfiltered)")
-pdf(file.path(output_dir, "grid_mean_expr_bewick_by_lineage_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_lineage_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_bewick_lineage_unfiltered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_lineage_unfiltered, list(), file.path(output_dir, "grid_mean_expr_bewick_by_lineage_unfiltered.pdf"), "Mean Expression by Bewick Group in Lineages (Unfiltered)")
 
 plots_bewick_lineage_filtered <- lapply(lineage_levels, function(ln) {
   d <- filtered_biol
@@ -437,179 +634,160 @@ plots_bewick_lineage_filtered <- lapply(lineage_levels, function(ln) {
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
 })
-g_bewick_lineage_filtered <- marrangeGrob(plots_bewick_lineage_filtered, nrow=2, ncol=3, top="Mean Expression by Bewick Group in Lineages (Filtered)")
-pdf(file.path(output_dir, "grid_mean_expr_bewick_by_lineage_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_lineage_filtered)) {
-  grid.newpage()
-  grid.draw(g_bewick_lineage_filtered[[i]])
-}
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_lineage_filtered, list(), file.path(output_dir, "grid_mean_expr_bewick_by_lineage_filtered.pdf"), "Mean Expression by Bewick Group in Lineages (Filtered)")
 
 
 # --- Boxplots by celltype (Cahn group) - Expression Noise (CV) ---
-plots_cahn_celltype_cv_unfiltered <- lapply(celltype_levels, function(ct) {
-  d_ct <- gene_data_by_celltype[[ct]] # Use celltype-specific data
-  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL) # Handle empty data for a celltype
-
-  ggplot(d_ct[!is.na(d_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
+plots_cahn_celltype_cv_unfiltered <- list()
+stats_cahn_celltype_cv_unfiltered <- list()
+for (ct in celltype_levels) {
+  d_ct <- gene_data_by_celltype[[ct]]
+  if (is.null(d_ct) || nrow(d_ct) == 0) next
+  
+  plot_title <- paste0("Cahn Group in ", ct)
+  plots_cahn_celltype_cv_unfiltered[[ct]] <- ggplot(d_ct[!is.na(d_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV)") +
+    labs(title=plot_title, x="Cahn Group", y="Expression Noise (CV)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_cahn_celltype_cv_unfiltered <- marrangeGrob(plots_cahn_celltype_cv_unfiltered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Celltypes (Unfiltered)")
-pdf(file.path(output_dir, "grid_cv_expr_cahn_by_celltype_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_celltype_cv_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_cahn_celltype_cv_unfiltered[[i]])
+  
+  stats_cahn_celltype_cv_unfiltered[[ct]] <- run_specific_group_stats(d_ct, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Unfiltered", ct)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_celltype_cv_unfiltered, stats_cahn_celltype_cv_unfiltered, file.path(output_dir, "grid_cv_expr_cahn_by_celltype_unfiltered.pdf"), "Expression Noise (CV) by Cahn Group in Celltypes (Unfiltered)")
 
-plots_cahn_celltype_cv_filtered <- lapply(celltype_levels, function(ct) {
-  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
-  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
 
-  # Filter to include only genes that were overall Brennecke-filtered
+plots_cahn_celltype_cv_filtered <- list()
+stats_cahn_celltype_cv_filtered <- list()
+for (ct in celltype_levels) {
+  d_ct <- gene_data_by_celltype[[ct]]
+  if (is.null(d_ct) || nrow(d_ct) == 0) next
   d_filtered_ct <- d_ct %>% filter(gene %in% filtered_biol$gene)
-  if (nrow(d_filtered_ct) == 0) return(NULL)
-
-  ggplot(d_filtered_ct[!is.na(d_filtered_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
+  if (nrow(d_filtered_ct) == 0) next
+  
+  plot_title <- paste0("Cahn Group in ", ct)
+  plots_cahn_celltype_cv_filtered[[ct]] <- ggplot(d_filtered_ct[!is.na(d_filtered_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV) (Brennecke Filtered)") +
+    labs(title=plot_title, x="Cahn Group", y="Expression Noise (CV) (Brennecke Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_cahn_celltype_cv_filtered <- marrangeGrob(plots_cahn_celltype_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Celltypes (Brennecke Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_cahn_by_celltype_brennecke_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_celltype_cv_filtered)) {
-  grid.newpage()
-  grid.draw(g_cahn_celltype_cv_filtered[[i]])
+  
+  stats_cahn_celltype_cv_filtered[[ct]] <- run_specific_group_stats(d_filtered_ct, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_celltype_cv_filtered, stats_cahn_celltype_cv_filtered, file.path(output_dir, "grid_cv_expr_cahn_by_celltype_brennecke_filtered.pdf"), "Expression Noise (CV) by Cahn Group in Celltypes (Brennecke Filtered)")
 
 # --- Boxplots by celltype (Bewick group) - Expression Noise (CV) ---
-plots_bewick_celltype_cv_unfiltered <- lapply(celltype_levels, function(ct) {
-  d_ct <- gene_data_by_celltype[[ct]] # Use celltype-specific data
-  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
-
-  ggplot(d_ct[!is.na(d_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
+plots_bewick_celltype_cv_unfiltered <- list()
+stats_bewick_celltype_cv_unfiltered <- list()
+for (ct in celltype_levels) {
+  d_ct <- gene_data_by_celltype[[ct]]
+  if (is.null(d_ct) || nrow(d_ct) == 0) next
+  
+  plot_title <- paste0("Bewick Group in ", ct)
+  plots_bewick_celltype_cv_unfiltered[[ct]] <- ggplot(d_ct[!is.na(d_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV)") +
+    labs(title=plot_title, x="Bewick Group", y="Expression Noise (CV)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_bewick_celltype_cv_unfiltered <- marrangeGrob(plots_bewick_celltype_cv_unfiltered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Celltypes (Unfiltered)")
-pdf(file.path(output_dir, "grid_cv_expr_bewick_by_celltype_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_celltype_cv_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_bewick_celltype_cv_unfiltered[[i]])
+  
+  # For Bewick, the 'TE-like' group for stats is CHH+CHG
+  stats_bewick_celltype_cv_unfiltered[[ct]] <- run_specific_group_stats(d_ct, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Unfiltered", ct)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_celltype_cv_unfiltered, stats_bewick_celltype_cv_unfiltered, file.path(output_dir, "grid_cv_expr_bewick_by_celltype_unfiltered.pdf"), "Expression Noise (CV) by Bewick Group in Celltypes (Unfiltered)")
 
-plots_bewick_celltype_cv_filtered <- lapply(celltype_levels, function(ct) {
-  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
-  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
-
-  # Filter to include only genes that were overall Brennecke-filtered
+plots_bewick_celltype_cv_filtered <- list()
+stats_bewick_celltype_cv_filtered <- list()
+for (ct in celltype_levels) {
+  d_ct <- gene_data_by_celltype[[ct]]
+  if (is.null(d_ct) || nrow(d_ct) == 0) next
   d_filtered_ct <- d_ct %>% filter(gene %in% filtered_biol$gene)
-  if (nrow(d_filtered_ct) == 0) return(NULL)
-
-  ggplot(d_filtered_ct[!is.na(d_filtered_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
+  if (nrow(d_filtered_ct) == 0) next
+  
+  plot_title <- paste0("Bewick Group in ", ct)
+  plots_bewick_celltype_cv_filtered[[ct]] <- ggplot(d_filtered_ct[!is.na(d_filtered_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV) (Brennecke Filtered)") +
+    labs(title=plot_title, x="Bewick Group", y="Expression Noise (CV) (Brennecke Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_bewick_celltype_cv_filtered <- marrangeGrob(plots_bewick_celltype_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Celltypes (Brennecke Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_bewick_by_celltype_brennecke_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_celltype_cv_filtered)) {
-  grid.newpage()
-  grid.draw(g_bewick_celltype_cv_filtered[[i]])
+  
+  stats_bewick_celltype_cv_filtered[[ct]] <- run_specific_group_stats(d_filtered_ct, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_celltype_cv_filtered, stats_bewick_celltype_cv_filtered, file.path(output_dir, "grid_cv_expr_bewick_by_celltype_brennecke_filtered.pdf"), "Expression Noise (CV) by Bewick Group in Celltypes (Brennecke Filtered)")
 
 
 # --- Boxplots by lineage (Cahn group) - Expression Noise (CV) ---
-plots_cahn_lineage_cv_unfiltered <- lapply(lineage_levels, function(ln) {
-  d_ln <- gene_data_by_lineage[[ln]] # Use lineage-specific data
-  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
-
-  ggplot(d_ln[!is.na(d_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
+plots_cahn_lineage_cv_unfiltered <- list()
+stats_cahn_lineage_cv_unfiltered <- list()
+for (ln in lineage_levels) {
+  d_ln <- gene_data_by_lineage[[ln]]
+  if (is.null(d_ln) || nrow(d_ln) == 0) next
+  
+  plot_title <- paste0("Cahn Group in ", ln)
+  plots_cahn_lineage_cv_unfiltered[[ln]] <- ggplot(d_ln[!is.na(d_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Cahn Group in", ln), x="Cahn Group", y="Expression Noise (CV)") +
+    labs(title=plot_title, x="Cahn Group", y="Expression Noise (CV)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_cahn_lineage_cv_unfiltered <- marrangeGrob(plots_cahn_lineage_cv_unfiltered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Lineages (Unfiltered)")
-pdf(file.path(output_dir, "grid_cv_expr_cahn_by_lineage_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_lineage_cv_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_cahn_lineage_cv_unfiltered[[i]])
+  
+  stats_cahn_lineage_cv_unfiltered[[ln]] <- run_specific_group_stats(d_ln, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Unfiltered", ln)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_lineage_cv_unfiltered, stats_cahn_lineage_cv_unfiltered, file.path(output_dir, "grid_cv_expr_cahn_by_lineage_unfiltered.pdf"), "Expression Noise (CV) by Cahn Group in Lineages (Unfiltered)")
 
-plots_cahn_lineage_cv_filtered <- lapply(lineage_levels, function(ln) {
-  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
-  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
-
-  # Filter to include only genes that were overall Brennecke-filtered
+plots_cahn_lineage_cv_filtered <- list()
+stats_cahn_lineage_cv_filtered <- list()
+for (ln in lineage_levels) {
+  d_ln <- gene_data_by_lineage[[ln]]
+  if (is.null(d_ln) || nrow(d_ln) == 0) next
   d_filtered_ln <- d_ln %>% filter(gene %in% filtered_biol$gene)
-  if (nrow(d_filtered_ln) == 0) return(NULL)
-
-  ggplot(d_filtered_ln[!is.na(d_filtered_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
+  if (nrow(d_filtered_ln) == 0) next
+  
+  plot_title <- paste0("Cahn Group in ", ln)
+  plots_cahn_lineage_cv_filtered[[ln]] <- ggplot(d_filtered_ln[!is.na(d_filtered_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Cahn Group in", ln), x="Cahn Group", y="Expression Noise (CV)") +
+    labs(title=plot_title, x="Cahn Group", y="Expression Noise (CV)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_cahn_lineage_cv_filtered <- marrangeGrob(plots_cahn_lineage_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Lineages (Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_cahn_by_lineage_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_lineage_cv_filtered)) {
-  grid.newpage()
-  grid.draw(g_cahn_lineage_cv_filtered[[i]])
+  
+  stats_cahn_lineage_cv_filtered[[ln]] <- run_specific_group_stats(d_filtered_ln, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_lineage_cv_filtered, stats_cahn_lineage_cv_filtered, file.path(output_dir, "grid_cv_expr_cahn_by_lineage_brennecke_filtered.pdf"), "Expression Noise (CV) by Cahn Group in Lineages (Brennecke Filtered)")
 
 # --- Boxplots by lineage (Bewick group) - Expression Noise (CV) ---
-plots_bewick_lineage_cv_unfiltered <- lapply(lineage_levels, function(ln) {
-  d_ln <- gene_data_by_lineage[[ln]] # Use lineage-specific data
-  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
-
-  ggplot(d_ln[!is.na(d_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
+plots_bewick_lineage_cv_unfiltered <- list()
+stats_bewick_lineage_cv_unfiltered <- list()
+for (ln in lineage_levels) {
+  d_ln <- gene_data_by_lineage[[ln]]
+  if (is.null(d_ln) || nrow(d_ln) == 0) next
+  
+  plot_title <- paste0("Bewick Group in ", ln)
+  plots_bewick_lineage_cv_unfiltered[[ln]] <- ggplot(d_ln[!is.na(d_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Bewick Group in", ln), x="Bewick Group", y="Expression Noise (CV)") +
+    labs(title=plot_title, x="Bewick Group", y="Expression Noise (CV)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_bewick_lineage_cv_unfiltered <- marrangeGrob(plots_bewick_lineage_cv_unfiltered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Lineages (Unfiltered)")
-pdf(file.path(output_dir, "grid_cv_expr_bewick_by_lineage_unfiltered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_lineage_cv_unfiltered)) {
-  grid.newpage()
-  grid.draw(g_bewick_lineage_cv_unfiltered[[i]])
+  
+  stats_bewick_lineage_cv_unfiltered[[ln]] <- run_specific_group_stats(d_ln, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Unfiltered", ln)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_lineage_cv_unfiltered, stats_bewick_lineage_cv_unfiltered, file.path(output_dir, "grid_cv_expr_bewick_by_lineage_unfiltered.pdf"), "Expression Noise (CV) by Bewick Group in Lineages (Unfiltered)")
 
-plots_bewick_lineage_cv_filtered <- lapply(lineage_levels, function(ln) {
-  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
-  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
-
-  # Filter to include only genes that were overall Brennecke-filtered
+plots_bewick_lineage_cv_filtered <- list()
+stats_bewick_lineage_cv_filtered <- list()
+for (ln in lineage_levels) {
+  d_ln <- gene_data_by_lineage[[ln]]
+  if (is.null(d_ln) || nrow(d_ln) == 0) next
   d_filtered_ln <- d_ln %>% filter(gene %in% filtered_biol$gene)
-  if (nrow(d_filtered_ln) == 0) return(NULL)
-
-  ggplot(d_filtered_ln[!is.na(d_filtered_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
+  if (nrow(d_filtered_ln) == 0) next
+  
+  plot_title <- paste0("Bewick Group in ", ln)
+  plots_bewick_lineage_cv_filtered[[ln]] <- ggplot(d_filtered_ln[!is.na(d_filtered_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Bewick Group in", ln), x="Bewick Group", y="Expression Noise (CV)") +
+    labs(title=plot_title, x="Bewick Group", y="Expression Noise (CV)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_bewick_lineage_cv_filtered <- marrangeGrob(plots_bewick_lineage_cv_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Lineages (Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_bewick_by_lineage_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_lineage_cv_filtered)) {
-  grid.newpage()
-  grid.draw(g_bewick_lineage_cv_filtered[[i]])
+  
+  stats_bewick_lineage_cv_filtered[[ln]] <- run_specific_group_stats(d_filtered_ln, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_lineage_cv_filtered, stats_bewick_lineage_cv_filtered, file.path(output_dir, "grid_cv_expr_bewick_by_lineage_brennecke_filtered.pdf"), "Expression Noise (CV) by Bewick Group in Lineages (Brennecke Filtered)")
+
 
 # --- NEW SECTION: Filter by bottom 10% least expressed genes and re-plot Mean vs CV ---
 
@@ -633,9 +811,9 @@ if (nrow(plot_results_mean_filtered[plot_results_mean_filtered$mean_expr > 0,]) 
   plot_results_mean_filtered$cv2 <- plot_results_mean_filtered$cv_expr^2
   fit_mean_filtered <- nls(cv2 ~ a / mean_expr + b, data=plot_results_mean_filtered[plot_results_mean_filtered$mean_expr > 0,], start=list(a=1, b=0.1))
   fit_vals_mean_filtered <- predict(fit_mean_filtered, newdata=data.frame(mean_expr=plot_results_mean_filtered$mean_expr))
-  residuals_mean_filtered <- plot_results_mean_filtered$cv2 - fit_vals_mean_filtered
-  threshold_mean_filtered <- quantile(residuals_mean_filtered, 0.95, na.rm=TRUE)
-  plot_results_mean_filtered$biol_variable <- residuals_mean_filtered > threshold_mean_filtered
+  residuals <- plot_results_mean_filtered$cv2 - fit_vals_mean_filtered
+  threshold_mean_filtered <- quantile(residuals, 0.95, na.rm=TRUE)
+  plot_results_mean_filtered$biol_variable <- residuals > threshold_mean_filtered
   filtered_biol_mean_filtered <- plot_results_mean_filtered[plot_results_mean_filtered$biol_variable & plot_results_mean_filtered$mean_expr > 0, ]
 } else {
   warning("Not enough data points to perform Brennecke fit after 10% mean expression filtering for combined filter.")
@@ -757,7 +935,7 @@ p_mean_cv_bewick_james_lloyd_filtered <- ggplot(plot_results_mean_filtered, aes(
 all_plots_for_pdf[["bewick_james_lloyd"]] <- p_mean_cv_bewick_james_lloyd_filtered
 
 
-# Scenario 4: James Lloyd Filter THEN Brennecke Filter (Log Scale)
+# Scenario 4: James Lloyd Filter THEN Brennecke Filter
 if (nrow(filtered_biol_mean_filtered) > 0) {
   p_mean_cv_cahn_james_lloyd_then_brennecke_filtered <- ggplot(filtered_biol_mean_filtered, aes(x=mean_expr, y=cv_expr, color=cahn_group)) +
     geom_point(alpha=0.5, size=0.7) +
@@ -818,11 +996,12 @@ all_plots_for_pdf[["bewick_brennecke_nolog"]] <- p_mean_cv_bewick_brennecke_nolo
 # --- STATISTICAL ANALYSIS FOR FILTERING METHODS AND GRID PLOTS ---
 
 # Initialize a list to store all statistical results for grid plots
-all_grid_stats_df_rows <- list()
-stat_counter <- 0
+# (This section is now for the main PDF's summary table, not individual grid PDFs)
+all_grid_stats_df_rows_main_pdf <- list()
+stat_counter_main_pdf <- 0
 
-# Function to perform Kruskal-Wallis and post-hoc Wilcoxon tests
-perform_group_stats <- function(data_df, value_col, group_col_name, context_name, filter_tag, current_ct_ln) {
+# Function to perform Kruskal-Wallis and post-hoc Wilcoxon tests for main PDF summary
+perform_group_stats_main_pdf <- function(data_df, value_col, group_col_name, context_name, filter_tag, current_ct_ln) {
   # Create a copy of the dataframe to avoid modifying the original
   d_test <- data_df
 
@@ -861,9 +1040,9 @@ perform_group_stats <- function(data_df, value_col, group_col_name, context_name
     return(NULL)
   }
 
-  stat_counter <<- stat_counter + 1
+  stat_counter_main_pdf <<- stat_counter_main_pdf + 1
   result_entry <- data.frame(
-    ID = stat_counter,
+    ID = stat_counter_main_pdf,
     Context = context_name,
     Filter_Tag = filter_tag,
     Group_Type = group_col_name, # Keep original group name for clarity
@@ -875,7 +1054,7 @@ perform_group_stats <- function(data_df, value_col, group_col_name, context_name
     Statistic = round(kruskal_result$statistic, 3),
     stringsAsFactors = FALSE
   )
-  all_grid_stats_df_rows[[length(all_grid_stats_df_rows) + 1]] <<- result_entry
+  all_grid_stats_df_rows_main_pdf[[length(all_grid_stats_df_rows_main_pdf) + 1]] <<- result_entry
 
   if (kruskal_result$p.value < 0.05) {
     pairwise_result <- tryCatch({
@@ -894,9 +1073,9 @@ perform_group_stats <- function(data_df, value_col, group_col_name, context_name
         filter(!is.na(P_value))
 
       for (i in 1:nrow(p_df)) {
-        stat_counter <<- stat_counter + 1
+        stat_counter_main_pdf <<- stat_counter_main_pdf + 1
         pairwise_entry <- data.frame(
-          ID = stat_counter,
+          ID = stat_counter_main_pdf,
           Context = context_name,
           Filter_Tag = filter_tag,
           Group_Type = group_col_name,
@@ -908,71 +1087,71 @@ perform_group_stats <- function(data_df, value_col, group_col_name, context_name
           Statistic = NA, # Pairwise Wilcoxon doesn't directly return a single statistic
           stringsAsFactors = FALSE
         )
-        all_grid_stats_df_rows[[length(all_grid_stats_df_rows) + 1]] <<- pairwise_entry
+        all_grid_stats_df_rows_main_pdf[[length(all_grid_stats_df_rows_main_pdf) + 1]] <<- pairwise_entry
       }
     }
   }
 }
 
-# Iterate and collect stats for Mean Expression by Celltype/Lineage
+# Iterate and collect stats for Mean Expression by Celltype/Lineage (for main PDF)
 for (ct in celltype_levels) { # Use celltype_levels
   if (is.na(ct) || ct == "") next
   d_unfiltered <- plot_results
   d_unfiltered$cell_mean <- gene_means_celltype[d_unfiltered$gene, ct]
-  perform_group_stats(d_unfiltered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "Unfiltered", ct)
-  perform_group_stats(d_unfiltered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "Unfiltered", ct)
+  perform_group_stats_main_pdf(d_unfiltered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "Unfiltered", ct)
+  perform_group_stats_main_pdf(d_unfiltered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "Unfiltered", ct)
 
   d_filtered <- filtered_biol
   d_filtered$cell_mean <- gene_means_celltype[d_filtered$gene, ct]
-  perform_group_stats(d_filtered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "Brennecke Filtered", ct)
-  perform_group_stats(d_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "Brennecke Filtered", ct)
+  perform_group_stats_main_pdf(d_filtered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "Brennecke Filtered", ct)
+  perform_group_stats_main_pdf(d_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "Brennecke Filtered", ct)
 
   d_jl_filtered <- plot_results_mean_filtered # Data filtered by James Lloyd
   d_jl_filtered$cell_mean <- gene_means_celltype[d_jl_filtered$gene, ct]
-  perform_group_stats(d_jl_filtered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "James Lloyd Filtered", ct)
-  perform_group_stats(d_jl_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "James Lloyd Filtered", ct)
+  perform_group_stats_main_pdf(d_jl_filtered, "cell_mean", "cahn_group", "Mean Expr by Celltype", "James Lloyd Filtered", ct)
+  perform_group_stats_main_pdf(d_jl_filtered, "cell_mean", "bewick_group", "Mean Expr by Celltype", "James Lloyd Filtered", ct)
 }
 
 for (ln in lineage_levels) { # Use lineage_levels
   if (is.na(ln) || ln == "") next
   d_unfiltered <- plot_results
   d_unfiltered$lineage_mean <- gene_means_lineage[d_unfiltered$gene, ln]
-  perform_group_stats(d_unfiltered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "Unfiltered", ln)
-  perform_group_stats(d_unfiltered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "Unfiltered", ln)
+  perform_group_stats_main_pdf(d_unfiltered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "Unfiltered", ln)
+  perform_group_stats_main_pdf(d_unfiltered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "Unfiltered", ln)
 
   d_filtered <- filtered_biol
   d_filtered$lineage_mean <- gene_means_lineage[d_filtered$gene, ln]
-  perform_group_stats(d_filtered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "Brennecke Filtered", ln)
-  perform_group_stats(d_filtered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "Brennecke Filtered", ln)
+  perform_group_stats_main_pdf(d_filtered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "Brennecke Filtered", ln)
+  perform_group_stats_main_pdf(d_filtered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "Brennecke Filtered", ln)
 
   d_jl_filtered <- plot_results_mean_filtered # Data filtered by James Lloyd
   d_jl_filtered$lineage_mean <- gene_means_lineage[d_jl_filtered$gene, ln]
-  perform_group_stats(d_jl_filtered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "James Lloyd Filtered", ln)
-  perform_group_stats(d_jl_filtered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "James Lloyd Filtered", ln)
+  perform_group_stats_main_pdf(d_jl_filtered, "lineage_mean", "cahn_group", "Mean Expr by Lineage", "James Lloyd Filtered", ln)
+  perform_group_stats_main_pdf(d_jl_filtered, "lineage_mean", "bewick_group", "Mean Expr by Lineage", "James Lloyd Filtered", ln)
 }
 
-# Iterate and collect stats for CV Expression by Celltype/Lineage
+# Iterate and collect stats for CV Expression by Celltype/Lineage (for main PDF)
 for (ct in celltype_levels) { # Use celltype_levels
   if (is.na(ct) || ct == "") next
   # For CV, use the celltype-specific data frame
   d_ct_unfiltered <- gene_data_by_celltype[[ct]]
   if (!is.null(d_ct_unfiltered) && nrow(d_ct_unfiltered) > 0) {
-    perform_group_stats(d_ct_unfiltered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Unfiltered", ct)
-    perform_group_stats(d_ct_unfiltered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Unfiltered", ct)
+    perform_group_stats_main_pdf(d_ct_unfiltered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Unfiltered", ct)
+    perform_group_stats_main_pdf(d_ct_unfiltered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Unfiltered", ct)
   }
 
   # Brennecke Filtered CV
   d_ct_brennecke_filtered <- d_ct_unfiltered %>% filter(gene %in% filtered_biol$gene)
   if (!is.null(d_ct_brennecke_filtered) && nrow(d_ct_brennecke_filtered) > 0) {
-    perform_group_stats(d_ct_brennecke_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
-    perform_group_stats(d_ct_brennecke_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
+    perform_group_stats_main_pdf(d_ct_brennecke_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
+    perform_group_stats_main_pdf(d_ct_brennecke_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "Brennecke Filtered", ct)
   }
 
   # James Lloyd Filtered CV
   d_ct_james_lloyd_filtered <- d_ct_unfiltered %>% filter(gene %in% plot_results_mean_filtered$gene)
   if (!is.null(d_ct_james_lloyd_filtered) && nrow(d_ct_james_lloyd_filtered) > 0) {
-    perform_group_stats(d_ct_james_lloyd_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
-    perform_group_stats(d_ct_james_lloyd_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
+    perform_group_stats_main_pdf(d_ct_james_lloyd_filtered, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
+    perform_group_stats_main_pdf(d_ct_james_lloyd_filtered, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
   }
 }
 
@@ -981,29 +1160,29 @@ for (ln in lineage_levels) { # Use lineage_levels
   # For CV, use the lineage-specific data frame
   d_ln_unfiltered <- gene_data_by_lineage[[ln]]
   if (!is.null(d_ln_unfiltered) && nrow(d_ln_unfiltered) > 0) {
-    perform_group_stats(d_ln_unfiltered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Unfiltered", ln)
-    perform_group_stats(d_ln_unfiltered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Unfiltered", ln)
+    perform_group_stats_main_pdf(d_ln_unfiltered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Unfiltered", ln)
+    perform_group_stats_main_pdf(d_ln_unfiltered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Unfiltered", ln)
   }
 
   # Brennecke Filtered CV
   d_ln_brennecke_filtered <- d_ln_unfiltered %>% filter(gene %in% filtered_biol$gene)
   if (!is.null(d_ln_brennecke_filtered) && nrow(d_ln_brennecke_filtered) > 0) {
-    perform_group_stats(d_ln_brennecke_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
-    perform_group_stats(d_ln_brennecke_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
+    perform_group_stats_main_pdf(d_ln_brennecke_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
+    perform_group_stats_main_pdf(d_ln_brennecke_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "Brennecke Filtered", ln)
   }
 
   # James Lloyd Filtered CV
   d_ln_james_lloyd_filtered <- d_ln_unfiltered %>% filter(gene %in% plot_results_mean_filtered$gene)
   if (!is.null(d_ln_james_lloyd_filtered) && nrow(d_ln_james_lloyd_filtered) > 0) {
-    perform_group_stats(d_ln_james_lloyd_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
-    perform_group_stats(d_ln_james_lloyd_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
+    perform_group_stats_main_pdf(d_ln_james_lloyd_filtered, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
+    perform_group_stats_main_pdf(d_ln_james_lloyd_filtered, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
   }
 }
 
 
-# Combine all collected stats into a single data frame
-final_grid_stats_df <- if (length(all_grid_stats_df_rows) > 0) {
-  do.call(rbind, all_grid_stats_df_rows)
+# Combine all collected stats into a single data frame for main PDF
+final_grid_stats_df_main_pdf <- if (length(all_grid_stats_df_rows_main_pdf) > 0) {
+  do.call(rbind, all_grid_stats_df_rows_main_pdf)
 } else {
   data.frame(ID=numeric(0), Context=character(0), Filter_Tag=character(0), Group_Type=character(0),
              Value_Type=character(0), Specific_Context=character(0), Test=character(0),
@@ -1063,22 +1242,22 @@ overall_stats_grob <- tableGrob(stat_table, rows = NULL, theme = ttheme_default(
 overall_stats_title <- textGrob("Overall Methylation Group Comparison Statistics", gp = gpar(fontsize = 14, fontface = "bold"))
 all_tables_for_pdf[[length(all_tables_for_pdf) + 1]] <- arrangeGrob(overall_stats_title, overall_stats_grob, ncol = 1, heights = c(0.1, 0.9))
 
-# Table 3: Grid Plot Statistics (Paginated if necessary)
-if (nrow(final_grid_stats_df) > 0) {
+# Table 3: Grid Plot Statistics (Paginated if necessary) - for Main PDF
+if (nrow(final_grid_stats_df_main_pdf) > 0) {
   rows_per_page <- 40 # Adjust as needed for readability
-  num_pages <- ceiling(nrow(final_grid_stats_df) / rows_per_page)
+  num_pages <- ceiling(nrow(final_grid_stats_df_main_pdf) / rows_per_page)
 
   for (p in 1:num_pages) {
     start_row <- (p - 1) * rows_per_page + 1
-    end_row <- min(p * rows_per_page, nrow(final_grid_stats_df))
-    page_data <- final_grid_stats_df[start_row:end_row, ]
+    end_row <- min(p * rows_per_page, nrow(final_grid_stats_df_main_pdf))
+    page_data <- final_grid_stats_df_main_pdf[start_row:end_row, ]
 
     grid_stats_grob <- tableGrob(page_data, rows = NULL, theme = ttheme_default(base_size = 8))
     grid_stats_title <- textGrob(paste0("Grid Plot Statistics (Page ", p, " of ", num_pages, ")"), gp = gpar(fontsize = 14, fontface = "bold"))
     all_tables_for_pdf[[length(all_tables_for_pdf) + 1]] <- arrangeGrob(grid_stats_title, grid_stats_grob, ncol = 1, heights = c(0.1, 0.9))
   }
 } else {
-  warning("No grid plot statistics to add to PDF.")
+  warning("No grid plot statistics to add to main PDF.")
 }
 
 
@@ -1108,93 +1287,89 @@ message(paste("All plots and statistics saved to:", pdf_filename))
 # --- NEW: Save James Lloyd Filtered CV Boxplots to separate PDFs ---
 
 # Boxplots by celltype (Cahn group) - Expression Noise (CV) (James Lloyd Filtered)
-plots_cahn_celltype_cv_james_lloyd_filtered <- lapply(celltype_levels, function(ct) {
-  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
-  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
+plots_cahn_celltype_cv_james_lloyd_filtered <- list()
+stats_cahn_celltype_cv_james_lloyd_filtered <- list()
+for (ct in celltype_levels) {
+  d_ct <- gene_data_by_celltype[[ct]]
+  if (is.null(d_ct) || nrow(d_ct) == 0) next
 
   # Filter to include only genes that were overall James Lloyd-filtered
   d_filtered_jl_ct <- d_ct %>% filter(gene %in% plot_results_mean_filtered$gene)
-  if (nrow(d_filtered_jl_ct) == 0) return(NULL)
+  if (nrow(d_filtered_jl_ct) == 0) next
 
-  ggplot(d_filtered_jl_ct[!is.na(d_filtered_jl_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
+  plot_title <- paste0("Cahn Group in ", ct)
+  plots_cahn_celltype_cv_james_lloyd_filtered[[ct]] <- ggplot(d_filtered_jl_ct[!is.na(d_filtered_jl_ct$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ct, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Cahn Group in", ct), x="Cahn Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    labs(title=plot_title, x="Cahn Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_cahn_celltype_cv_james_lloyd_filtered <- marrangeGrob(plots_cahn_celltype_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Celltypes (James Lloyd Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_cahn_by_celltype_james_lloyd_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_celltype_cv_james_lloyd_filtered)) {
-  grid.newpage()
-  grid.draw(g_cahn_celltype_cv_james_lloyd_filtered[[i]])
+
+  stats_cahn_celltype_cv_james_lloyd_filtered[[ct]] <- run_specific_group_stats(d_filtered_jl_ct, "cv_expr_ct", "cahn_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_celltype_cv_james_lloyd_filtered, stats_cahn_celltype_cv_james_lloyd_filtered, file.path(output_dir, "grid_cv_expr_cahn_by_celltype_james_lloyd_filtered.pdf"), "Expression Noise (CV) by Cahn Group in Celltypes (James Lloyd Filtered)")
 
 # Boxplots by celltype (Bewick group) - Expression Noise (CV) (James Lloyd Filtered)
-plots_bewick_celltype_cv_james_lloyd_filtered <- lapply(celltype_levels, function(ct) {
-  d_ct <- gene_data_by_celltype[[ct]] # Start with celltype-specific data
-  if (is.null(d_ct) || nrow(d_ct) == 0) return(NULL)
+plots_bewick_celltype_cv_james_lloyd_filtered <- list()
+stats_bewick_celltype_cv_james_lloyd_filtered <- list()
+for (ct in celltype_levels) {
+  d_ct <- gene_data_by_celltype[[ct]]
+  if (is.null(d_ct) || nrow(d_ct) == 0) next
 
   # Filter to include only genes that were overall James Lloyd-filtered
   d_filtered_jl_ct <- d_ct %>% filter(gene %in% plot_results_mean_filtered$gene)
-  if (nrow(d_filtered_jl_ct) == 0) return(NULL)
+  if (nrow(d_filtered_jl_ct) == 0) next
 
-  ggplot(d_filtered_jl_ct[!is.na(d_filtered_jl_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
+  plot_title <- paste0("Bewick Group in ", ct)
+  plots_bewick_celltype_cv_james_lloyd_filtered[[ct]] <- ggplot(d_filtered_jl_ct[!is.na(d_filtered_jl_ct$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ct, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Bewick Group in", ct), x="Bewick Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    labs(title=plot_title, x="Bewick Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_bewick_celltype_cv_james_lloyd_filtered <- marrangeGrob(plots_bewick_celltype_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Celltypes (James Lloyd Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_bewick_by_celltype_james_lloyd_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_celltype_cv_james_lloyd_filtered)) {
-  grid.newpage()
-  grid.draw(g_bewick_celltype_cv_james_lloyd_filtered[[i]])
+
+  stats_bewick_celltype_cv_james_lloyd_filtered[[ct]] <- run_specific_group_stats(d_filtered_jl_ct, "cv_expr_ct", "bewick_group", "CV Expr by Celltype", "James Lloyd Filtered", ct)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_celltype_cv_james_lloyd_filtered, stats_bewick_celltype_cv_james_lloyd_filtered, file.path(output_dir, "grid_cv_expr_bewick_by_celltype_james_lloyd_filtered.pdf"), "Expression Noise (CV) by Bewick Group in Celltypes (James Lloyd Filtered)")
 
 # Boxplots by lineage (Cahn group) - Expression Noise (CV) (James Lloyd Filtered)
-plots_cahn_lineage_cv_james_lloyd_filtered <- lapply(lineage_levels, function(ln) {
-  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
-  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+plots_cahn_lineage_cv_james_lloyd_filtered <- list()
+stats_cahn_lineage_cv_james_lloyd_filtered <- list()
+for (ln in lineage_levels) {
+  d_ln <- gene_data_by_lineage[[ln]]
+  if (is.null(d_ln) || nrow(d_ln) == 0) next
 
   # Filter to include only genes that were overall James Lloyd-filtered
   d_filtered_jl_ln <- d_ln %>% filter(gene %in% plot_results_mean_filtered$gene)
-  if (nrow(d_filtered_jl_ln) == 0) return(NULL)
+  if (nrow(d_filtered_jl_ln) == 0) next
 
-  ggplot(d_filtered_jl_ln[!is.na(d_filtered_jl_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
+  plot_title <- paste0("Cahn Group in ", ln)
+  plots_cahn_lineage_cv_james_lloyd_filtered[[ln]] <- ggplot(d_filtered_jl_ln[!is.na(d_filtered_jl_ln$cahn_group),], aes(x=factor(cahn_group), y=cv_expr_ln, fill=factor(cahn_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Cahn Group in", ln), x="Cahn Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    labs(title=plot_title, x="Cahn Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_cahn_lineage_cv_james_lloyd_filtered <- marrangeGrob(plots_cahn_lineage_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Cahn Group in Lineages (James Lloyd Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_cahn_by_lineage_james_lloyd_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_cahn_lineage_cv_james_lloyd_filtered)) {
-  grid.newpage()
-  grid.draw(g_cahn_lineage_cv_james_lloyd_filtered[[i]])
+
+  stats_cahn_lineage_cv_james_lloyd_filtered[[ln]] <- run_specific_group_stats(d_filtered_jl_ln, "cv_expr_ln", "cahn_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_cahn_lineage_cv_james_lloyd_filtered, stats_cahn_lineage_cv_james_lloyd_filtered, file.path(output_dir, "grid_cv_expr_cahn_by_lineage_james_lloyd_filtered.pdf"), "Expression Noise (CV) by Cahn Group in Lineages (James Lloyd Filtered)")
 
 # Boxplots by lineage (Bewick group) - Expression Noise (CV) (James Lloyd Filtered)
-plots_bewick_lineage_cv_james_lloyd_filtered <- lapply(lineage_levels, function(ln) {
-  d_ln <- gene_data_by_lineage[[ln]] # Start with lineage-specific data
-  if (is.null(d_ln) || nrow(d_ln) == 0) return(NULL)
+plots_bewick_lineage_cv_james_lloyd_filtered <- list()
+stats_bewick_lineage_cv_james_lloyd_filtered <- list()
+for (ln in lineage_levels) {
+  d_ln <- gene_data_by_lineage[[ln]]
+  if (is.null(d_ln) || nrow(d_ln) == 0) next
 
   # Filter to include only genes that were overall James Lloyd-filtered
   d_filtered_jl_ln <- d_ln %>% filter(gene %in% plot_results_mean_filtered$gene)
-  if (nrow(d_filtered_jl_ln) == 0) return(NULL)
+  if (nrow(d_filtered_jl_ln) == 0) next
 
-  ggplot(d_filtered_jl_ln[!is.na(d_filtered_jl_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
+  plot_title <- paste0("Bewick Group in ", ln)
+  plots_bewick_lineage_cv_james_lloyd_filtered[[ln]] <- ggplot(d_filtered_jl_ln[!is.na(d_filtered_jl_ln$bewick_group),], aes(x=factor(bewick_group), y=cv_expr_ln, fill=factor(bewick_group))) +
     geom_boxplot(outlier.size=0.5) +
-    labs(title=paste("Bewick Group in", ln), x="Bewick Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
+    labs(title=plot_title, x="Bewick Group", y="Expression Noise (CV) (James Lloyd Filtered)") +
     theme_bw() +
     theme(legend.position = "none", axis.text.x = element_text(angle=45, hjust=1))
-})
-g_bewick_lineage_cv_james_lloyd_filtered <- marrangeGrob(plots_bewick_lineage_cv_james_lloyd_filtered, nrow=2, ncol=3, top="Expression Noise (CV) by Bewick Group in Lineages (James Lloyd Filtered)")
-pdf(file.path(output_dir, "grid_cv_expr_bewick_by_lineage_james_lloyd_filtered.pdf"), width=18, height=12)
-for (i in 1:length(g_bewick_lineage_cv_james_lloyd_filtered)) {
-  grid.newpage()
-  grid.draw(g_bewick_lineage_cv_james_lloyd_filtered[[i]])
+
+  stats_bewick_lineage_cv_james_lloyd_filtered[[ln]] <- run_specific_group_stats(d_filtered_jl_ln, "cv_expr_ln", "bewick_group", "CV Expr by Lineage", "James Lloyd Filtered", ln)
 }
-dev.off()
+save_grid_pdf_with_stats(plots_bewick_lineage_cv_james_lloyd_filtered, stats_bewick_lineage_cv_james_lloyd_filtered, file.path(output_dir, "grid_cv_expr_bewick_by_lineage_james_lloyd_filtered.pdf"), "Expression Noise (CV) by Bewick Group in Lineages (James Lloyd Filtered)")
