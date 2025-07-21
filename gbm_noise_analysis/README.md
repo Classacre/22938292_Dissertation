@@ -1,6 +1,15 @@
 # Pipeline for Comparing Gene Expression Noise and Methylation in Seurat Data
 
+
 This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA-seq data, focusing on the effects of gene body methylation (gbM) and TE-like methylation, using a large Seurat object on an HPC cluster with SLURM.
+
+**The main analysis pipeline is now split into modular R scripts for maintainability and clarity.**
+
+To run the full pipeline, use the new master script and SLURM batch file:
+
+```sh
+sbatch run_gbm_noise_analysis.sh
+```
 
 ## Files and Inputs
 - **Seurat object:** `/group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds`
@@ -13,12 +22,22 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
 ## Main Steps
 1. **Export gene expression matrix from Seurat**
    - `export_expression_matrix.R`/`.sh`: Exports log-normalized gene expression matrix for all cells.
-2. **Calculate expression noise and compare methylation groups**
-   - `gbm_noise_analysis.R`/`.sh`: Calculates mean, variance, standard deviation, and coefficient of variation (CV) for each gene. Annotates each gene with methylation status from both Cahn and Bewick studies.
-   - Compares noise (CV) between:
-     - Cahn: gbM, TE-like methylation, Unmethylated
-     - Bewick: gbM, mCHG, mCHH, Unmethylated
-   - Generates boxplots and scatter plots for each group.
+2. **Run the split noise and methylation analysis pipeline**
+   - The pipeline is now split into modular R scripts:
+     - `gbm_noise_libraries.R`: Loads required libraries
+     - `gbm_noise_setup.R`: Sets up output directories and paths
+     - `gbm_noise_load_data.R`: Loads expression and methylation data
+     - `gbm_noise_annotate.R`: Annotates genes and calculates summary statistics
+     - `gbm_noise_filtering.R`: Filtering and group assignment
+     - `gbm_noise_plotting.R`: All main plots (boxplots, scatter, violin, ridge, upset, heatmap)
+     - `gbm_noise_celltype_lineage.R`: Celltype and lineage analysis
+     - `gbm_noise_stats.R`: Statistical analysis and PDF/table generation
+     - `gbm_noise_pngs.R`: Standalone PNGs and summary plots
+   - The master script `gbm_noise_analysis_master.R` sources all these files in order.
+   - Submit the job with:
+     ```sh
+     sbatch run_gbm_noise_analysis.sh
+     ```
 3. **Responsive gene analysis**
    - `responsive_gene_analysis.R`/`.sh`: Identifies genes highly expressed in one cell type but low in others (responsive genes).
 4. **Genomic feature annotation**
@@ -29,9 +48,9 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
    ```sh
    sbatch export_expression_matrix.sh
    ```
-2. Run the noise and methylation analysis:
+2. Run the split noise and methylation analysis pipeline:
    ```sh
-   sbatch gbm_noise_analysis.sh
+   sbatch run_gbm_noise_analysis.sh
    ```
 3. (Optional) Run responsive gene and feature annotation analyses:
    ```sh
@@ -42,43 +61,13 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
 ## Output Files
 - **Expression matrix:** `expression_matrix.csv`
 - **Noise analysis results:** `results/high_low_noise/gbm_noise_comparison.csv`
-- **Boxplots:**
-  - `gbm_noise_boxplot_cahn.png` (Cahn: gbM, TE-like, Unmethylated)
-  - `gbm_noise_boxplot_bewick.png` (Bewick: gbM, mCHG, mCHH, Unmethylated)
-  - `gbm_noise_boxplot_combined.png` (all groups)
-  - `gbm_noise_boxplot_te_like.png`, `gbm_noise_boxplot_by_celltype.png`, `gbm_noise_boxplot_by_lineage.png`, etc.
-  - `gbm_noise_boxplot_h2az.png` (CV by H2A.Z group)
-  - `gbm_noise_boxplot_meth_h2az.png` (CV by methylation + H2A.Z group)
-- **Scatter plots:**
-  - `gbm_noise_scatter_cahn.png`, `gbm_noise_scatter_bewick.png`, `gbm_noise_scatter_combined.png`
-  - `mean_vs_sd_by_cahn_group.png`, `mean_vs_cv_by_cahn_group.png`
-  - `mean_vs_sd_by_bewick_group.png`, `mean_vs_cv_by_bewick_group.png`
-  - `mean_vs_sd_by_methylation_group.png`, `mean_vs_cv_by_methylation_group.png`
-  - `mean_vs_sd_by_h2az_group.png`, `mean_vs_cv_by_h2az_group.png`
-  - `mean_vs_sd_by_meth_h2az_group.png`, `mean_vs_cv_by_meth_h2az_group.png`
-- **Violin plots:**
-  - `gbm_noise_violin_cahn.png`, `gbm_noise_violin_bewick.png` (CV by methylation group, violin)
-  - `results/responsive_genes/responsive_vs_nonresponsive_violin.png` (CV for responsive vs non-responsive genes, violin)
-- **Ridge plots:**
-  - `gbm_noise_ridge_cahn.png`, `gbm_noise_ridge_bewick.png` (CV by methylation group, ridge)
-  - `results/responsive_genes/responsive_vs_nonresponsive_ridge.png` (CV for responsive vs non-responsive genes, ridge)
-- **UpSet plots:**
-  - `upset_highnoise_gbm_h2az.png` (Overlap of high-noise, gbM, and H2A.Z-depleted genes)
-  - `results/responsive_genes/upset_responsive_gbm_h2az.png` (Overlap of responsive, gbM, and H2A.Z-depleted genes)
-- **Heatmaps:**
-  - `heatmap_top100_highnoise.png` (Top 100 high-noise genes, wide canvas)
-  - `results/responsive_genes/heatmap_top100_responsive.png` (Top 100 responsive genes, wide canvas)
-- **Statistical results:**
-  - `gbm_noise_stats_summary.csv` (table of p-values for all group comparisons)
-  - `gbm_noise_stats_summary.txt` (plain-language summary of findings)
-- **Responsive gene results:**
-  - `results/responsive_genes/responsive_stats_summary.csv` (table of p-values for all group comparisons)
-  - `results/responsive_genes/responsive_stats_summary.txt` (plain-language summary of findings)
-- **Logs:**
-  - All SLURM output and error logs are in the `logs/` subfolder.
+- **Boxplots, scatter plots, violin plots, ridge plots, UpSet plots, heatmaps, and statistics:**
+  - All outputs are generated as before, but the pipeline is now modular and run via `gbm_noise_analysis_master.R` and `run_gbm_noise_analysis.sh`.
+  - See the `results/high_low_noise/` folder for all output files.
 
 ## Batch Scripts
 - All batch scripts (`*.sh`) are provided for SLURM job submission and reproducibility.
+- The main analysis pipeline is now run with `run_gbm_noise_analysis.sh`.
 - Adjust memory and CPU in the sbatch scripts if needed (default: 120G RAM, 8 CPUs, 24h for large jobs).
 - All scripts assume the conda environment at `/group/sms029/conda_environment/R`.
 
@@ -87,6 +76,7 @@ This workflow analyzes gene expression noise in Arabidopsis root single-cell RNA
 ## Notes
 - All statistical results are now summarized in a single table and a single summary text file per analysis folder for clarity. Old .txt files with individual p-values have been removed for a cleaner output directory.
 - The pipeline now supports flexible comparison of gene expression noise and responsiveness across both methylation and H2A.Z categories, including their combinations.
+- The main noise analysis pipeline is now split into modular R scripts for easier maintenance and extension.
 - All code and workflow steps are provided for transparency and future reproducibility.
 - You may need to edit gene names if your Seurat object uses a different format than the methylation annotation.
 
