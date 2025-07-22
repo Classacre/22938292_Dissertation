@@ -13,4 +13,4 @@ module load Anaconda3/2024.06
 source ~/.bashrc
 conda activate /group/sms029/conda_environment/R
 
-Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/export_expression_matrix.R
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/00_export_expression_matrix.R
