@@ -1,0 +1,9 @@
+"feature_group","category","odds_ratio","p_value","p_adj"
+"cahn_group","Unmethylated",0.785124565475518,1,1
+"cahn_group","gbM",3.5055851876956,0,0
+"cahn_group","TE-like",0.330976905525275,1,1
+"bewick_group","Unmethylated",1.25182814160909,1.68389461896097e-14,3.36778923792195e-14
+"bewick_group","gbM",4.13850661100491,4.66891675530132e-272,1.24504446808035e-271
+"bewick_group","TE-like",0.125031603768477,1,1
+"h2az_group","H2A.Z-Enriched",0.674607528898696,1,1
+"h2az_group","H2A.Z-Depleted",10.4375154607439,0,0

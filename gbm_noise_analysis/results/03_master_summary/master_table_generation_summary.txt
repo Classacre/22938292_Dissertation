@@ -1,0 +1,7 @@
+Master Gene Summary Table Generation Complete.
+
+A master table with 24633 genes and 10 columns has been generated.
+This table integrates information on gene identity, responsiveness (statistically defined),
+summarized intrinsic noise (median within-cell-type CV), and epigenetic annotations.
+
+The final file is located at: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_master_summary/master_gene_summary_table.csv

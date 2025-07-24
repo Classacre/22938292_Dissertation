@@ -1,0 +1,123 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attaching package: ‘gridExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+
+Loading and transforming expression matrix...
+Loading cell metadata...
+Loading and preparing gene annotations...
+Data preparation complete.
+Calculating noise within each cell type. This may take a while...
+Noise calculation complete. Processed 536312 gene-in-cell-type observations.
+Saving processed noise data to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/01_noise_analysis/within_celltype_noise_data.csv
+This file should be the starting point for all subsequent noise-related analyses.
+Performing overall noise analysis...
+Overall noise analysis complete.
+Generating multi-page PDF with cell-type-specific noise plots...
+Cell-type-specific analysis complete.
+Script finished successfully.
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading Seurat object to identify cell-type markers...
+Running FindAllMarkers to define responsive genes. This may take some time...
+Calculating cluster border cells
+For a (much!) faster implementation of the Wilcoxon Rank Sum Test,
+(default method for FindMarkers) please install the presto package
+--------------------------------------------
+install.packages('devtools')
+devtools::install_github('immunogenomics/presto')
+--------------------------------------------
+After installation of presto, Seurat will automatically use the more 
+efficient implementation (no further action necessary).
+This message will be shown once per session
+Calculating cluster root cap early
+Calculating cluster root cap tip
+Calculating cluster root cap lateral
+Calculating cluster columella
+Calculating cluster non-hair cells
+Calculating cluster epidermis early
+Calculating cluster hair cells early
+Calculating cluster cortex ERS+
+Calculating cluster hair cells ERS+
+Calculating cluster hair cells ERS-
+Calculating cluster xpp ERS-
+Calculating cluster cortex ERS-
+Calculating cluster endodermis ERS-
+Calculating cluster endodermis ERS+
+Calculating cluster xpp ERS+
+Calculating cluster ppp ERS+
+Calculating cluster ppp ERS-
+Calculating cluster procambium ERS+
+Calculating cluster procambium ERS-
+Calculating cluster protophloem ERS-
+Calculating cluster metaphloem ERS-
+Calculating cluster protophloem ERS+
+Calculating cluster metaphloem ERS+
+Calculating cluster metaxylem ERS+
+Calculating cluster protoxylem early
+Calculating cluster protoxylem ERS-
+Calculating cluster metaxylem ERS-
+Calculating cluster protoxylem ERS+
+Warning messages:
+1: The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.
+ℹ Please use the `layer` argument instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+2: `PackageCheck()` was deprecated in SeuratObject 5.0.0.
+ℹ Please use `rlang::check_installed()` instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+Identified 16547 unique responsive genes across all cell types.
+Loading pre-calculated noise data...
+Performing epigenetic enrichment analysis for responsive genes...
+Saving all analysis outputs...
+Generating UpSet plot for overlaps...
+Script finished successfully.
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading processed data from previous steps...
+Summarizing noise metrics for each gene...
+Creating the master gene summary table...
+Master table created successfully.
+Saving master gene summary table to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_master_summary/master_gene_summary_table.csv
+Script finished successfully.

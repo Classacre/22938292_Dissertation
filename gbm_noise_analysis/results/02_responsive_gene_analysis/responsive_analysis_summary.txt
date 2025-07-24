@@ -1,0 +1,44 @@
+====================================================
+ RESPONSIVE GENE ANALYSIS - SUMMARY
+====================================================
+
+1. Definition of Responsive Genes:
+   - Based on FindAllMarkers (Seurat) with parameters: only.pos = TRUE, min.pct = 0.1, logfc.threshold = 0.25
+   - Genes with p_val_adj < 0.05 were considered responsive.
+   - Found 16547 unique responsive genes in total.
+
+----------------------------------------------------
+
+2. Noise Comparison (Responsive vs. Non-Responsive):
+   - Test: Wilcoxon rank-sum test on within-cell-type CVs (mean_expr > 0.1).
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  cv_expr by gene_type
+W = 297138549, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+
+
+----------------------------------------------------
+
+3. Epigenetic Enrichment in Responsive Genes (Fisher's Exact Test):
+   - 'p_adj' is the Benjamini-Hochberg corrected p-value across all tests.
+
+               feature_group       category odds_ratio       p_value
+odds ratio...1    cahn_group   Unmethylated  0.7851246  1.000000e+00
+odds ratio...2    cahn_group            gbM  3.5055852  0.000000e+00
+odds ratio...3    cahn_group        TE-like  0.3309769  1.000000e+00
+odds ratio...4  bewick_group   Unmethylated  1.2518281  1.683895e-14
+odds ratio...5  bewick_group            gbM  4.1385066 4.668917e-272
+odds ratio...6  bewick_group        TE-like  0.1250316  1.000000e+00
+odds ratio...7    h2az_group H2A.Z-Enriched  0.6746075  1.000000e+00
+odds ratio...8    h2az_group H2A.Z-Depleted 10.4375155  0.000000e+00
+                       p_adj
+odds ratio...1  1.000000e+00
+odds ratio...2  0.000000e+00
+odds ratio...3  1.000000e+00
+odds ratio...4  3.367789e-14
+odds ratio...5 1.245044e-271
+odds ratio...6  1.000000e+00
+odds ratio...7  1.000000e+00
+odds ratio...8  0.000000e+00
