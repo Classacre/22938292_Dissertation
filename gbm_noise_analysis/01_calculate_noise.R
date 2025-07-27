@@ -1,6 +1,4 @@
 #### **`01_calculate_noise.R`**
-*(This script has been corrected for the file path and the column name from `HVFInfo`.)*
-```R
 # ==============================================================================
 # SCRIPT: 01_calculate_noise.R
 #
