@@ -1,4 +1,3 @@
-null device 
-          1 
-null device 
-          1 
+             used   (Mb) gc trigger    (Mb)   max used    (Mb)
+Ncells    3404389  181.9    5172612   276.3    5172612   276.3
+Vcells 1301957222 9933.2 2472807216 18866.1 2472806578 18866.1

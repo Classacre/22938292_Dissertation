@@ -3,25 +3,12 @@
 #
 # PURPOSE:
 #   This script consolidates all previously generated results into a single,
-#   comprehensive summary table. It loads the validated noise data and the
-#   statistically defined responsive gene list, summarizes the noise for each
-#   gene, and merges all annotations into one master file.
+#   comprehensive summary table. It integrates the corrected noise metrics,
+#   HVG status, responsive gene status, and epigenetic annotations for every
+#   gene in the analysis.
 #
-#   This final table is a key deliverable, perfect for supplementary data in a
-#   publication and for downstream exploratory analysis.
-#
-# MAJOR CORRECTIONS IMPLEMENTED:
-#   1.  **Removed Arbitrary Cutoffs:** The flawed "top/bottom 10%" analysis for
-#       high/low noise and responsiveness has been completely removed.
-#   2.  **Focus on Consolidation:** The script's new, clear purpose is to
-#       integrate results, not perform new statistical tests (which are already
-#       done correctly in scripts 01 and 02).
-#   3.  **Correct Inputs:** The script now loads the validated outputs from the
-#       previous two scripts, ensuring the entire pipeline is connected and sound.
-#   4.  **Summarized Noise Metric:** It calculates a robust summary of each gene's
-#       intrinsic noise (e.g., median within-cell-type CV) to provide a single,
-#       useful noise value per gene.
-#
+#   This final table is a key deliverable, perfect for supplementary data and
+#   for downstream exploratory analysis.
 # ==============================================================================
 
 # --- 1. SETUP: Load libraries and define paths ---
@@ -36,9 +23,8 @@ for (pkg in packages_to_load) {
 }
 
 # --- Define I/O Paths ---
-# INPUTS (from the previous two corrected scripts)
-processed_noise_data_path <- "/group/sms029/mnieuwenh/gbm_noise_analysis/results/01_noise_analysis/within_celltype_noise_data.csv"
-responsive_genes_path <- "/group/sms029/mnieuwenh/gbm_noise_analysis/results/02_responsive_gene_analysis/responsive_genes_list.csv"
+# INPUTS (from the previous two rewritten scripts)
+complete_noise_data_path <- "/group/sms029/mnieuwenh/gbm_noise_analysis/results/01_noise_analysis/noise_analysis_complete_data.csv"
 full_marker_list_path <- "/group/sms029/mnieuwenh/gbm_noise_analysis/results/02_responsive_gene_analysis/all_celltype_markers_full_list.csv"
 
 # OUTPUTS
@@ -52,90 +38,73 @@ master_summary_path <- file.path(output_dir, "master_gene_summary_table.csv")
 
 message("Loading processed data from previous steps...")
 
-# Load the validated, within-cell-type noise data
-noise_data <- read.csv(processed_noise_data_path)
+# Load the comprehensive noise data from script 01
+complete_noise_data <- read.csv(complete_noise_data_path)
 
-# Load the list of statistically-defined responsive genes
-responsive_gene_list <- read.csv(responsive_genes_path)$gene
-
-# Load the full marker list to get details about responsiveness (e.g., which cell type)
-marker_details <- read.csv(full_marker_list_path) %>%
-  # Filter for only the significant markers to match our responsive definition
+# Load the full marker list from script 02 to get details about responsiveness
+responsive_gene_details <- read.csv(full_marker_list_path) %>%
   filter(p_val_adj < 0.05) %>%
-  # In case a gene is a marker for multiple cell types, we'll keep the one where it has the highest log2FC
   group_by(gene) %>%
   arrange(desc(avg_log2FC)) %>%
   slice(1) %>%
   ungroup() %>%
   select(gene, responsive_cell_type = cluster, responsive_avg_log2FC = avg_log2FC)
 
-
-# --- 3. SUMMARIZE NOISE PER GENE ---
-
-message("Summarizing noise metrics for each gene...")
-
-# To create a single noise value per gene, we can calculate the median or mean
-# of its within-cell-type CVs. The median is generally more robust to outliers.
-# We also count how many cell types each gene was expressed in.
-gene_noise_summary <- noise_data %>%
-  # We should only consider noise values where the gene is reasonably expressed
-  filter(mean_expr > 0.1) %>%
-  group_by(gene) %>%
-  summarise(
-    # Median CV is a robust measure of a gene's typical intrinsic noise
-    median_within_celltype_cv = median(cv_expr, na.rm = TRUE),
-    # Mean CV can also be useful
-    mean_within_celltype_cv = mean(cv_expr, na.rm = TRUE),
-    # Number of cell types where the gene is expressed and noise could be calculated
-    num_celltypes_expressed = n()
-  )
+responsive_gene_list <- unique(responsive_gene_details$gene)
 
 
-# --- 4. CREATE AND ANNOTATE THE MASTER TABLE ---
+# --- 3. CREATE THE MASTER GENE TABLE ---
 
 message("Creating the master gene summary table...")
 
-# Start with a unique list of all genes from the noise analysis
-all_genes <- unique(noise_data$gene)
+# CORRECTED: Select 'variance.standardized'
+gene_summary_base <- complete_noise_data %>%
+  distinct(gene, .keep_all = TRUE) %>%
+  select(
+    gene,
+    variance.standardized,
+    is_hvg,
+    cahn_group,
+    bewick_group,
+    h2az_group
+  )
 
-# Create the base data frame
-master_table <- data.frame(gene = all_genes)
+raw_noise_summary <- complete_noise_data %>%
+  filter(mean_expr > 0.01, pct_expressing > 0.1) %>%
+  group_by(gene) %>%
+  summarise(
+    median_within_celltype_cv2 = median(cv2, na.rm = TRUE),
+    num_celltypes_expressed = n()
+  )
 
-# --- Merge all annotations ---
-
-# 1. Add the summarized noise metrics
-master_table <- master_table %>%
-  left_join(gene_noise_summary, by = "gene")
-
-# 2. Add responsive gene status and details
-master_table <- master_table %>%
-  mutate(is_responsive = gene %in% responsive_gene_list) %>%
-  left_join(marker_details, by = "gene")
-
-# 3. Add epigenetic annotations (from the `noise_data` table, which already has them)
-epigenetic_annotations <- noise_data %>%
-  distinct(gene, cahn_group, bewick_group, h2az_group)
-
-master_table <- master_table %>%
-  left_join(epigenetic_annotations, by = "gene")
+master_table <- gene_summary_base %>%
+  left_join(raw_noise_summary, by = "gene") %>%
+  left_join(responsive_gene_details, by = "gene") %>%
+  mutate(is_responsive = gene %in% responsive_gene_list)
 
 
-# --- Reorder and clean the final table ---
+# --- 4. FINALIZE AND REORDER THE TABLE FOR CLARITY ---
+
+# CORRECTED: Reorder and arrange using 'variance.standardized'
 master_table <- master_table %>%
   select(
     gene,
+    # Core Noise Metrics
+    variance.standardized, # This is the primary, corrected noise metric
+    is_hvg,
+    # Responsiveness Info
     is_responsive,
     responsive_cell_type,
     responsive_avg_log2FC,
-    median_within_celltype_cv,
-    mean_within_celltype_cv,
+    # Raw Noise Summary (for reference)
+    median_within_celltype_cv2,
     num_celltypes_expressed,
+    # Epigenetic Annotations
     cahn_group,
     bewick_group,
     h2az_group
   ) %>%
-  # Arrange by a meaningful metric, e.g., noise or responsiveness
-  arrange(desc(median_within_celltype_cv))
+  arrange(desc(variance.standardized))
 
 message("Master table created successfully.")
 
@@ -145,13 +114,18 @@ message("Master table created successfully.")
 message(paste("Saving master gene summary table to:", master_summary_path))
 write.csv(master_table, master_summary_path, row.names = FALSE)
 
-# Optionally, save a summary text file describing the final output
 summary_text <- c(
   "Master Gene Summary Table Generation Complete.",
   "",
   paste("A master table with", nrow(master_table), "genes and", ncol(master_table), "columns has been generated."),
-  "This table integrates information on gene identity, responsiveness (statistically defined),",
-  "summarized intrinsic noise (median within-cell-type CV), and epigenetic annotations.",
+  "",
+  "This table integrates information on:",
+  "  - Gene identity (gene)",
+  "  - Corrected noise (variance.standardized) <- PRIMARY NOISE METRIC",
+  "  - High-Variability status (is_hvg)",
+  "  - Responsiveness status and details (is_responsive, responsive_cell_type, etc.)",
+  "  - Summarized raw noise for reference (median_within_celltype_cv2)",
+  "  - Epigenetic annotations (cahn_group, bewick_group, h2az_group)",
   "",
   paste("The final file is located at:", master_summary_path)
 )
