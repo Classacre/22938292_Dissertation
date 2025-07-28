@@ -34,8 +34,8 @@ for (pkg in packages_to_load) {
 # INPUTS
 # Data exported from script 00
 expr_matrix_path <- "/group/sms029/mnieuwenh/gbm_noise_analysis/expression_matrix.csv"
-# CORRECTED PATH: Pointing to the output directory from script 00
-cell_meta_path <- "/group/sms029/mnieuwenh/gbm_noise_analysis/seurat_metadata_full.csv"
+# CORRECTED PATH: Pointing to the correct location in seurat_metadata
+cell_meta_path <- "/group/sms029/mnieuwenh/seurat_metadata/seurat_metadata_full.csv"
 # Other inputs
 gene_anno_path <- "/group/sms029/mnieuwenh/Methylation_Data/combined_methylation_data.csv"
 # We need the full Seurat object for VST modeling.

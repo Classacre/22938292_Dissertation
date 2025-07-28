@@ -1,3 +1,18 @@
+Environment activated successfully.
+--- Starting Step 1: Calculate Noise ---
+            used   (Mb) gc trigger    (Mb)   max used    (Mb)
+Ncells   4261030  227.6    6774768   361.9    6774768   361.9
+Vcells 576209153 4396.2 1664437429 12698.7 1884895675 14380.7
+--- Finished Step 1 ---
+--- Starting Step 2: Analyze Responsive Genes ---
              used   (Mb) gc trigger    (Mb)   max used    (Mb)
 Ncells    3404389  181.9    5172612   276.3    5172612   276.3
 Vcells 1301957222 9933.2 2472807216 18866.1 2472806578 18866.1
+--- Finished Step 2 ---
+--- Starting Step 3: Create Master Summary ---
+--- Finished Step 3 ---
+--- Starting Step 4: Subsampling Analysis ---
+--- Finished Step 4 ---
+--- Starting Step 5: Visualize Filtering ---
+--- Finished Step 5 ---
+Pipeline completed successfully.
