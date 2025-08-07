@@ -1,4 +1,3 @@
-#### **`01_calculate_noise.R`**
 # ==============================================================================
 # SCRIPT: 01_calculate_noise.R
 #
@@ -174,6 +173,18 @@ message("Performing initial analysis using the corrected noise metric (VST stand
 # --- Visualization Function ---
 plot_corrected_noise <- function(data, group_col, title) {
   plot_data <- data %>% filter(!is.na(.data[[group_col]]))
+  
+  # === MODIFICATION: Reorder factor levels for specific plots ===
+  desired_order <- c("gbM", "Unmethylated", "TE-like")
+  current_levels <- unique(as.character(plot_data[[group_col]]))
+  
+  # Apply reordering only if the column is one of the targeted ones and contains all levels
+  if (all(desired_order %in% current_levels) && (group_col == "cahn_group" || group_col == "bewick_group")) {
+    plot_data[[group_col]] <- factor(plot_data[[group_col]], levels = desired_order)
+    message(paste("Reordered x-axis levels for the", group_col, "plot."))
+  }
+  # === END MODIFICATION ===
+
   # CORRECTED: Use 'variance.standardized'
   y_zoom <- quantile(plot_data$variance.standardized, probs = c(0.01, 0.99), na.rm = TRUE)
 

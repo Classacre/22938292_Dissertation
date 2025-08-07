@@ -1,0 +1,28 @@
+========================================================
+Job started on Tue Jul 29 15:01:32 AWST 2025
+Running on node: n011.hpc.uwa.edu.au
+========================================================
+Loading Anaconda module...
+Sourcing .bashrc to initialize Conda...
+Activating Conda environment: /group/sms029/conda_environment/R
+Environment activated successfully.
+Using R from: /group/sms029/conda_environment/R/bin/R
+Channels:
+ - conda-forge
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+# All requested packages already installed.
+
+
+--- Starting Step 6: Generate Supervisor's Requested Plots ---
+          used  (Mb) gc trigger  (Mb) max used  (Mb)
+Ncells 2116270 113.1    4063138 217.0  4063138 217.0
+Vcells 4065576  31.1   18566894 141.7 18370256 140.2
+--- Finished Step 6 successfully. ---
+
+========================================================
+Job completed successfully on Tue Jul 29 15:35:06 AWST 2025.
+========================================================

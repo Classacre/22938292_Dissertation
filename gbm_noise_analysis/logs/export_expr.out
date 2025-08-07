@@ -1,1 +1,1 @@
-Expression matrix saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/expression_matrix.csv 
+Fatal error: cannot open file '/group/sms029/mnieuwenh/gbm_noise_analysis/00_export_expression_matrix.R': No such file or directory

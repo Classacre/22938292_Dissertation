@@ -1,0 +1,54 @@
+Step 1: SETUP - Loading required libraries...
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Libraries loaded successfully.
+Setup complete. Starting Task 1.
+
+--- TASK 1: Correlate CV vs. VST score ---
+Loading master summary data from: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_master_summary/master_gene_summary_table.csv
+Master summary data loaded.
+Dimensions of master_data: 25784 x 11
+Memory usage of master_data: 3.6 Mb
+Preparing data for CV vs. VST plot...
+Data prepared. Generating plot...
+Plot generated. Saving CV vs. VST plot...
+Plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_supervisor_requests/correlation_cv2_vs_vst_variance.png
+--- TASK 1 COMPLETE ---
+
+--- TASK 2: Subsampling Before-and-After Visualization ---
+Preparing data for subsampling analysis...
+Loading complete noise data from: /group/sms029/mnieuwenh/gbm_noise_analysis/results/01_noise_analysis/noise_analysis_complete_data.csv
+Complete noise data loaded.
+Dimensions of complete_noise_data: 747736 x 12
+Memory usage of complete_noise_data: 67.2 Mb
+Calculating median mean expression per gene...
+Median mean expression calculated.
+Joining master data with expression data to create final analysis table...
+Final analysis table created.
+Dimensions of analysis_data: 16711 x 12
+Memory usage of analysis_data: 2.4 Mb
+Cleaned up intermediate large objects to free memory.
+
+Starting plot generation for Cahn classification...
+Performing subsampling for cahn_group ...
+Subsampling complete. Generating plots...
+Cahn plots generated. Saving file...
+Cahn subsampling plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_supervisor_requests/subsampling_before_after_cahn.png
+
+Starting plot generation for Bewick classification...
+Performing subsampling for bewick_group ...
+Subsampling complete. Generating plots...
+Bewick plots generated. Saving file...
+Bewick subsampling plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_supervisor_requests/subsampling_before_after_bewick.png
+
+--- TASK 2 COMPLETE ---
+Script finished successfully.
