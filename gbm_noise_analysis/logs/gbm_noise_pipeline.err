@@ -7,6 +7,27 @@ The following objects are masked from ‘package:base’:
 
     intersect, t
 
+Loading Seurat object from: /group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds
+Seurat object loaded successfully.
+Extracting the expression matrix from the 'RNA' assay...
+Writing expression matrix with 25784 genes and 21527 cells.
+Warning message:
+In asMethod(object) :
+  sparse->dense coercion: allocating vector of size 4.1 GiB
+Expression matrix saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/02_expression_matrix.csv
+Extracting cell metadata...
+Writing metadata for 21527 cells.
+Cell metadata saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/02_seurat_metadata_full.csv
+Script finished. All necessary data has been exported.
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
 
 Attaching package: ‘dplyr’
 
@@ -43,13 +64,13 @@ Calculating feature variances of standardized and clipped values
 When using repel, set xnudge and ynudge to 0 for optimal results
 Warning message:
 In scale_x_log10() : log-10 transformation introduced infinite values.
-HVG plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/01_noise_analysis/hvg_identification_plot.png
+HVG plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_noise_analysis/hvg_identification_plot.png
 Integrating all metrics into a final data table...
-Saving final complete (unfiltered) data to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/01_noise_analysis/noise_analysis_complete_data.csv
+Saving final complete (unfiltered) data to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_noise_analysis/noise_analysis_complete_data.csv
 Performing initial analysis using the corrected noise metric (VST standardized variance)...
 Reordered x-axis levels for the cahn_group plot.
 Reordered x-axis levels for the bewick_group plot.
-Statistical summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/01_noise_analysis/overall_noise_statistics_corrected.txt
+Statistical summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_noise_analysis/overall_noise_statistics_corrected.txt
 Script finished successfully.
 
 Attaching package: ‘dplyr’
@@ -62,382 +83,47 @@ The following objects are masked from ‘package:base’:
 
     intersect, setdiff, setequal, union
 
-also installing the dependencies ‘rbibutils’, ‘Deriv’, ‘modelr’, ‘microbenchmark’, ‘Rdpack’, ‘numDeriv’, ‘doBy’, ‘SparseM’, ‘MatrixModels’, ‘boot’, ‘minqa’, ‘nloptr’, ‘reformulas’, ‘backports’, ‘carData’, ‘Formula’, ‘nnet’, ‘pbkrtest’, ‘quantreg’, ‘lme4’, ‘broom’, ‘corrplot’, ‘car’, ‘ggsci’, ‘ggsignif’, ‘polynom’, ‘rstatix’
-
-trying URL 'https://cloud.r-project.org/src/contrib/rbibutils_2.3.tar.gz'
-Content type 'application/x-gzip' length 1132601 bytes (1.1 MB)
-==================================================
-downloaded 1.1 MB
-
-trying URL 'https://cloud.r-project.org/src/contrib/Deriv_4.2.0.tar.gz'
-Content type 'application/x-gzip' length 38752 bytes (37 KB)
-==================================================
-downloaded 37 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/modelr_0.1.11.tar.gz'
-Content type 'application/x-gzip' length 121480 bytes (118 KB)
-==================================================
-downloaded 118 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/microbenchmark_1.5.0.tar.gz'
-Content type 'application/x-gzip' length 61673 bytes (60 KB)
-==================================================
-downloaded 60 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/Rdpack_2.6.4.tar.gz'
-Content type 'application/x-gzip' length 379140 bytes (370 KB)
-==================================================
-downloaded 370 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/numDeriv_2016.8-1.1.tar.gz'
-Content type 'application/x-gzip' length 76053 bytes (74 KB)
-==================================================
-downloaded 74 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/doBy_4.7.0.tar.gz'
-Content type 'application/x-gzip' length 4588869 bytes (4.4 MB)
-==================================================
-downloaded 4.4 MB
-
-trying URL 'https://cloud.r-project.org/src/contrib/SparseM_1.84-2.tar.gz'
-Content type 'application/x-gzip' length 553080 bytes (540 KB)
-==================================================
-downloaded 540 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/MatrixModels_0.5-4.tar.gz'
-Content type 'application/x-gzip' length 24607 bytes (24 KB)
-==================================================
-downloaded 24 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/boot_1.3-31.tar.gz'
-Content type 'application/x-gzip' length 238458 bytes (232 KB)
-==================================================
-downloaded 232 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/minqa_1.2.8.tar.gz'
-Content type 'application/x-gzip' length 54644 bytes (53 KB)
-==================================================
-downloaded 53 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/nloptr_2.2.1.tar.gz'
-Content type 'application/x-gzip' length 2253853 bytes (2.1 MB)
-==================================================
-downloaded 2.1 MB
-
-trying URL 'https://cloud.r-project.org/src/contrib/reformulas_0.4.1.tar.gz'
-Content type 'application/x-gzip' length 75934 bytes (74 KB)
-==================================================
-downloaded 74 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/backports_1.5.0.tar.gz'
-Content type 'application/x-gzip' length 30687 bytes (29 KB)
-==================================================
-downloaded 29 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/carData_3.0-5.tar.gz'
-Content type 'application/x-gzip' length 1004201 bytes (980 KB)
-==================================================
-downloaded 980 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/Formula_1.2-5.tar.gz'
-Content type 'application/x-gzip' length 128259 bytes (125 KB)
-==================================================
-downloaded 125 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/nnet_7.3-20.tar.gz'
-Content type 'application/x-gzip' length 31285 bytes (30 KB)
-==================================================
-downloaded 30 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/pbkrtest_0.5.5.tar.gz'
-Content type 'application/x-gzip' length 77353 bytes (75 KB)
-==================================================
-downloaded 75 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/quantreg_6.1.tar.gz'
-Content type 'application/x-gzip' length 925163 bytes (903 KB)
-==================================================
-downloaded 903 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/lme4_1.1-37.tar.gz'
-Content type 'application/x-gzip' length 3313529 bytes (3.2 MB)
-==================================================
-downloaded 3.2 MB
-
-trying URL 'https://cloud.r-project.org/src/contrib/broom_1.0.9.tar.gz'
-Content type 'application/x-gzip' length 651399 bytes (636 KB)
-==================================================
-downloaded 636 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/corrplot_0.95.tar.gz'
-Content type 'application/x-gzip' length 3745190 bytes (3.6 MB)
-==================================================
-downloaded 3.6 MB
-
-trying URL 'https://cloud.r-project.org/src/contrib/car_3.1-3.tar.gz'
-Content type 'application/x-gzip' length 384407 bytes (375 KB)
-==================================================
-downloaded 375 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/ggsci_3.2.0.tar.gz'
-Content type 'application/x-gzip' length 2238454 bytes (2.1 MB)
-==================================================
-downloaded 2.1 MB
-
-trying URL 'https://cloud.r-project.org/src/contrib/ggsignif_0.6.4.tar.gz'
-Content type 'application/x-gzip' length 587393 bytes (573 KB)
-==================================================
-downloaded 573 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/polynom_1.4-1.tar.gz'
-Content type 'application/x-gzip' length 334803 bytes (326 KB)
-==================================================
-downloaded 326 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/rstatix_0.7.2.tar.gz'
-Content type 'application/x-gzip' length 405256 bytes (395 KB)
-==================================================
-downloaded 395 KB
-
-trying URL 'https://cloud.r-project.org/src/contrib/ggpubr_0.6.1.tar.gz'
-Content type 'application/x-gzip' length 1723260 bytes (1.6 MB)
-==================================================
-downloaded 1.6 MB
-
-* installing *source* package ‘rbibutils’ ...
-** package ‘rbibutils’ successfully unpacked and MD5 sums checked
-** using staged installation
-** libs
-using C compiler: ‘x86_64-conda-linux-gnu-cc (conda-forge gcc 15.1.0-2) 15.1.0’
-x86_64-conda-linux-gnu-cc: fatal error: cannot execute 'cc1': posix_spawnp: No such file or directory
-compilation terminated.
-make: *** [/group/sms029/conda_environment/R/lib/R/etc/Makeconf:193: adsout.o] Error 1
-ERROR: compilation failed for package ‘rbibutils’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/rbibutils’
-* installing *source* package ‘Deriv’ ...
-** package ‘Deriv’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (Deriv)
-* installing *source* package ‘microbenchmark’ ...
-** package ‘microbenchmark’ successfully unpacked and MD5 sums checked
-** using staged installation
-configure: error: in `/tmp/RtmpI7S0rX/R.INSTALL1ad3654ab53ecd/microbenchmark':
-configure: error: C compiler cannot create executables
-See `config.log' for more details
-ERROR: configuration failed for package ‘microbenchmark’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/microbenchmark’
-* installing *source* package ‘numDeriv’ ...
-** package ‘numDeriv’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** installing vignettes
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (numDeriv)
-* installing *source* package ‘SparseM’ ...
-** package ‘SparseM’ successfully unpacked and MD5 sums checked
-** using staged installation
-** libs
-using C compiler: ‘x86_64-conda-linux-gnu-cc (conda-forge gcc 15.1.0-2) 15.1.0’
-using Fortran compiler: ‘GNU Fortran (conda-forge gcc 15.1.0-2) 15.1.0’
-x86_64-conda-linux-gnu-gfortran: fatal error: cannot execute 'f951': posix_spawnp: No such file or directory
-compilation terminated.
-make: *** [/group/sms029/conda_environment/R/lib/R/etc/Makeconf:217: bckslv.o] Error 1
-ERROR: compilation failed for package ‘SparseM’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/SparseM’
-* installing *source* package ‘MatrixModels’ ...
-** package ‘MatrixModels’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (MatrixModels)
-* installing *source* package ‘boot’ ...
-** package ‘boot’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** data
-*** moving datasets to lazyload DB
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (boot)
-* installing *source* package ‘minqa’ ...
-** package ‘minqa’ successfully unpacked and MD5 sums checked
-** using staged installation
-** libs
-using Fortran compiler: ‘GNU Fortran (conda-forge gcc 15.1.0-2) 15.1.0’
-using C++ compiler: ‘x86_64-conda-linux-gnu-c++ (conda-forge gcc 15.1.0-2) 15.1.0’
-x86_64-conda-linux-gnu-gfortran: fatal error: cannot execute 'f951': posix_spawnp: No such file or directory
-compilation terminated.
-make: *** [/group/sms029/conda_environment/R/lib/R/etc/Makeconf:217: altmov.o] Error 1
-ERROR: compilation failed for package ‘minqa’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/minqa’
-* installing *source* package ‘nloptr’ ...
-** package ‘nloptr’ successfully unpacked and MD5 sums checked
-** using staged installation
-configure: error: in '/tmp/RtmpMZKqPm/R.INSTALL1ad6401e6cacd9/nloptr':
-configure: error: C++ compiler cannot create executables
-See 'config.log' for more details
-ERROR: configuration failed for package ‘nloptr’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/nloptr’
-* installing *source* package ‘backports’ ...
-** package ‘backports’ successfully unpacked and MD5 sums checked
-** using staged installation
-** libs
-using C compiler: ‘x86_64-conda-linux-gnu-cc (conda-forge gcc 15.1.0-2) 15.1.0’
-x86_64-conda-linux-gnu-cc: fatal error: cannot execute 'cc1': posix_spawnp: No such file or directory
-compilation terminated.
-make: *** [/group/sms029/conda_environment/R/lib/R/etc/Makeconf:193: dotsElt.o] Error 1
-ERROR: compilation failed for package ‘backports’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/backports’
-* installing *source* package ‘carData’ ...
-** package ‘carData’ successfully unpacked and MD5 sums checked
-** using staged installation
-** data
-*** moving datasets to lazyload DB
-** help
-*** installing help indices
-** building package indices
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (carData)
-* installing *source* package ‘Formula’ ...
-** package ‘Formula’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** installing vignettes
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (Formula)
-* installing *source* package ‘nnet’ ...
-** package ‘nnet’ successfully unpacked and MD5 sums checked
-** using staged installation
-** libs
-using C compiler: ‘x86_64-conda-linux-gnu-cc (conda-forge gcc 15.1.0-2) 15.1.0’
-x86_64-conda-linux-gnu-cc: fatal error: cannot execute 'cc1': posix_spawnp: No such file or directory
-compilation terminated.
-make: *** [/group/sms029/conda_environment/R/lib/R/etc/Makeconf:193: nnet.o] Error 1
-ERROR: compilation failed for package ‘nnet’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/nnet’
-* installing *source* package ‘corrplot’ ...
-** package ‘corrplot’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** installing vignettes
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (corrplot)
-* installing *source* package ‘ggsci’ ...
-** package ‘ggsci’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-*** copying figures
-** building package indices
-** installing vignettes
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (ggsci)
-* installing *source* package ‘ggsignif’ ...
-** package ‘ggsignif’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-*** copying figures
-** building package indices
-** installing vignettes
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (ggsignif)
-* installing *source* package ‘polynom’ ...
-** package ‘polynom’ successfully unpacked and MD5 sums checked
-** using staged installation
-** R
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** installing vignettes
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (polynom)
-ERROR: dependency ‘rbibutils’ is not available for package ‘Rdpack’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/Rdpack’
-ERROR: dependency ‘SparseM’ is not available for package ‘quantreg’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/quantreg’
-ERROR: dependency ‘backports’ is not available for package ‘broom’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/broom’
-ERROR: dependency ‘broom’ is not available for package ‘modelr’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/modelr’
-ERROR: dependency ‘Rdpack’ is not available for package ‘reformulas’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/reformulas’
-ERROR: dependencies ‘broom’, ‘modelr’, ‘microbenchmark’ are not available for package ‘doBy’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/doBy’
-ERROR: dependencies ‘minqa’, ‘nloptr’, ‘reformulas’ are not available for package ‘lme4’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/lme4’
-ERROR: dependencies ‘lme4’, ‘broom’, ‘doBy’ are not available for package ‘pbkrtest’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/pbkrtest’
-ERROR: dependencies ‘nnet’, ‘pbkrtest’, ‘quantreg’, ‘lme4’ are not available for package ‘car’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/car’
-ERROR: dependencies ‘broom’, ‘car’ are not available for package ‘rstatix’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/rstatix’
-ERROR: dependency ‘rstatix’ is not available for package ‘ggpubr’
-* removing ‘/group/sms029/conda_environment/R/lib/R/library/ggpubr’
-
-The downloaded source packages are in
-	‘/tmp/RtmpXcg1TC/downloaded_packages’
-Updating HTML index of packages in '.Library'
-Making 'packages.html' ... done
-Error in library(pkg, character.only = TRUE) : 
-  there is no package called ‘ggpubr’
-In addition: There were 18 warnings (use warnings() to see them)
+Loading processed data from previous steps...
+Error in file(file, "rt") : cannot open the connection
+Calls: %>% ... group_by -> filter -> read.csv -> read.table -> file
+In addition: Warning message:
+In file(file, "rt") :
+  cannot open file '/group/sms029/mnieuwenh/gbm_noise_analysis/results/04_responsive_gene_analysis/all_celltype_markers_full_list.csv': No such file or directory
 Execution halted
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading Seurat object to identify cell-type markers...
+Running FindAllMarkers to define responsive genes. This may take some time...
+Calculating cluster border cells
+For a (much!) faster implementation of the Wilcoxon Rank Sum Test,
+(default method for FindMarkers) please install the presto package
+--------------------------------------------
+install.packages('devtools')
+devtools::install_github('immunogenomics/presto')
+--------------------------------------------
+After installation of presto, Seurat will automatically use the more 
+efficient implementation (no further action necessary).
+This message will be shown once per session
+Calculating cluster root cap early
+Calculating cluster root cap tip
+Calculating cluster root cap lateral
+Calculating cluster columella
+slurmstepd: error: *** JOB 679523 ON n028 CANCELLED AT 2025-08-07T18:46:43 ***

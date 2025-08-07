@@ -19,28 +19,37 @@ echo "Environment activated successfully."
 # The 'echo' statements will print progress to your .out file.
 # If a script fails, the job will now stop immediately.
 
-echo "--- Starting Step 1: Calculate Noise ---"
-Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/01_calculate_noise.R
+
+echo "--- Starting Step 1: Combine Methylation Datasets ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/01_combine_methylation_datasets.R
 echo "--- Finished Step 1 ---"
 
-#echo "--- Starting Step 2: Analyze Responsive Genes ---"
-#Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/02_analyze_responsive_genes.R
-#echo "--- Finished Step 2 ---"
+echo "--- Starting Step 2: Export Data ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/02_export_data.R
+echo "--- Finished Step 2 ---"
 
-#echo "--- Starting Step 3: Create Master Summary ---"
-#Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/03_create_master_gene_summary.R
-#echo "--- Finished Step 3 ---"
+echo "--- Starting Step 3: Calculate Noise ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/03_calculate_noise.R
+echo "--- Finished Step 3 ---"
 
-#echo "--- Starting Step 4: Subsampling Analysis ---"
-#Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/04_subsampling_validation.R
-#echo "--- Finished Step 4 ---"
+echo "--- Starting Step 4: Create Master Summary ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/04_create_master_gene_summary.R
+echo "--- Finished Step 4 ---"
 
-#echo "--- Starting Step 5: Visualize Filtering ---"
-#Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/05_visualize_filtering.R
-#echo "--- Finished Step 5 ---"
+echo "--- Starting Step 5: Analyze Responsive Genes ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/05_analyze_responsive_genes.R
+echo "--- Finished Step 5 ---"
 
-echo "--- Starting Step 6: Visualize Filtering ---"
-Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/06_supervisor_requests.R
+echo "--- Starting Step 6: Subsampling Validation ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/06_subsampling_validation.R
 echo "--- Finished Step 6 ---"
+
+echo "--- Starting Step 7: Visualize Filtering ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/07_visualize_filtering.R
+echo "--- Finished Step 7 ---"
+
+echo "--- Starting Step 8: Supervisor Requests Diagnostics ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/08_supervisor_requests.R
+echo "--- Finished Step 8 ---"
 
 echo "Pipeline completed successfully."

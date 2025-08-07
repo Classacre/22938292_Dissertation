@@ -1,8 +1,0 @@
-Filter Visualization Script Complete.
-
-A diagnostic plot showing the effect of data filtering has been generated.
-The plot visualizes all gene-celltype combinations, coloring them based on whether they passed or failed the filtering criteria:
-  - Mean Expression > 0.01
-  - Percentage of Expressing Cells > 0.1
-
-The plot has been saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_diagnostic_plots/mean_vs_cv_filtering_visualization.png
