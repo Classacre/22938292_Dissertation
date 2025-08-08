@@ -1,0 +1,68 @@
+=================================================================
+ STATISTICAL SUMMARY OF CORRECTED NOISE METRICS
+=================================================================
+
+NOTE: All tests performed on the VST-based 'variance.standardized' score.
+Data is filtered for mean_expr > 0.01 and pct_expressing > 0.1 in each cell type.
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 26490, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM     TE-like
+TE-like      < 2e-16 -      
+Unmethylated < 2e-16 1.4e-06
+
+P value adjustment method: BH 
+
+
+--- Bewick Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 20063, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM     TE-like
+TE-like      < 2e-16 -      
+Unmethylated < 2e-16 2.4e-11
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 27738, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 

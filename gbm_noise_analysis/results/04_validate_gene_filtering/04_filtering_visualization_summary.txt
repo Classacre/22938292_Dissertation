@@ -1,0 +1,8 @@
+Filter Visualization Script Complete.
+
+A diagnostic plot showing the effect of data filtering has been generated.
+This plot validates the filtering criteria used for the main noise analysis:
+  - Mean Expression > 0.01
+  - Percentage of Expressing Cells > 0.1
+
+The plot has been saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/04_validate_gene_filtering/04_filtering_criteria_visualization.png

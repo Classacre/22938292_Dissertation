@@ -1,0 +1,61 @@
+=================================================================
+ STATISTICAL SUMMARY FOR RESPONSIVE GENE ANALYSIS
+=================================================================
+
+--- Noise Comparison (Corrected Noise) ---
+Comparison of 'variance.standardized' between responsive and non-responsive genes.
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  variance.standardized by is_responsive
+W = 4034660684, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+
+
+
+--- Epigenetic Enrichment (Cahn Classification) ---
+Contingency Table:
+       
+         gbM TE-like Unmethylated
+  FALSE  223       7           53
+  TRUE  8484     486         7187
+
+Chi-squared Test:
+
+	Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 78.448, df = 2, p-value < 2.2e-16
+
+
+
+--- Epigenetic Enrichment (Bewick Classification) ---
+Contingency Table:
+       
+          gbM TE-like Unmethylated
+  FALSE   135       1          147
+  TRUE   4119      59        11920
+
+Chi-squared Test:
+
+	Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 70.827, df = 2, p-value = 4.169e-16
+
+
+
+--- Epigenetic Enrichment (H2A.Z Occupancy) ---
+Contingency Table:
+       
+        H2A.Z-Depleted H2A.Z-Enriched Other
+  FALSE            141             15   127
+  TRUE            3563           2100 10498
+
+Chi-squared Test:
+
+	Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 125.43, df = 2, p-value < 2.2e-16
+

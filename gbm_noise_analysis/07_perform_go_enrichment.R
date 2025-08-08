@@ -30,7 +30,12 @@ for (pkg in packages_to_load) {
     if (pkg %in% c("clusterProfiler", "org.Hs.eg.db")) {
       # Install Bioconductor packages
       if (!requireNamespace("BiocManager", quietly = TRUE)) {
-        install.packages("BiocManager")
+        # ============================================================================ #
+        # === FIX APPLIED HERE ===
+        # The 'repos' argument was missing from this install.packages() call,
+        # which caused the script to fail if 'BiocManager' was not already installed.
+        # ============================================================================ #
+        install.packages("BiocManager", repos = "https://cloud.r-project.org/")
       }
       BiocManager::install(pkg)
     } else {

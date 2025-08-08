@@ -1,0 +1,50 @@
+=================================================================
+            DATASET OVERVIEW & CONTEXT
+=================================================================
+
+Summary generated on: 2025-08-07
+
+--- Epigenetic Data Summary ---
+Number of gbM genes in Cahn et al.: 11108
+Number of gbM genes in Bewick et al.: 4934
+Number of gbM genes common to both: 4770
+A Venn diagram visualizing this overlap has been saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_gbm_classification_agreement.png
+
+--- Single-Cell (Seurat) Data Summary ---
+DISCLAIMER: This is unpublished data from an external source.
+Total number of cells: 21527
+Total number of genes: 25784
+Number of identified cell types: 29
+
+Cell counts per type:
+  - border cells: 504 cells
+  - columella: 397 cells
+  - cortex ERS-: 283 cells
+  - cortex ERS+: 319 cells
+  - endodermis ERS-: 507 cells
+  - endodermis ERS+: 770 cells
+  - epidermis early: 1179 cells
+  - hair cells early: 1024 cells
+  - hair cells ERS-: 223 cells
+  - hair cells ERS+: 916 cells
+  - metaphloem ERS-: 517 cells
+  - metaphloem ERS+: 498 cells
+  - metaxylem ERS-: 304 cells
+  - metaxylem ERS+: 327 cells
+  - non-hair cells: 1475 cells
+  - ppp ERS-: 530 cells
+  - ppp ERS+: 618 cells
+  - procambium ERS-: 865 cells
+  - procambium ERS+: 819 cells
+  - protophloem ERS-: 297 cells
+  - protophloem ERS+: 171 cells
+  - protoxylem early: 186 cells
+  - protoxylem ERS-: 217 cells
+  - protoxylem ERS+: 117 cells
+  - root cap early: 2213 cells
+  - root cap lateral: 2110 cells
+  - root cap tip: 1776 cells
+  - xpp ERS-: 977 cells
+  - xpp ERS+: 1388 cells
+
+A figure summarizing the Seurat data has been saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_seurat_data_overview.png

@@ -1,0 +1,28 @@
+--- Starting Seurat Object Diagnostic ---
+
+Loading Seurat object from: /group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds
+Object loaded successfully.
+
+
+--- 1. Default Seurat Object Printout ---
+
+
+--- 2. Available Dimensional Reductions ---
+The following dimensional reductions were found in the object:
+
+NOTE: The 'reduction' parameter in DimPlot MUST be one of these names.
+
+
+--- 3. Available Assays ---
+The following assays were found:
+
+
+--- 4. Metadata Head ---
+Showing the first 6 rows and first 10 columns of the metadata:
+
+
+--- 5. Summary of Cell Identities ---
+Counts for each level in the 'identity' column:
+
+
+--- Diagnostic Complete ---

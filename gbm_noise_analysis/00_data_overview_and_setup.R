@@ -115,9 +115,15 @@ message("Seurat object loaded successfully.")
 
 # --- Panel A: UMAP Visualization ---
 message("Generating UMAP plot...")
-p_umap <- DimPlot(seurat_obj, reduction = "umap", group.by = "identity", label = TRUE, repel = TRUE) +
+
+# ============================================================================ #
+# === FIX APPLIED HERE ===
+# The reduction name was changed from "umap" to "umap.rpca" based on the
+# diagnostic script output.
+# ============================================================================ #
+p_umap <- DimPlot(seurat_obj, reduction = "umap.rpca", group.by = "identity", label = TRUE, repel = TRUE) +
   labs(title = "UMAP of Cell Types",
-       subtitle = "Visualization of single-cell clusters") +
+       subtitle = "Visualization of single-cell clusters (using 'umap.rpca')") +
   theme_bw(base_size = 12) +
   theme(legend.position = "none",
         plot.title = element_text(face = "bold"))

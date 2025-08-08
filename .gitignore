@@ -1,3 +1,4 @@
 gbm_noise_analysis/expression_matrix.csv
 gbm_noise_analysis/results/01_noise_analysis/within_celltype_noise_data.csv
 gbm_noise_analysis/02_expression_matrix.csv
+gbm_noise_analysis/results/02_prepare_expression_data/02_expression_matrix.csv

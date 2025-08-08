@@ -7,6 +7,40 @@ The following objects are masked from ‘package:base’:
 
     intersect, t
 
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: grid
+Loading and processing epigenetic data for Venn diagram...
+Generating Venn diagram for gbM gene overlap...
+Venn diagram saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_gbm_classification_agreement.png
+Loading Seurat object for data overview...
+Seurat object loaded successfully.
+Generating UMAP plot...
+Generating cell count summary plot...
+Assembling final Seurat overview figure...
+Seurat overview figure saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_seurat_data_overview.png
+Writing summary statistics to text file...
+Summary text file saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_data_summary.txt
+Script 00 finished successfully. Contextual figures and summaries are generated.
+Script finished. Master epigenetic annotation file saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/01_prepare_epigenetic_data/01_epigenetic_annotations.csv
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
 Loading Seurat object from: /group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds
 Seurat object loaded successfully.
 Extracting the expression matrix from the 'RNA' assay...
@@ -14,11 +48,11 @@ Writing expression matrix with 25784 genes and 21527 cells.
 Warning message:
 In asMethod(object) :
   sparse->dense coercion: allocating vector of size 4.1 GiB
-Expression matrix saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/02_expression_matrix.csv
+Expression matrix saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/02_prepare_expression_data/02_expression_matrix.csv
 Extracting cell metadata...
 Writing metadata for 21527 cells.
-Cell metadata saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/02_seurat_metadata_full.csv
-Script finished. All necessary data has been exported.
+Cell metadata saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/02_prepare_expression_data/02_cell_metadata.csv
+Script finished. All necessary expression data has been exported.
 Loading required package: SeuratObject
 Loading required package: sp
 
@@ -39,16 +73,9 @@ The following objects are masked from ‘package:base’:
 
     intersect, setdiff, setequal, union
 
-
-Attaching package: ‘gridExtra’
-
-The following object is masked from ‘package:dplyr’:
-
-    combine
-
 Loading and preparing data...
 Data loading complete.
-Calculating raw noise metrics within each cell type...
+Calculating raw noise metrics (mean, CV^2) within each cell type...
 Raw noise calculation complete.
 Loading full Seurat object for VST modeling...
 Identifying HVGs and calculating corrected noise scores using VST...
@@ -64,13 +91,11 @@ Calculating feature variances of standardized and clipped values
 When using repel, set xnudge and ynudge to 0 for optimal results
 Warning message:
 In scale_x_log10() : log-10 transformation introduced infinite values.
-HVG plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_noise_analysis/hvg_identification_plot.png
+HVG plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_calculate_expression_noise/03_hvg_identification_plot.png
 Integrating all metrics into a final data table...
-Saving final complete (unfiltered) data to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_noise_analysis/noise_analysis_complete_data.csv
+Saving final complete (unfiltered) data to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_calculate_expression_noise/03_gene_noise_metrics_complete.csv
 Performing initial analysis using the corrected noise metric (VST standardized variance)...
-Reordered x-axis levels for the cahn_group plot.
-Reordered x-axis levels for the bewick_group plot.
-Statistical summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_noise_analysis/overall_noise_statistics_corrected.txt
+Statistical summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_calculate_expression_noise/03_noise_statistics_summary.txt
 Script finished successfully.
 
 Attaching package: ‘dplyr’
@@ -83,13 +108,12 @@ The following objects are masked from ‘package:base’:
 
     intersect, setdiff, setequal, union
 
-Loading processed data from previous steps...
-Error in file(file, "rt") : cannot open the connection
-Calls: %>% ... group_by -> filter -> read.csv -> read.table -> file
-In addition: Warning message:
-In file(file, "rt") :
-  cannot open file '/group/sms029/mnieuwenh/gbm_noise_analysis/results/04_responsive_gene_analysis/all_celltype_markers_full_list.csv': No such file or directory
-Execution halted
+Loading complete noise data to visualize filtering effects...
+Preparing data for plotting by assigning filter status...
+Plotting 416530 data points (all 216530 passing points, and a sample of filtered points).
+Generating the mean vs. CV plot to visualize filter effects...
+Saving plot to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/04_validate_gene_filtering/04_filtering_criteria_visualization.png
+Script finished successfully.
 Loading required package: SeuratObject
 Loading required package: sp
 
@@ -110,8 +134,8 @@ The following objects are masked from ‘package:base’:
 
     intersect, setdiff, setequal, union
 
-Loading Seurat object to identify cell-type markers...
-Running FindAllMarkers to define responsive genes. This may take some time...
+Loading Seurat object to identify responsive genes...
+Running FindAllMarkers to find cell-type-specific (responsive) genes...
 Calculating cluster border cells
 For a (much!) faster implementation of the Wilcoxon Rank Sum Test,
 (default method for FindMarkers) please install the presto package
@@ -126,4 +150,86 @@ Calculating cluster root cap early
 Calculating cluster root cap tip
 Calculating cluster root cap lateral
 Calculating cluster columella
-slurmstepd: error: *** JOB 679523 ON n028 CANCELLED AT 2025-08-07T18:46:43 ***
+Calculating cluster non-hair cells
+Calculating cluster epidermis early
+Calculating cluster hair cells early
+Calculating cluster cortex ERS+
+Calculating cluster hair cells ERS+
+Calculating cluster hair cells ERS-
+Calculating cluster xpp ERS-
+Calculating cluster cortex ERS-
+Calculating cluster endodermis ERS-
+Calculating cluster endodermis ERS+
+Calculating cluster xpp ERS+
+Calculating cluster ppp ERS+
+Calculating cluster ppp ERS-
+Calculating cluster procambium ERS+
+Calculating cluster procambium ERS-
+Calculating cluster protophloem ERS-
+Calculating cluster metaphloem ERS-
+Calculating cluster protophloem ERS+
+Calculating cluster metaphloem ERS+
+Calculating cluster metaxylem ERS+
+Calculating cluster protoxylem early
+Calculating cluster protoxylem ERS-
+Calculating cluster metaxylem ERS-
+Calculating cluster protoxylem ERS+
+Warning messages:
+1: The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.
+ℹ Please use the `layer` argument instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+2: `PackageCheck()` was deprecated in SeuratObject 5.0.0.
+ℹ Please use `rlang::check_installed()` instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+Identified 72153 significant responsive gene markers across all cell types.
+Loading complete noise data from script 03...
+Annotating main data table with responsiveness status...
+Annotated data saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_gene_noise_with_responsiveness.csv
+Analyzing noise differences between responsive and non-responsive genes...
+Noise comparison plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_noise_responsive_vs_nonresponsive.png
+Analyzing epigenetic differences between responsive and non-responsive genes...
+Warning message:
+In chisq.test(contingency_table) :
+  Chi-squared approximation may be incorrect
+Epigenetic composition plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_epigenetics_of_responsive_genes.png
+Statistical summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_responsive_gene_statistics.txt
+Script finished successfully.
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading final annotated data...
+Applying standard filters for consistency across all plots...
+Generating Panel A: Noise by Epigenetic Group...
+Generating Panel B: Noise of Responsive Genes...
+Generating Panel C: Epigenetics of Responsive Genes...
+Warning message:
+In chisq.test(contingency_c) : Chi-squared approximation may be incorrect
+Assembling the final summary figure...
+Final summary figure saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/06_final_summary_figure.png
+Final summary text saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/06_analysis_conclusion.txt
+Analysis pipeline complete.
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Error in contrib.url(repos, type) : 
+  trying to use CRAN without setting a mirror
+Calls: install.packages -> startsWith -> contrib.url
+Execution halted

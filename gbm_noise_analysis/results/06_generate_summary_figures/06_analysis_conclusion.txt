@@ -1,0 +1,21 @@
+=================================================================
+            FINAL ANALYSIS SUMMARY & CONCLUSION
+=================================================================
+
+Date: 2025-08-07
+
+This analysis pipeline has successfully processed and integrated single-cell expression data with epigenetic annotations to investigate the determinants of gene expression noise.
+
+Key Findings Summarized in the Figure:
+---------------------------------------
+Panel A: Genes marked by gene body methylation (gbM) consistently show lower intrinsic expression noise after correcting for mean-expression effects. This suggests gbM plays a role in buffering expression variability.
+
+Panel B: Genes identified as 'responsive' (i.e., having cell-type-specific expression) exhibit significantly higher expression noise than stably expressed, non-responsive genes. This links higher noise to dynamic biological function.
+
+Panel C: The epigenetic makeup of these two gene categories differs starkly. Responsive genes are significantly depleted of gbM and are enriched for H2A.Z occupancy, a histone variant associated with transcriptional plasticity.
+
+Overall Conclusion:
+-------------------
+The results support a model where gene body methylation is a feature of stably expressed, low-noise 'housekeeping' genes, while dynamic, responsive genes utilize alternative epigenetic strategies (like H2A.Z enrichment) that permit higher expression variability, likely facilitating rapid changes in transcription.
+
+The final summary figure has been saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/06_final_summary_figure.png
