@@ -1,0 +1,535 @@
+=================================================================
+   CELL-TYPE-SPECIFIC MODEL SUMMARY: 06_multivariate_modeling
+=================================================================
+
+Summary generated on: 2025-08-09 
+
+This file contains a separate Linear Mixed-Effects Model for each cell type.
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: BORDER CELLS 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: ROOT CAP EARLY 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: ROOT CAP TIP 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: ROOT CAP LATERAL 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: COLUMELLA 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: NON-HAIR CELLS 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: EPIDERMIS EARLY 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: HAIR CELLS EARLY 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: CORTEX 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -116193.8
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-5.158e-07 -1.051e-07 -4.990e-08  3.420e-08  1.180e-05 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 6.573e-01 8.108e-01
+ Residual             1.011e-13 3.179e-07
+Number of obs: 16282, groups:  gene, 10880
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                  -4.478e-01  5.545e-02  -8.076
+I(log10(mean_expr))          -1.932e-13  2.330e-08   0.000
+has_TATA_boxTRUE              1.679e+00  5.385e-02  31.185
+cahn_groupgbM                -3.746e-01  1.669e-02 -22.441
+cahn_groupTE-like             1.143e-01  5.153e-02   2.217
+avg_log2FC                    1.163e-01  1.262e-02   9.212
+cahn_groupgbM:avg_log2FC     -1.319e-01  2.016e-02  -6.543
+cahn_groupTE-like:avg_log2FC -9.583e-02  5.568e-02  -1.721
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.974  0.000                                   
+cahn_grpgbM -0.299  0.000  0.131                            
+chn_grpTE-l -0.092  0.000  0.037  0.189                     
+avg_log2FC  -0.090  0.000  0.026  0.219  0.071              
+chn_gM:_2FC  0.056  0.000 -0.015 -0.267 -0.044 -0.626       
+ch_TE-:_2FC  0.020  0.000 -0.005 -0.049 -0.211 -0.227  0.142
+optimizer (nloptwrap) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 0.494514 (tol = 0.002, component 1)
+Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: HAIR CELLS 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -206185.7
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-3.211e-07 -6.240e-08 -2.180e-08  4.010e-08  6.561e-06 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 6.637e-01 8.147e-01
+ Residual             6.478e-14 2.545e-07
+Number of obs: 19890, groups:  gene, 11192
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                  -1.034e-01  4.299e-02  -2.404
+I(log10(mean_expr))          -9.050e-14  1.428e-08   0.000
+has_TATA_boxTRUE              1.130e+00  4.240e-02  26.647
+cahn_groupgbM                -1.564e-01  1.560e-02 -10.026
+cahn_groupTE-like             3.809e-01  4.861e-02   7.837
+avg_log2FC                    1.365e-01  1.290e-02  10.581
+cahn_groupgbM:avg_log2FC     -1.867e-01  2.051e-02  -9.104
+cahn_groupTE-like:avg_log2FC -2.402e-01  5.466e-02  -4.394
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.964  0.000                                   
+cahn_grpgbM -0.240  0.000  0.046                            
+chn_grpTE-l -0.066  0.000  0.003  0.173                     
+avg_log2FC  -0.066  0.000 -0.003  0.188  0.060              
+chn_gM:_2FC  0.044  0.000 -0.001 -0.256 -0.038 -0.629       
+ch_TE-:_2FC  0.013  0.000  0.003 -0.044 -0.185 -0.236  0.148
+optimizer (nloptwrap) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 0.391177 (tol = 0.002, component 1)
+Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: XPP 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -110420.6
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-6.370e-07 -9.590e-08 -3.780e-08  4.700e-08  8.303e-06 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 7.676e-01 8.761e-01
+ Residual             1.140e-13 3.376e-07
+Number of obs: 16463, groups:  gene, 11164
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   9.092e-01  6.133e-02  14.825
+I(log10(mean_expr))           2.513e-13  2.764e-08   0.000
+has_TATA_boxTRUE              3.767e-01  5.934e-02   6.348
+cahn_groupgbM                -4.574e-01  1.780e-02 -25.692
+cahn_groupTE-like             2.427e-02  5.800e-02   0.418
+avg_log2FC                    1.488e-01  1.271e-02  11.709
+cahn_groupgbM:avg_log2FC     -1.286e-01  2.068e-02  -6.222
+cahn_groupTE-like:avg_log2FC -7.171e-02  5.432e-02  -1.320
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.975  0.000                                   
+cahn_grpgbM -0.320  0.000  0.157                            
+chn_grpTE-l -0.084  0.000  0.033  0.182                     
+avg_log2FC  -0.099  0.000  0.033  0.234  0.071              
+chn_gM:_2FC  0.069  0.000 -0.028 -0.278 -0.044 -0.615       
+ch_TE-:_2FC  0.023  0.000 -0.007 -0.055 -0.261 -0.234  0.144
+optimizer (nloptwrap) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 0.473751 (tol = 0.002, component 1)
+Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: ENDODERMIS 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -31111.2
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-5.100e-05 -7.600e-06 -2.290e-06  2.930e-06  5.254e-04 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 1.022e+00 1.011e+00
+ Residual             3.602e-10 1.898e-05
+Number of obs: 13406, groups:  gene, 10108
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   1.236e+00  6.171e-02  20.020
+I(log10(mean_expr))           1.843e-09  1.607e-06   0.001
+has_TATA_boxTRUE              1.369e-01  6.069e-02   2.256
+cahn_groupgbM                -5.548e-01  2.154e-02 -25.763
+cahn_groupTE-like            -8.208e-02  7.032e-02  -1.167
+avg_log2FC                    8.905e-02  1.566e-02   5.687
+cahn_groupgbM:avg_log2FC     -9.095e-02  2.523e-02  -3.605
+cahn_groupTE-like:avg_log2FC -1.240e-01  6.902e-02  -1.797
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.964  0.000                                   
+cahn_grpgbM -0.243  0.000  0.040                            
+chn_grpTE-l -0.075  0.000  0.012  0.180                     
+avg_log2FC  -0.074  0.000 -0.006  0.229  0.070              
+chn_gM:_2FC  0.045  0.000  0.005 -0.276 -0.043 -0.621       
+ch_TE-:_2FC  0.018  0.000  0.000 -0.052 -0.258 -0.227  0.141
+optimizer (nloptwrap) convergence code: -4 (NLOPT_ROUNDOFF_LIMITED: Roundoff errors led to a breakdown of the optimization algorithm. In this case, the returned minimum may still be useful. (e.g. this error occurs in NEWUOA if one tries to achieve a tolerance too close to machine precision.))
+unable to evaluate scaled gradient
+Model failed to converge: degenerate  Hessian with 1 negative eigenvalues
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: PPP 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -102406.6
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-1.357e-06 -2.227e-07 -5.650e-08  7.470e-08  7.095e-06 
+
+Random effects:
+ Groups   Name        Variance Std.Dev. 
+ gene     (Intercept) 9.25e-01 9.618e-01
+ Residual             1.17e-13 3.420e-07
+Number of obs: 14832, groups:  gene, 9888
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   2.321e+00  6.530e-02  35.544
+I(log10(mean_expr))           5.885e-13  2.441e-08   0.000
+has_TATA_boxTRUE             -5.193e-01  6.427e-02  -8.080
+cahn_groupgbM                -9.770e-01  2.190e-02 -44.609
+cahn_groupTE-like            -3.475e-01  6.835e-02  -5.084
+avg_log2FC                   -3.035e-02  1.425e-02  -2.131
+cahn_groupgbM:avg_log2FC      3.505e-02  2.342e-02   1.497
+cahn_groupTE-like:avg_log2FC  8.761e-02  6.033e-02   1.452
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.965  0.000                                   
+cahn_grpgbM -0.236  0.000  0.034                            
+chn_grpTE-l -0.060  0.000 -0.005  0.194                     
+avg_log2FC  -0.075  0.000 -0.013  0.261  0.084              
+chn_gM:_2FC  0.048  0.000  0.005 -0.299 -0.051 -0.608       
+ch_TE-:_2FC  0.021  0.000  0.000 -0.062 -0.268 -0.236  0.144
+optimizer (nloptwrap) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 0.975474 (tol = 0.002, component 1)
+Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: PROCAMBIUM 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -74536.3
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-4.004e-07 -6.910e-08 -2.670e-08  3.690e-08  6.930e-06 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 6.615e-01 8.133e-01
+ Residual             5.807e-14 2.410e-07
+Number of obs: 12259, groups:  gene, 8707
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   7.146e-01  4.541e-02  15.736
+I(log10(mean_expr))          -3.112e-14  1.844e-08   0.000
+has_TATA_boxTRUE              4.680e-01  4.498e-02  10.405
+cahn_groupgbM                -3.968e-01  1.709e-02 -23.218
+cahn_groupTE-like             1.198e-01  6.108e-02   1.961
+avg_log2FC                    1.771e-01  1.231e-02  14.392
+cahn_groupgbM:avg_log2FC     -1.246e-01  2.059e-02  -6.051
+cahn_groupTE-like:avg_log2FC -1.225e-01  5.282e-02  -2.318
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.964  0.000                                   
+cahn_grpgbM -0.231  0.000  0.043                            
+chn_grpTE-l -0.042  0.000 -0.011  0.140                     
+avg_log2FC  -0.066  0.000 -0.009  0.199  0.056              
+chn_gM:_2FC  0.051  0.000 -0.007 -0.271 -0.033 -0.598       
+ch_TE-:_2FC  0.015  0.000  0.002 -0.046 -0.259 -0.233  0.139
+optimizer (nloptwrap) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 1.54815 (tol = 0.002, component 1)
+Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: PROTOPHLOEM 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -39734
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-6.998e-07 -1.114e-07 -3.960e-08  6.270e-08  1.037e-05 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 8.705e-01 9.330e-01
+ Residual             1.330e-13 3.647e-07
+Number of obs: 9577, groups:  gene, 7299
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   1.883e+00  7.946e-02  23.695
+I(log10(mean_expr))           3.322e-13  3.679e-08   0.000
+has_TATA_boxTRUE             -7.046e-01  7.782e-02  -9.054
+cahn_groupgbM                -3.994e-01  2.272e-02 -17.579
+cahn_groupTE-like             2.449e-01  7.848e-02   3.120
+avg_log2FC                    2.232e-01  1.588e-02  14.050
+cahn_groupgbM:avg_log2FC     -2.133e-01  2.662e-02  -8.012
+cahn_groupTE-like:avg_log2FC -2.394e-01  7.283e-02  -3.287
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.978  0.000                                   
+cahn_grpgbM -0.269  0.000  0.117                            
+chn_grpTE-l -0.043  0.000 -0.002  0.156                     
+avg_log2FC  -0.070  0.000  0.010  0.211  0.061              
+chn_gM:_2FC  0.049  0.000 -0.013 -0.247 -0.036 -0.597       
+ch_TE-:_2FC  0.015  0.000 -0.002 -0.046 -0.241 -0.218  0.130
+optimizer (nloptwrap) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 4.9204 (tol = 0.002, component 1)
+Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: METAPHLOEM 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -48104.9
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-2.891e-05 -4.258e-06 -1.505e-06  2.030e-06  1.788e-04 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 7.251e-01 8.515e-01
+ Residual             9.258e-11 9.622e-06
+Number of obs: 11408, groups:  gene, 7928
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   1.190e+00  6.270e-02  18.974
+I(log10(mean_expr))           3.570e-10  8.681e-07   0.000
+has_TATA_boxTRUE              1.392e-01  6.181e-02   2.251
+cahn_groupgbM                -5.116e-01  2.038e-02 -25.102
+cahn_groupTE-like             1.003e-01  6.773e-02   1.481
+avg_log2FC                    1.851e-01  1.409e-02  13.143
+cahn_groupgbM:avg_log2FC     -1.874e-01  2.349e-02  -7.978
+cahn_groupTE-like:avg_log2FC -1.353e-01  6.244e-02  -2.167
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.969  0.000                                   
+cahn_grpgbM -0.229  0.000  0.040                            
+chn_grpTE-l -0.062  0.000  0.005  0.176                     
+avg_log2FC  -0.067  0.000 -0.010  0.234  0.070              
+chn_gM:_2FC  0.042  0.000  0.004 -0.260 -0.042 -0.600       
+ch_TE-:_2FC  0.016  0.000  0.001 -0.053 -0.220 -0.226  0.135
+optimizer (nloptwrap) convergence code: -4 (NLOPT_ROUNDOFF_LIMITED: Roundoff errors led to a breakdown of the optimization algorithm. In this case, the returned minimum may still be useful. (e.g. this error occurs in NEWUOA if one tries to achieve a tolerance too close to machine precision.))
+Model failed to converge with max|grad| = 0.00876156 (tol = 0.002, component 1)
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: METAXYLEM 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -86057.4
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-4.328e-05 -6.260e-06 -2.180e-06  2.430e-06  4.483e-04 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 9.796e-01 9.898e-01
+ Residual             3.342e-10 1.828e-05
+Number of obs: 17866, groups:  gene, 11401
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   1.322e+00  5.588e-02  23.658
+I(log10(mean_expr))           9.869e-10  1.161e-06   0.001
+has_TATA_boxTRUE              1.626e-01  5.494e-02   2.960
+cahn_groupgbM                -6.111e-01  1.982e-02 -30.831
+cahn_groupTE-like            -6.199e-02  6.408e-02  -0.967
+avg_log2FC                    6.342e-02  1.488e-02   4.263
+cahn_groupgbM:avg_log2FC     -1.023e-01  2.392e-02  -4.278
+cahn_groupTE-like:avg_log2FC -1.783e-01  6.497e-02  -2.744
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.962  0.000                                   
+cahn_grpgbM -0.247  0.000  0.039                            
+chn_grpTE-l -0.069  0.000  0.004  0.183                     
+avg_log2FC  -0.074  0.000 -0.005  0.223  0.069              
+chn_gM:_2FC  0.049  0.000  0.001 -0.264 -0.043 -0.622       
+ch_TE-:_2FC  0.016  0.000  0.002 -0.051 -0.218 -0.229  0.142
+optimizer (nloptwrap) convergence code: -4 (NLOPT_ROUNDOFF_LIMITED: Roundoff errors led to a breakdown of the optimization algorithm. In this case, the returned minimum may still be useful. (e.g. this error occurs in NEWUOA if one tries to achieve a tolerance too close to machine precision.))
+unable to evaluate scaled gradient
+Model failed to converge: degenerate  Hessian with 1 negative eigenvalues
+
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: PROTOXYLEM EARLY 
+-----------------------------------------------------------------
+Model failed to converge for this cell type.
+Error:  number of levels of each grouping factor must be < number of observations (problems: gene) 
+
+
+-----------------------------------------------------------------
+                MODEL FOR CELL TYPE: PROTOXYLEM 
+-----------------------------------------------------------------
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: ..2
+
+REML criterion at convergence: -30327.3
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-6.749e-05 -9.086e-06 -2.192e-06  5.406e-06  2.560e-04 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 1.694e+00 1.3015911
+ Residual             4.710e-10 0.0000217
+Number of obs: 8940, groups:  gene, 6103
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   1.374e+00  1.051e-01  13.072
+I(log10(mean_expr))           2.667e-09  2.001e-06   0.001
+has_TATA_boxTRUE              1.259e-01  1.038e-01   1.214
+cahn_groupgbM                -6.367e-01  3.482e-02 -18.288
+cahn_groupTE-like             3.316e-01  1.141e-01   2.905
+avg_log2FC                   -3.688e-02  2.687e-02  -1.372
+cahn_groupgbM:avg_log2FC     -5.081e-02  4.329e-02  -1.174
+cahn_groupTE-like:avg_log2FC -1.394e-01  1.097e-01  -1.271
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.969  0.000                                   
+cahn_grpgbM -0.228  0.000  0.045                            
+chn_grpTE-l -0.052  0.000 -0.005  0.170                     
+avg_log2FC  -0.051  0.000 -0.007  0.173  0.053              
+chn_gM:_2FC  0.029  0.000  0.006 -0.213 -0.033 -0.621       
+ch_TE-:_2FC  0.008  0.000  0.006 -0.042 -0.168 -0.245  0.152
+optimizer (nloptwrap) convergence code: -4 (NLOPT_ROUNDOFF_LIMITED: Roundoff errors led to a breakdown of the optimization algorithm. In this case, the returned minimum may still be useful. (e.g. this error occurs in NEWUOA if one tries to achieve a tolerance too close to machine precision.))
+unable to evaluate scaled gradient
+Model failed to converge: degenerate  Hessian with 1 negative eigenvalues
+

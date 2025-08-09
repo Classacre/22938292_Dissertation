@@ -1,26 +1,12 @@
-Environment activated successfully. Starting pipeline execution...
+================================================================
+Job starting at: Sat Aug  9 14:12:47 AWST 2025
+================================================================
+--- Loading modules and activating final Conda environment ---
+Conda environment activated: /home/mnieuwenh/.conda/envs/R_final_env/bin/R
 ----------------------------------------------------------------
---- Starting Step 0: Data Overview and Setup ---
---- Finished Step 0 ---
---- Starting Step 1: Prepare Epigenetic Data ---
---- Finished Step 1 ---
---- Starting Step 2: Prepare Expression Data ---
---- Finished Step 2 ---
---- Starting Step 3: Calculate Expression Noise ---
-            used   (Mb) gc trigger    (Mb)   max used   (Mb)
-Ncells   3245292  173.4    6774387   361.8    6507434  347.6
-Vcells 561727377 4285.7 1610909132 12290.3 1116962311 8521.8
-            used   (Mb) gc trigger    (Mb)   max used    (Mb)
-Ncells   4260907  227.6    6774387   361.8    6774387   361.8
-Vcells 576208817 4396.2 1664437299 12698.7 1884895188 14380.7
---- Finished Step 3 ---
---- Starting Step 4: Validate Gene Filtering ---
---- Finished Step 4 ---
---- Starting Step 5: Analyze Responsive Genes ---
-             used   (Mb) gc trigger    (Mb)   max used    (Mb)
-Ncells    3401519  181.7    5172571   276.3    5172571   276.3
-Vcells 1301952575 9933.2 2472799187 18866.0 2472799169 18866.0
---- Finished Step 5 ---
---- Starting Step 6: Generate Summary Figures ---
 --- Finished Step 6 ---
---- Starting Step 7: Perform GO Enrichment Analysis ---
+--- Finished Step 7 ---
+--- Finished Step 8 ---
+================================================================
+Pipeline completed successfully at: Sat Aug  9 14:23:01 AWST 2025
+================================================================

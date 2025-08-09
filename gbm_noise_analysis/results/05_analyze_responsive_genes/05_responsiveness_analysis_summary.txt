@@ -1,0 +1,37 @@
+=================================================================
+        STATISTICAL SUMMARY: 05_analyze_responsive_genes.R
+=================================================================
+
+Summary generated on: 2025-08-08 
+
+--- Marker Gene Identification ---
+Total positive markers found by FindAllMarkers: 84,349 
+Markers with adjusted p-value < 0.05 (defined as 'responsive'): 72,153 
+Number of unique genes defined as responsive in at least one identity: 16547 
+
+--- Noise Comparison: Responsive vs. Non-Responsive ---
+Comparison performed on 216,530 gene-identity pairs passing filters.
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  variance.standardized by is_responsive
+W = 4034660684, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+
+
+--- Association between Responsiveness and Epigenetic Status ---
+Analysis performed on unique genes.
+Contingency Table:
+       
+         gbM TE-like Unmethylated
+  FALSE 7367     339         5345
+  TRUE  8484     486         7187
+
+Pearson's Chi-squared Test:
+
+	Pearson's Chi-squared test
+
+data:  contingency_table
+X-squared = 45.875, df = 2, p-value = 1.092e-10
+
+

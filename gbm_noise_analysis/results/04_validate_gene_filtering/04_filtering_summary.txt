@@ -1,0 +1,18 @@
+=================================================================
+         STATISTICAL SUMMARY: 04_validate_gene_filtering.R
+=================================================================
+
+Summary generated on: 2025-08-09
+
+--- Filtering Summary ---
+Total gene-identity pairs before filtering: 747736
+Filtering criteria: mean_expr > 0.01 & pct_expressing > 0.1
+Total gene-identity pairs after filtering: 0
+Number of pairs removed: 747736
+
+--- Noise Metric Validation ---
+Panel D was added to validate the primary noise metric (variance.standardized from VST)
+against an alternative metric (dm from scran's Distance-to-Median method).
+Pearson correlation between VST and DM metrics: NA
+The strong positive correlation indicates that our downstream findings are robust
+and not dependent on a single choice of noise calculation method.

@@ -1,0 +1,29 @@
+=================================================================
+       STATISTICAL SUMMARY: 02_prepare_expression_data.R
+=================================================================
+
+Summary generated on: 2025-08-09 
+
+--- Exported Data Dimensions ---
+Expression Matrix: 25784 genes x 21527 cells
+Cell Metadata Table: 21527 cells x 13 attributes
+
+--- Metadata Annotation Summary ---
+A summary of the 'ers_state' column created from 'identity':
+
+ ERS-  ERS+    NA 
+ 4720  5943 10864 
+
+A summary of the 'base_cell_type' column created from 'identity':
+
+    border cells        columella           cortex       endodermis 
+             504              397              602             1277 
+ epidermis early       hair cells hair cells early       metaphloem 
+            1179             1139             1024             1015 
+       metaxylem   non-hair cells              ppp       procambium 
+             631             1475             1148             1684 
+     protophloem       protoxylem protoxylem early   root cap early 
+             468              334              186             2213 
+root cap lateral     root cap tip              xpp 
+            2110             1776             2365 
+

@@ -1,12 +1,3 @@
-Loading required package: SeuratObject
-Loading required package: sp
-
-Attaching package: ‘SeuratObject’
-
-The following objects are masked from ‘package:base’:
-
-    intersect, t
-
 
 Attaching package: ‘dplyr’
 
@@ -18,184 +9,184 @@ The following objects are masked from ‘package:base’:
 
     intersect, setdiff, setequal, union
 
-Loading required package: grid
-Loading and processing epigenetic data for Venn diagram...
-Generating Venn diagram for gbM gene overlap...
-Venn diagram saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_gbm_classification_agreement.png
-Loading Seurat object for data overview...
-Seurat object loaded successfully.
-Generating UMAP plot...
-Generating cell count summary plot...
-Assembling final Seurat overview figure...
-Seurat overview figure saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_seurat_data_overview.png
-Writing summary statistics to text file...
-Summary text file saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/00_data_overview/00_data_summary.txt
-Script 00 finished successfully. Contextual figures and summaries are generated.
-Script finished. Master epigenetic annotation file saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/01_prepare_epigenetic_data/01_epigenetic_annotations.csv
-Loading required package: SeuratObject
-Loading required package: sp
-
-Attaching package: ‘SeuratObject’
-
-The following objects are masked from ‘package:base’:
-
-    intersect, t
-
-Loading Seurat object from: /group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds
-Seurat object loaded successfully.
-Extracting the expression matrix from the 'RNA' assay...
-Writing expression matrix with 25784 genes and 21527 cells.
-Warning message:
-In asMethod(object) :
-  sparse->dense coercion: allocating vector of size 4.1 GiB
-Expression matrix saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/02_prepare_expression_data/02_expression_matrix.csv
-Extracting cell metadata...
-Writing metadata for 21527 cells.
-Cell metadata saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/02_prepare_expression_data/02_cell_metadata.csv
-Script finished. All necessary expression data has been exported.
-Loading required package: SeuratObject
-Loading required package: sp
-
-Attaching package: ‘SeuratObject’
-
-The following objects are masked from ‘package:base’:
-
-    intersect, t
-
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Loading and preparing data...
-Data loading complete.
-Calculating raw noise metrics (mean, CV^2) within each cell type...
-Raw noise calculation complete.
-Loading full Seurat object for VST modeling...
-Identifying HVGs and calculating corrected noise scores using VST...
-Finding variable features for layer counts
-Calculating gene variances
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating feature variances of standardized and clipped values
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-When using repel, set xnudge and ynudge to 0 for optimal results
-Warning message:
-In scale_x_log10() : log-10 transformation introduced infinite values.
-HVG plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_calculate_expression_noise/03_hvg_identification_plot.png
-Integrating all metrics into a final data table...
-Saving final complete (unfiltered) data to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_calculate_expression_noise/03_gene_noise_metrics_complete.csv
-Performing initial analysis using the corrected noise metric (VST standardized variance)...
-Statistical summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/03_calculate_expression_noise/03_noise_statistics_summary.txt
-Script finished successfully.
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Loading complete noise data to visualize filtering effects...
-Preparing data for plotting by assigning filter status...
-Plotting 416530 data points (all 216530 passing points, and a sample of filtered points).
-Generating the mean vs. CV plot to visualize filter effects...
-Saving plot to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/04_validate_gene_filtering/04_filtering_criteria_visualization.png
-Script finished successfully.
-Loading required package: SeuratObject
-Loading required package: sp
-
-Attaching package: ‘SeuratObject’
-
-The following objects are masked from ‘package:base’:
-
-    intersect, t
-
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Loading Seurat object to identify responsive genes...
-Running FindAllMarkers to find cell-type-specific (responsive) genes...
-Calculating cluster border cells
-For a (much!) faster implementation of the Wilcoxon Rank Sum Test,
-(default method for FindMarkers) please install the presto package
---------------------------------------------
-install.packages('devtools')
-devtools::install_github('immunogenomics/presto')
---------------------------------------------
-After installation of presto, Seurat will automatically use the more 
-efficient implementation (no further action necessary).
-This message will be shown once per session
-Calculating cluster root cap early
-Calculating cluster root cap tip
-Calculating cluster root cap lateral
-Calculating cluster columella
-Calculating cluster non-hair cells
-Calculating cluster epidermis early
-Calculating cluster hair cells early
-Calculating cluster cortex ERS+
-Calculating cluster hair cells ERS+
-Calculating cluster hair cells ERS-
-Calculating cluster xpp ERS-
-Calculating cluster cortex ERS-
-Calculating cluster endodermis ERS-
-Calculating cluster endodermis ERS+
-Calculating cluster xpp ERS+
-Calculating cluster ppp ERS+
-Calculating cluster ppp ERS-
-Calculating cluster procambium ERS+
-Calculating cluster procambium ERS-
-Calculating cluster protophloem ERS-
-Calculating cluster metaphloem ERS-
-Calculating cluster protophloem ERS+
-Calculating cluster metaphloem ERS+
-Calculating cluster metaxylem ERS+
-Calculating cluster protoxylem early
-Calculating cluster protoxylem ERS-
-Calculating cluster metaxylem ERS-
-Calculating cluster protoxylem ERS+
+Loading required package: Matrix
+Loading annotated noise data...
+Generating panels for the final global summary figure...
+`geom_smooth()` using formula = 'y ~ x'
+Global summary figure saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/06_summary_figure_noise_drivers_GLOBAL.png
+Generating cell-type-specific faceted summary figure...
+Cell-type faceted figure saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/celltype_analyses/06_summary_figure_noise_drivers_BY_CELL_TYPE.png
+Building and summarizing global multivariate models...
 Warning messages:
-1: The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.
-ℹ Please use the `layer` argument instead.
-ℹ The deprecated feature was likely used in the Seurat package.
-  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
-2: `PackageCheck()` was deprecated in SeuratObject 5.0.0.
-ℹ Please use `rlang::check_installed()` instead.
-ℹ The deprecated feature was likely used in the Seurat package.
-  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
-Identified 72153 significant responsive gene markers across all cell types.
-Loading complete noise data from script 03...
-Annotating main data table with responsiveness status...
-Annotated data saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_gene_noise_with_responsiveness.csv
-Analyzing noise differences between responsive and non-responsive genes...
-Noise comparison plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_noise_responsive_vs_nonresponsive.png
-Analyzing epigenetic differences between responsive and non-responsive genes...
-Warning message:
-In chisq.test(contingency_table) :
-  Chi-squared approximation may be incorrect
-Epigenetic composition plot saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_epigenetics_of_responsive_genes.png
-Statistical summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/05_analyze_responsive_genes/05_responsive_gene_statistics.txt
-Script finished successfully.
+1: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 38.1353 (tol = 0.002, component 1)
+2: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+Global model summary saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/06_multivariate_model_summary_GLOBAL.txt
+Building and summarizing cell-type-specific multivariate models...
+... Modeling cell type: border cells
+... Modeling cell type: root cap early
+... Modeling cell type: root cap tip
+... Modeling cell type: root cap lateral
+... Modeling cell type: columella
+... Modeling cell type: non-hair cells
+... Modeling cell type: epidermis early
+... Modeling cell type: hair cells early
+... Modeling cell type: cortex
+... Modeling cell type: hair cells
+... Modeling cell type: xpp
+... Modeling cell type: endodermis
+... Modeling cell type: ppp
+... Modeling cell type: procambium
+... Modeling cell type: protophloem
+... Modeling cell type: metaphloem
+... Modeling cell type: metaxylem
+... Modeling cell type: protoxylem early
+... Modeling cell type: protoxylem
+There were 23 warnings (use warnings() to see them)
+Cell-type-specific model summaries saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/celltype_analyses/06_multivariate_model_summary_BY_CELL_TYPE.txt
+Script 06 finished successfully.
+
+clusterProfiler v4.14.0 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
+
+Please cite:
+
+G Yu. Thirteen years of clusterProfiler. The Innovation. 2024,
+5(6):100722
+
+Attaching package: ‘clusterProfiler’
+
+The following object is masked from ‘package:stats’:
+
+    filter
+
+
+Loading required package: AnnotationDbi
+Loading required package: stats4
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, saveRDS, setdiff,
+    table, tapply, union, unique, unsplit, which.max, which.min
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: IRanges
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:clusterProfiler’:
+
+    rename
+
+The following object is masked from ‘package:utils’:
+
+    findMatches
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+
+Attaching package: ‘IRanges’
+
+The following object is masked from ‘package:clusterProfiler’:
+
+    slice
+
+
+Attaching package: ‘AnnotationDbi’
+
+The following object is masked from ‘package:clusterProfiler’:
+
+    select
+
+
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:AnnotationDbi’:
+
+    select
+
+The following objects are masked from ‘package:IRanges’:
+
+    collapse, desc, intersect, setdiff, slice, union
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    first, intersect, rename, setdiff, setequal, union
+
+The following object is masked from ‘package:Biobase’:
+
+    combine
+
+The following objects are masked from ‘package:BiocGenerics’:
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+enrichplot v1.26.1 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
+
+Please cite:
+
+Guangchuang Yu, Fei Li, Yide Qin, Xiaochen Bo, Yibo Wu and Shengqi
+Wang. GOSemSim: an R package for measuring semantic similarity among GO
+terms and gene products. Bioinformatics. 2010, 26(7):976-978
+Loading and preparing data for GSEA...
+Performing Global GSEA on genes ranked by average (centered) noise...
+Warning messages:
+1: In preparePathwaysAndStats(pathways, stats, minSize, maxSize, gseaParam,  :
+  There are ties in the preranked stats (22.66% of the list).
+The order of those tied genes will be arbitrary, which may produce unexpected results.
+2: In fgseaMultilevel(pathways = pathways, stats = stats, minSize = minSize,  :
+  There were 52 pathways for which P-values were not calculated properly due to unbalanced (positive and negative) gene-level statistic values. For such pathways pval, padj, NES, log2err are set to NA. You can try to increase the value of the argument nPermSimple (for example set it nPermSimple = 10000)
+Performing cell-type-specific GSEA...
+... GSEA for cell type: border cells
+... GSEA for cell type: root cap early
+... GSEA for cell type: root cap tip
+... GSEA for cell type: root cap lateral
+... GSEA for cell type: columella
+... GSEA for cell type: non-hair cells
+... GSEA for cell type: epidermis early
+... GSEA for cell type: hair cells early
+... GSEA for cell type: cortex
+... GSEA for cell type: hair cells
+... GSEA for cell type: xpp
+... GSEA for cell type: endodermis
+... GSEA for cell type: ppp
+... GSEA for cell type: procambium
+... GSEA for cell type: protophloem
+... GSEA for cell type: metaphloem
+... GSEA for cell type: metaxylem
+... GSEA for cell type: protoxylem early
+... GSEA for cell type: protoxylem
+There were 38 warnings (use warnings() to see them)
+Script 07 finished. Cell-type-specific outputs saved in: /group/sms029/mnieuwenh/gbm_noise_analysis/results/07_GO_enrichment_analysis/celltype_analyses
 
 Attaching package: ‘dplyr’
 
@@ -207,29 +198,10 @@ The following objects are masked from ‘package:base’:
 
     intersect, setdiff, setequal, union
 
-Loading final annotated data...
-Applying standard filters for consistency across all plots...
-Generating Panel A: Noise by Epigenetic Group...
-Generating Panel B: Noise of Responsive Genes...
-Generating Panel C: Epigenetics of Responsive Genes...
-Warning message:
-In chisq.test(contingency_c) : Chi-squared approximation may be incorrect
-Assembling the final summary figure...
-Final summary figure saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/06_final_summary_figure.png
-Final summary text saved to: /group/sms029/mnieuwenh/gbm_noise_analysis/results/06_generate_summary_figures/06_analysis_conclusion.txt
-Analysis pipeline complete.
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Error in contrib.url(repos, type) : 
-  trying to use CRAN without setting a mirror
-Calls: install.packages -> startsWith -> contrib.url
-Execution halted
+Loading and preparing data for bootstrapping...
+Running bootstrap analysis with 1000 iterations...
+Bootstrap analysis complete.
+Summarizing bootstrap results...
+Visualizing coefficient distributions...
+Saving final bootstrap summary...
+Script 08 finished. Outputs saved in: /group/sms029/mnieuwenh/gbm_noise_analysis/results/08_bootstrap_analysis

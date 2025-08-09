@@ -1,0 +1,51 @@
+=================================================================
+       GLOBAL STATISTICAL SUMMARY: 06_multivariate_modeling
+=================================================================
+
+Summary generated on: 2025-08-09 
+
+--- LINEAR MIXED-EFFECTS MODEL (LMM) - PLATINUM STANDARD ---
+Formula: lmer(Noise ~ log10(MeanExpr) + TATA + Methylation * Responsiveness + (1 | gene))
+
+Linear mixed model fit by REML ['lmerMod']
+Formula: variance.standardized ~ I(log10(mean_expr)) + has_TATA_box +  
+    cahn_group * avg_log2FC + (1 | gene)
+   Data: filtered_data
+
+REML criterion at convergence: -5218301
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-2.122e-06 -4.500e-08 -1.400e-08  5.100e-08  3.682e-05 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev. 
+ gene     (Intercept) 2.952e-01 5.433e-01
+ Residual             1.520e-13 3.899e-07
+Number of obs: 214384, groups:  gene, 16440
+
+Fixed effects:
+                               Estimate Std. Error t value
+(Intercept)                   6.524e-01  1.896e-02  34.402
+I(log10(mean_expr))          -2.856e-14  2.993e-09   0.000
+has_TATA_boxTRUE             -4.254e-01  1.906e-02 -22.320
+cahn_groupgbM                 1.136e+00  8.478e-03 134.047
+cahn_groupTE-like             1.662e+00  2.550e-02  65.172
+avg_log2FC                   -1.529e-01  7.225e-03 -21.164
+cahn_groupgbM:avg_log2FC     -9.955e-02  1.218e-02  -8.175
+cahn_groupTE-like:avg_log2FC  1.737e-01  3.147e-02   5.519
+
+Correlation of Fixed Effects:
+            (Intr) I(10(_ h_TATA chn_gM ch_TE- av_2FC c_M:_2
+I(lg10(m_))  0.000                                          
+h_TATA_TRUE -0.951  0.000                                   
+cahn_grpgbM -0.192  0.000 -0.021                            
+chn_grpTE-l -0.058  0.000 -0.013  0.158                     
+avg_log2FC  -0.078  0.000  0.007  0.158  0.052              
+chn_gM:_2FC  0.069  0.000 -0.029 -0.229 -0.031 -0.594       
+ch_TE-:_2FC  0.020  0.000 -0.004 -0.036 -0.170 -0.230  0.136
+optimizer (nloptwrap) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 38.1353 (tol = 0.002, component 1)
+Model is nearly unidentifiable: very large eigenvalue
+ - Rescale variables?
+

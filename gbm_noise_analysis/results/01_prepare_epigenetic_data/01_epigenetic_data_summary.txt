@@ -1,0 +1,39 @@
+=================================================================
+         STATISTICAL SUMMARY: 01_prepare_epigenetic_data.R
+=================================================================
+
+Summary generated on: 2025-08-09
+
+--- Input Data Dimensions ---
+Cahn et al. (2024) records: 27443
+Bewick et al. (2016) records: 27206
+H2A.Z Depleted gene list size: 3920
+H2A.Z Enriched gene list size: 4081
+Total unique promoters scanned for TATA box: 33323
+
+--- Merged Data Summary ---
+Total unique genes in merged file: 27940
+
+--- Gene Counts by Category (in final merged file) ---
+Cahn et al. Classifications:
+  -  gbM :  11108  genes
+  -  TE-like methylation :  2459  genes
+  -  Unmethylated :  13876  genes
+  -  NA :  497  genes
+
+Bewick et al. Classifications:
+  -  gbM :  4934  genes
+  -  mCHG :  117  genes
+  -  mCHH :  956  genes
+  -  Unmethylated :  21199  genes
+  -  NA :  734  genes
+
+H2A.Z Status:
+  - H2A.Z Depleted: 3905
+  - H2A.Z Enriched: 4050
+  - Overlap (Enriched & Depleted): 0
+
+Promoter Architecture:
+  - Genes with a TATA box in promoter: 26413
+  - Genes without a TATA box in promoter: 1527
+

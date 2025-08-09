@@ -1,0 +1,35 @@
+=================================================================
+       GLOBAL STATISTICAL SUMMARY: 05_analyze_responsive_genes.R
+=================================================================
+
+Summary generated on: 2025-08-09 
+
+--- Differential Expression Analysis (ERS+ vs ERS-) ---
+LogFC Threshold: 0.25 
+Adj P-val Threshold: 0.05 
+Total 'Responsive' genes: 4775 
+
+--- Noise Analysis --- 
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  variance.standardized by is_responsive
+W = 5802508830, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+
+
+
+--- TATA Box Enrichment Analysis ---
+Contingency Table:
+                
+                 TATA-less TATA-containing
+  Non-responsive       388           11338
+  Responsive           126            4592
+
+Chi-squared Test:
+
+	Pearson's Chi-squared test with Yates' continuity correction
+
+data:  contingency_table
+X-squared = 4.3179, df = 1, p-value = 0.03771
+

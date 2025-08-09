@@ -1,9 +1,17 @@
 =================================================================
- STATISTICAL SUMMARY OF CORRECTED NOISE METRICS
+       STATISTICAL SUMMARY: 03_calculate_expression_noise.R
 =================================================================
 
-NOTE: All tests performed on the VST-based 'variance.standardized' score.
-Data is filtered for mean_expr > 0.01 and pct_expressing > 0.1 in each cell type.
+Summary generated on: 2025-08-09 
+
+--- Data Processing and Filtering Summary ---
+NOTE: The dataset now includes an alternative noise metric 'dm' for validation.
+Gene-identity pairs retained after filtering for min cells (> 20 ): 747,736 
+Total gene-identity pairs in the final complete dataset: 747,736 
+Number of Highly Variable Features identified by VST: 2000 
+
+--- Overall Noise Analysis (Corrected Metric on Filtered Data) ---
+Number of pairs used for statistical tests (mean_expr > 0.01 & pct > 0.1): 216,530 
 
 --- Cahn Classification ---
 
@@ -13,7 +21,7 @@ data:  variance.standardized by get(group_col)
 Kruskal-Wallis chi-squared = 26490, df = 2, p-value < 2.2e-16
 
 
-Pairwise (BH-adjusted):
+Pairwise (BH-adjusted p-values):
 
 	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
 
@@ -26,27 +34,6 @@ Unmethylated < 2e-16 1.4e-06
 P value adjustment method: BH 
 
 
---- Bewick Classification ---
-
-	Kruskal-Wallis rank sum test
-
-data:  variance.standardized by get(group_col)
-Kruskal-Wallis chi-squared = 20063, df = 2, p-value < 2.2e-16
-
-
-Pairwise (BH-adjusted):
-
-	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
-
-data:  stat_data$variance.standardized and stat_data[[group_col]] 
-
-             gbM     TE-like
-TE-like      < 2e-16 -      
-Unmethylated < 2e-16 2.4e-11
-
-P value adjustment method: BH 
-
-
 --- H2A.Z Occupancy ---
 
 	Kruskal-Wallis rank sum test
@@ -55,7 +42,7 @@ data:  variance.standardized by get(group_col)
 Kruskal-Wallis chi-squared = 27738, df = 2, p-value < 2.2e-16
 
 
-Pairwise (BH-adjusted):
+Pairwise (BH-adjusted p-values):
 
 	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
 
@@ -66,3 +53,25 @@ H2A.Z-Enriched <2e-16         -
 Other          <2e-16         <2e-16        
 
 P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 165.09, df = 1, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE 
+TRUE <2e-16
+
+P value adjustment method: BH 
+
+

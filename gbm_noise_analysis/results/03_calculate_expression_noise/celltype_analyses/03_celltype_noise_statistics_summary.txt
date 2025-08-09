@@ -1,0 +1,1282 @@
+=================================================================
+   CELL-TYPE-SPECIFIC STATISTICAL SUMMARY: 03_calculate_expression_noise.R
+=================================================================
+
+Summary generated on: 2025-08-09 
+
+This file contains statistical tests on the drivers of expression noise,
+run independently for each base cell type.
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: BORDER CELLS 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 2,166 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 292.27, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      2e-12  -      
+Unmethylated <2e-16 0.041  
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 270.21, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched < 2e-16        -             
+Other          < 2e-16        7.4e-07       
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 0.034144, df = 1, p-value = 0.8534
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE
+TRUE 0.85 
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: ROOT CAP EARLY 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 8,059 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 934.39, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM     TE-like
+TE-like      4.2e-15 -      
+Unmethylated < 2e-16 0.29   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 967.41, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched < 2e-16        -             
+Other          < 2e-16        1.2e-10       
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 4.6526, df = 1, p-value = 0.03101
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE
+TRUE 0.031
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: ROOT CAP TIP 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 4,996 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 743.89, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.58   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 676.47, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched < 2e-16        -             
+Other          < 2e-16        4.9e-09       
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 12.892, df = 1, p-value = 0.00033
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE  
+TRUE 0.00033
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: ROOT CAP LATERAL 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 4,657 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 692.56, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.23   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 646.03, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched < 2e-16        -             
+Other          < 2e-16        3.6e-11       
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 7.3247, df = 1, p-value = 0.006801
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE 
+TRUE 0.0068
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: COLUMELLA 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 8,282 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 995.03, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM     TE-like
+TE-like      3.5e-13 -      
+Unmethylated < 2e-16 0.05   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1015.9, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched < 2e-16        -             
+Other          < 2e-16        1.6e-12       
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 4.8318, df = 1, p-value = 0.02794
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE
+TRUE 0.028
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: NON-HAIR CELLS 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 11,424 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1531.6, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.08   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1582.2, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 9.1093, df = 1, p-value = 0.002543
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE 
+TRUE 0.0025
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: EPIDERMIS EARLY 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 13,542 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1524.3, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 4e-05  
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1738.2, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 10.358, df = 1, p-value = 0.001289
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE 
+TRUE 0.0013
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: HAIR CELLS EARLY 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 12,939 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1581.7, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.0047 
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1697.1, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 12.87, df = 1, p-value = 0.0003338
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE  
+TRUE 0.00033
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: CORTEX 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 16,469 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 2196.7, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.52   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 2183.9, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 12.359, df = 1, p-value = 0.0004388
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE  
+TRUE 0.00044
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: HAIR CELLS 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 20,120 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 2807.7, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.39   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 2910.5, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 21.221, df = 1, p-value = 4.093e-06
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE  
+TRUE 4.1e-06
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: XPP 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 16,632 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1823, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.026  
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1951.7, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 14.01, df = 1, p-value = 0.0001818
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE  
+TRUE 0.00018
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: ENDODERMIS 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 13,534 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1722.8, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.3    
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1734.1, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 12.344, df = 1, p-value = 0.0004425
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE  
+TRUE 0.00044
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: PPP 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 14,953 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1878.9, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.28   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1926.2, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 13.588, df = 1, p-value = 0.0002276
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE  
+TRUE 0.00023
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: PROCAMBIUM 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 12,367 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1532.3, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.36   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1549, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 10.363, df = 1, p-value = 0.001286
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE 
+TRUE 0.0013
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: PROTOPHLOEM 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 9,638 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1177.4, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.83   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1127.5, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 12.522, df = 1, p-value = 0.0004023
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE
+TRUE 4e-04
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: METAPHLOEM 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 11,500 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1306.8, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.33   
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1307.6, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 7.4391, df = 1, p-value = 0.006382
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE 
+TRUE 0.0064
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: METAXYLEM 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 18,042 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 2168, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.023  
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 2449.5, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 9.6593, df = 1, p-value = 0.001884
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE 
+TRUE 0.0019
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: PROTOXYLEM EARLY 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 8,188 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 996.57, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM     TE-like
+TE-like      1.9e-15 -      
+Unmethylated < 2e-16 0.077  
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1131.5, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 5.559, df = 1, p-value = 0.01839
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE
+TRUE 0.018
+
+P value adjustment method: BH 
+
+
+-----------------------------------------------------------------
+                ANALYSIS FOR CELL TYPE: PROTOXYLEM 
+-----------------------------------------------------------------
+Number of gene-identity pairs used for tests: 9,022 
+
+--- Cahn Classification ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1070.3, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+             gbM    TE-like
+TE-like      <2e-16 -      
+Unmethylated <2e-16 0.5    
+
+P value adjustment method: BH 
+
+
+--- H2A.Z Occupancy ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 1208.7, df = 2, p-value < 2.2e-16
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+               H2A.Z-Depleted H2A.Z-Enriched
+H2A.Z-Enriched <2e-16         -             
+Other          <2e-16         <2e-16        
+
+P value adjustment method: BH 
+
+
+--- TATA Box Presence ---
+
+	Kruskal-Wallis rank sum test
+
+data:  variance.standardized by get(group_col)
+Kruskal-Wallis chi-squared = 3.0408, df = 1, p-value = 0.0812
+
+
+Pairwise (BH-adjusted p-values):
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  stat_data$variance.standardized and stat_data[[group_col]] 
+
+     FALSE
+TRUE 0.081
+
+P value adjustment method: BH 
+
+

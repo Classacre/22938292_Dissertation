@@ -2,7 +2,7 @@
             DATASET OVERVIEW & CONTEXT
 =================================================================
 
-Summary generated on: 2025-08-07
+Summary generated on: 2025-08-09
 
 --- Epigenetic Data Summary ---
 Number of gbM genes in Cahn et al.: 11108
@@ -14,9 +14,9 @@ A Venn diagram visualizing this overlap has been saved to: /group/sms029/mnieuwe
 DISCLAIMER: This is unpublished data from an external source.
 Total number of cells: 21527
 Total number of genes: 25784
-Number of identified cell types: 29
+Number of identified identities (cell type + ERS state): 29
 
-Cell counts per type:
+Cell counts per identity:
   - border cells: 504 cells
   - columella: 397 cells
   - cortex ERS-: 283 cells

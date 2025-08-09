@@ -1,0 +1,28 @@
+=================================================================
+         STATISTICAL SUMMARY: 08_bootstrap_analysis.R
+=================================================================
+
+Summary generated on: 2025-08-09 
+
+--- Methodology ---
+A bootstrap analysis with 1000 iterations was performed on the final interaction model.
+This analysis repeatedly samples the data and refits the model to assess the stability
+and confidence in each coefficient's estimate.
+
+Final Model Formula:
+lm(Noise ~ log10_mean_expr + Has_TATA_Box + Methylation_Group * Responsiveness_Score)
+
+--- Bootstrap Summary Statistics ---
+Mean estimate and 95% CI for each term across successful bootstrap fits.
+
+# A tibble: 8 × 6
+  term                         n_success mean_estimate std_error  ci_2.5 ci_97.5
+  <chr>                            <int>         <dbl>     <dbl>   <dbl>   <dbl>
+1 (Intercept)                       1000        2.00      0.0488  1.91    2.10  
+2 avg_log2FC                        1000        0.0468    0.0304 -0.0119  0.106 
+3 cahn_groupTE-like                 1000        0.119     0.0995 -0.0622  0.317 
+4 cahn_groupTE-like:avg_log2FC      1000       -0.0559    0.115  -0.265   0.182 
+5 cahn_groupgbM                     1000       -0.510     0.0245 -0.556  -0.461 
+6 cahn_groupgbM:avg_log2FC          1000       -0.0133    0.0395 -0.0894  0.0650
+7 has_TATA_boxTRUE                  1000        0.0728    0.0281  0.0155  0.124 
+8 log10_mean_expr                   1000        0.924     0.0466  0.833   1.02  

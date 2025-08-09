@@ -1,0 +1,9 @@
+=================================================================
+         GLOBAL SUMMARY: 07_GO_enrichment_analysis.R
+=================================================================
+
+Summary generated on: 2025-08-09 
+
+Method: clusterProfiler::gseGO (BP ontology), keyType = 'TAIR'.
+Ranking: genes ordered by centered (z-scored) average VST-corrected noise,
+which yields both positive and negative statistics as recommended for GSEA.
