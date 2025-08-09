@@ -29,24 +29,24 @@ echo "----------------------------------------------------------------"
 # --- NO INSTALLATION STEPS ARE NEEDED ---
 
 # # --- PIPELINE EXECUTION ---
-# echo "--- Starting main analysis pipeline ---"
-# Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/00_data_overview_and_setup.R
-# echo "--- Finished Step 0 ---"
+echo "--- Starting main analysis pipeline ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/00_data_overview_and_setup.R
+echo "--- Finished Step 0 ---"
 
-# Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/01_prepare_epigenetic_data.R
-# echo "--- Finished Step 1 ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/01_prepare_epigenetic_data.R
+echo "--- Finished Step 1 ---"
 
-# Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/02_prepare_expression_data.R
-# echo "--- Finished Step 2 ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/02_prepare_expression_data.R
+echo "--- Finished Step 2 ---"
 
-# Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/03_calculate_expression_noise.R
-# echo "--- Finished Step 3 ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/03_calculate_expression_noise.R
+echo "--- Finished Step 3 ---"
 
-# Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/04_validate_gene_filtering.R
-# echo "--- Finished Step 4 ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/04_validate_gene_filtering.R
+echo "--- Finished Step 4 ---"
 
-# Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/05_analyze_responsive_genes.R
-# echo "--- Finished Step 5 ---"
+Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/05_analyze_responsive_genes.R
+echo "--- Finished Step 5 ---"
 
 Rscript /group/sms029/mnieuwenh/gbm_noise_analysis/06_generate_summary_figures.R
 echo "--- Finished Step 6 ---"

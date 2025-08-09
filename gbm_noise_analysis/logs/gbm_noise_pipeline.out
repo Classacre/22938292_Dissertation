@@ -1,12 +1,10 @@
 ================================================================
-Job starting at: Sat Aug  9 14:12:47 AWST 2025
+Job starting at: Sat Aug  9 15:12:47 AWST 2025
 ================================================================
 --- Loading modules and activating final Conda environment ---
 Conda environment activated: /home/mnieuwenh/.conda/envs/R_final_env/bin/R
 ----------------------------------------------------------------
---- Finished Step 6 ---
---- Finished Step 7 ---
---- Finished Step 8 ---
+--- Finished Step 4 ---
 ================================================================
-Pipeline completed successfully at: Sat Aug  9 14:23:01 AWST 2025
+Pipeline completed successfully at: Sat Aug  9 15:13:06 AWST 2025
 ================================================================
