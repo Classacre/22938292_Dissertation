@@ -1,0 +1,33 @@
+name: r_workflow2
+channels: [conda-forge, bioconda, r]
+dependencies:
+  - r-base=4.4*
+  - r-optparse
+  - r-matrix
+  - r-data.table
+  - r-readr
+  - r-dplyr
+  - r-tidyr
+  - r-ggplot2
+  - r-patchwork
+  - r-ggpubr
+  - r-eulerr
+  - r-seurat=5.*
+  - r-sctransform
+  - r-lme4
+  - r-MatchIt
+  - r-metafor
+  - bioconductor-singlecellexperiment
+  - bioconductor-scuttle
+  - bioconductor-scran
+  - bioconductor-delayedarray
+  - bioconductor-genomicfeatures
+  - bioconductor-genomicranges
+  - bioconductor-bsgenome
+  - bioconductor-bsgenome.athaliana.tair.tair9
+  - bioconductor-txdb.athaliana.biomart.plantsmart28
+  - bioconductor-annotationhub
+  - bioconductor-tfbstools
+  - bioconductor-jaspar2024
+  - bioconductor-biostrings
+  - gzip

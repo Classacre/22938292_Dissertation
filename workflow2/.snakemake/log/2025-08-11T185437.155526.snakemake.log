@@ -1,0 +1,9 @@
+Building DAG of jobs...
+Creating conda environment envs/enrich.yaml...
+Downloading and installing remote packages.
+Cleaning up conda package tarballs.
+Environment for /group/sms029/mnieuwenh/workflow2/envs/enrich.yaml created (location: .snakemake/conda/694901b1add2416d151c2520f73dd4ac_)
+Creating conda environment envs/r_base.yaml...
+Downloading and installing remote packages.
+Cleaning up conda package tarballs.
+Environment for /group/sms029/mnieuwenh/workflow2/envs/r_base.yaml created (location: .snakemake/conda/f6ffe6009c3127d728849d96ca75f987_)

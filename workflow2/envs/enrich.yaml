@@ -1,0 +1,19 @@
+name: r_enrich
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base=4.4.*
+  - r-dplyr
+  - r-ggplot2
+  - r-patchwork
+  - bioconductor-clusterprofiler
+  - bioconductor-enrichplot
+  - bioconductor-gosemsim
+  - bioconductor-reactomepa
+  - bioconductor-org.at.tair.db
+  - bioconductor-annotationdbi
+  - bioconductor-go.db
+  - bioconductor-genomeinfodb
+  - bioconductor-genomeinfodbdata

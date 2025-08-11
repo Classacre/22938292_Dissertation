@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+channel_priority: strict
+auto_activate_base: false
+show_channel_urls: true
+repodata_threads: 4

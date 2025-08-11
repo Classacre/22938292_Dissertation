@@ -1,0 +1,44 @@
+Building DAG of jobs...
+Creating conda environment envs/enrich.yaml...
+Downloading and installing remote packages.
+Cleaning up conda package tarballs.
+Environment for /group/sms029/mnieuwenh/workflow2/envs/enrich.yaml created (location: .snakemake/conda/694901b1add2416d151c2520f73dd4ac_)
+Creating conda environment envs/r_base.yaml...
+Downloading and installing remote packages.
+Cleaning up conda package tarballs.
+Environment for /group/sms029/mnieuwenh/workflow2/envs/r_base.yaml created (location: .snakemake/conda/f6ffe6009c3127d728849d96ca75f987_)
+Using profile config/slurm_profile for setting default command line arguments.
+host: n033.hpc.uwa.edu.au
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided remote nodes: 100
+Job stats:
+job                   count
+------------------  -------
+all                       1
+bootstrap                 1
+enrichment                1
+epigenetics               1
+export_expr               1
+filter_qc                 1
+models                    1
+noise_per_identity        1
+overview                  1
+responsive                1
+total                    10
+
+Select jobs to execute...
+Execute 3 jobs...
+
+[Mon Aug 11 19:07:18 2025]
+rule export_expr:
+    input: /group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds
+    output: /group/sms029/mnieuwenh/workflow2/results/02_export/expression_matrix.mtx.gz, /group/sms029/mnieuwenh/workflow2/results/02_export/genes.tsv.gz, /group/sms029/mnieuwenh/workflow2/results/02_export/cell_metadata.csv
+    jobid: 3
+    reason: Missing output files: /group/sms029/mnieuwenh/workflow2/results/02_export/expression_matrix.mtx.gz, /group/sms029/mnieuwenh/workflow2/results/02_export/genes.tsv.gz, /group/sms029/mnieuwenh/workflow2/results/02_export/cell_metadata.csv
+    threads: 4
+    resources: mem_mb=64000, mem_mib=61036, disk_mb=14372, disk_mib=13707, tmpdir=<TBD>, time=08:00:00
+Shell command: Rscript scripts/02_export.R --seurat /group/sms029/Oliva_dataset/integrated_col_trajectories_colonly.rds --outdir /group/sms029/mnieuwenh/workflow2/results/02_export
+RuleException in rule export_expr in file "/group/sms029/mnieuwenh/workflow2/Snakefile", line 59:
+NameError: The name 'jobscript' is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}, when formatting the following:
+sbatch --parsable --export=ALL --job-name=smk_{rule} --partition=work --cpus-per-task={threads} --mem={resources.mem_mb}M --time={resources.time} --mail-type=FAIL --mail-user=22938292@student.uwa.edu.au --output=logs/{rule}.out --error=logs/{rule}.err {jobscript}

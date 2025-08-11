@@ -1,0 +1,6 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: n033.hpc.uwa.edu.au
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce --cluster=sbatch --export=ALL --job-name=smk_{rule} --partition=work --cpus-per-task={threads} --mem={resources.mem_mb}M --time={resources.time} --mail-type=FAIL --mail-user=22938292@student.uwa.edu.au --output=logs/{rule}.out --error=logs/{rule}.err (if you use input functions make sure that they don't raise unexpected exceptions).

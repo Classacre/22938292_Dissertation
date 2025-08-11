@@ -1,0 +1,39 @@
+Checking conda version inside 'snakemake' environment...
+Installing snakemake-executor-plugin-cluster-generic...
+Channels:
+ - conda-forge
+ - bioconda
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /home/mnieuwenh/.conda/envs/snakemake
+
+  added / updated specs:
+    - snakemake-executor-plugin-cluster-generic
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    snakemake-executor-plugin-cluster-generic-1.0.9|     pyhdfd78af_0          14 KB  bioconda
+    ------------------------------------------------------------
+                                           Total:          14 KB
+
+The following NEW packages will be INSTALLED:
+
+  snakemake-executo~ bioconda/noarch::snakemake-executor-plugin-cluster-generic-1.0.9-pyhdfd78af_0 
+
+
+
+Downloading and Extracting Packages: ...working... done
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+Cleaning up potentially broken conda environments...
+Pre-creating rule conda environments locally...
+Starting Snakemake on SLURM...
